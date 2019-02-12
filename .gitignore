@@ -1,0 +1,6 @@
+*.class
+\.metadata/
+\.RemoteSystemsTempFiles/
+\Scrapbook/
+\Servers/
+RemoteSystemsTempFiles/
