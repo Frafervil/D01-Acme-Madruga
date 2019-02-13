@@ -1,4 +1,3 @@
-
 package domain;
 
 import java.util.Date;
@@ -18,12 +17,11 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.PROPERTY)
 public class Procession extends DomainEntity {
 
-	private String	title;
-	private String	description;
-	private Date	moment;
-	private String	ticker;
-	private boolean	isDraft;
-
+	private String title;
+	private String description;
+	private Date moment;
+	private String ticker;
+	private boolean isDraft;
 
 	@NotBlank
 	public String getTitle() {
@@ -42,6 +40,7 @@ public class Procession extends DomainEntity {
 	public void setDescription(final String description) {
 		this.description = description;
 	}
+
 	@NotNull
 	@Temporal(TemporalType.DATE)
 	public Date getMoment() {

@@ -1,4 +1,3 @@
-
 package domain;
 
 import java.util.Collection;
@@ -15,10 +14,9 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.PROPERTY)
 public class FloatB extends DomainEntity {
 
-	private String				title;
-	private String				description;
-	private Collection<String>	pictures;
-
+	private String title;
+	private String description;
+	private Collection<String> pictures;
 
 	@NotBlank
 	public String getTitle() {

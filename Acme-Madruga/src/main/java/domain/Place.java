@@ -1,4 +1,3 @@
-
 package domain;
 
 import javax.persistence.Access;
@@ -12,9 +11,8 @@ import org.hibernate.validator.constraints.Range;
 @Access(AccessType.PROPERTY)
 public class Place extends DomainEntity {
 
-	private int	row;
-	private int	column;
-
+	private int row;
+	private int column;
 
 	@NotBlank
 	@Range(min = 1)

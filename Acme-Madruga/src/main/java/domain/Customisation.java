@@ -1,4 +1,3 @@
-
 package domain;
 
 import javax.persistence.Access;
@@ -13,11 +12,10 @@ import org.hibernate.validator.constraints.URL;
 @Access(AccessType.PROPERTY)
 public class Customisation extends DomainEntity {
 
-	private String	systemName;
-	private String	welcomeBanner;
-	private String	welcomeMessage;
-	private String	countryCode;
-
+	private String systemName;
+	private String welcomeBanner;
+	private String welcomeMessage;
+	private String countryCode;
 
 	@NotBlank
 	public String getSystemName() {

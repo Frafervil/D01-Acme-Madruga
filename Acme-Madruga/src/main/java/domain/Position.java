@@ -1,4 +1,3 @@
-
 package domain;
 
 import java.util.Collection;
@@ -13,8 +12,7 @@ import javax.validation.constraints.NotNull;
 @Access(AccessType.PROPERTY)
 public class Position extends DomainEntity {
 
-	private Collection<LanguagePosition>	languagePositions;
-
+	private Collection<LanguagePosition> languagePositions;
 
 	// Relationships----------------------------------------------
 	@NotNull
@@ -23,7 +21,8 @@ public class Position extends DomainEntity {
 		return this.languagePositions;
 	}
 
-	public void setLanguagePositions(final Collection<LanguagePosition> languagePositions) {
+	public void setLanguagePositions(
+			final Collection<LanguagePosition> languagePositions) {
 		this.languagePositions = languagePositions;
 	}
 }
