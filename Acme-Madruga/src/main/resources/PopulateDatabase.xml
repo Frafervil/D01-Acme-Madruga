@@ -307,5 +307,122 @@
 		<property name="brotherhood" ref="brotherhood2" />
 		<property name="member" ref="member1" />
 	</bean>
+	
+	<!-- FloatBs -->
+	
+	<bean id="floatB1" class="domain.FloatB">
+		<property name="title" value="title float 1" />
+		<property name="description" value="description float 1" />
+		<property name="pictures">
+			<list>
+				<value>http://www.fotolog4.com</value>
+				<value>http://www.fotolog5.com</value>
+			</list>
+		</property>
+		<property name="procession" ref="procession1" />
+	</bean>
+	
+	<bean id="floatB2" class="domain.FloatB">
+		<property name="title" value="title float 2" />
+		<property name="description" value="description float 2" />
+		<property name="pictures">
+			<list>
+				<value>http://www.fotolog6.com</value>
+				<value>http://www.fotolog7.com</value>
+			</list>
+		</property>
+		<property name="procession" ref="procession2" />
+	</bean>
+	
+	<bean id="floatB3" class="domain.FloatB">
+		<property name="title" value="title float 3" />
+		<property name="description" value="description float 3" />
+		<property name="pictures">
+			<list>
+				<value>http://www.fotolog8.com</value>
+				<value>http://www.fotolog9.com</value>
+			</list>
+		</property>
+		<property name="procession"><null /></property>
+	</bean>
+	
+	<!-- LanguagePositions -->
+	
+	<bean class="domain.LanguagePosition" id="languagePosition1">
+		<property name="name" value="President" />
+		<property name="language" value="English" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition2">
+		<property name="name" value="Presidente" />
+		<property name="language" value="Spanish" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition3">
+		<property name="name" value="Vice President" />
+		<property name="language" value="English" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition4">
+		<property name="name" value="Vicepresidente" />
+		<property name="language" value="Spanish" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition5">
+		<property name="name" value="Secretary" />
+		<property name="language" value="English" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition6">
+		<property name="name" value="Secretario" />
+		<property name="language" value="Spanish" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition7">
+		<property name="name" value="Treasurer" />
+		<property name="language" value="English" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition8">
+		<property name="name" value="Tesorero" />
+		<property name="language" value="Spanish" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition9">
+		<property name="name" value="Historian" />
+		<property name="language" value="English" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition10">
+		<property name="name" value="Historiador" />
+		<property name="language" value="Spanish" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition11">
+		<property name="name" value="Fundraiser" />
+		<property name="language" value="English" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition12">
+		<property name="name" value="Promotor" />
+		<property name="language" value="Spanish" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition13">
+		<property name="name" value="Officer" />
+		<property name="language" value="English" />
+	</bean>
+	
+	<bean class="domain.LanguagePosition" id="languagePosition14">
+		<property name="name" value="Vocal" />
+		<property name="language" value="Spanish" />
+	</bean>
+	
+	<!-- Places -->
+	
+	<bean class="domain.Place" id="place1">
+		<property name="row" value="1" />
+		<property name="column" value="1" />
+	</bean>
 
 </beans>
