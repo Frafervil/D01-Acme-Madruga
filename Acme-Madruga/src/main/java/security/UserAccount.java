@@ -22,6 +22,7 @@ import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
@@ -34,8 +35,7 @@ public class UserAccount extends DomainEntity implements UserDetails {
 
 	// Constructors -----------------------------------------------------------
 
-	private static final long	serialVersionUID	= 7254823034213841482L;
-
+	private static final long serialVersionUID = 7254823034213841482L;
 
 	public UserAccount() {
 		super();
@@ -43,16 +43,15 @@ public class UserAccount extends DomainEntity implements UserDetails {
 		this.authorities = new ArrayList<Authority>();
 	}
 
-
 	// Attributes -------------------------------------------------------------
 
 	// UserDetails interface --------------------------------------------------
 
-	private String					username;
-	private String					password;
-	private Collection<Authority>	authorities;
+	private String username;
+	private String password;
+	private Collection<Authority> authorities;
 
-
+	@NotBlank
 	@Size(min = 5, max = 32)
 	@Column(unique = true)
 	@Override
@@ -64,6 +63,7 @@ public class UserAccount extends DomainEntity implements UserDetails {
 		this.username = username;
 	}
 
+	@NotBlank
 	@Size(min = 5, max = 32)
 	@Override
 	public String getPassword() {
@@ -79,7 +79,8 @@ public class UserAccount extends DomainEntity implements UserDetails {
 	@ElementCollection
 	@Override
 	public Collection<Authority> getAuthorities() {
-		// WARNING: Should return an unmodifiable copy, but it's not possible with hibernate!
+		// WARNING: Should return an unmodifiable copy, but it's not possible
+		// with hibernate!
 		return this.authorities;
 	}
 

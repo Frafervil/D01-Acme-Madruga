@@ -1,4 +1,3 @@
-
 package domain;
 
 import java.util.Collection;
@@ -7,7 +6,7 @@ import java.util.Date;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import javax.validation.Valid;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -16,10 +15,9 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.PROPERTY)
 public class Brotherhood extends Actor {
 
-	private String				title;
-	private Date				establishmentDate;
-	private Collection<String>	pictures;
-
+	private String title;
+	private Date establishmentDate;
+	private Collection<String> pictures;
 
 	@NotBlank
 	public String getTitle() {
@@ -48,17 +46,15 @@ public class Brotherhood extends Actor {
 		this.pictures = pictures;
 	}
 
-
 	// Relationships----------------------------------------------
 
-	private Collection<Procession>	processions;
-	private Collection<FloatB>		floatBs;
-	private Collection<Enrolment>	enrolments;
-	private Collection<DropOut>		dropOuts;
-
+	private Collection<Procession> processions;
+	private Collection<FloatB> floatBs;
+	private Collection<Enrolment> enrolments;
+	private Collection<DropOut> dropOuts;
 
 	@NotNull
-	@Valid
+	@OneToMany
 	public Collection<Procession> getProcessions() {
 		return this.processions;
 	}
@@ -68,7 +64,7 @@ public class Brotherhood extends Actor {
 	}
 
 	@NotNull
-	@Valid
+	@OneToMany
 	public Collection<FloatB> getFloatBs() {
 		return this.floatBs;
 	}
@@ -78,7 +74,7 @@ public class Brotherhood extends Actor {
 	}
 
 	@NotNull
-	@Valid
+	@OneToMany(mappedBy = "brotherhood")
 	public Collection<Enrolment> getEnrolments() {
 		return this.enrolments;
 	}
@@ -88,7 +84,7 @@ public class Brotherhood extends Actor {
 	}
 
 	@NotNull
-	@Valid
+	@OneToMany(mappedBy = "brotherhood")
 	public Collection<DropOut> getDropOuts() {
 		return this.dropOuts;
 	}

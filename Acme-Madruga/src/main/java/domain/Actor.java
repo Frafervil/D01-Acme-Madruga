@@ -1,9 +1,11 @@
-
 package domain;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -15,15 +17,14 @@ import security.UserAccount;
 @Access(AccessType.PROPERTY)
 public class Actor extends DomainEntity {
 
-	private String		name;
-	private String		middleName;
-	private String		surname;
-	private String		photo;
-	private String		email;
-	private String		phone;
-	private String		address;
-	private UserAccount	userAccount;
-
+	private String name;
+	private String middleName;
+	private String surname;
+	private String photo;
+	private String email;
+	private String phone;
+	private String address;
+	private UserAccount userAccount;
 
 	@NotBlank
 	public String getName() {
@@ -89,6 +90,8 @@ public class Actor extends DomainEntity {
 	// Relationships----------------------------------------------
 
 	@NotNull
+	@Valid
+	@OneToOne(optional = false, cascade = CascadeType.ALL)
 	public UserAccount getUserAccount() {
 		return this.userAccount;
 	}

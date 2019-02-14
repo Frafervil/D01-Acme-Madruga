@@ -1,4 +1,3 @@
-
 package domain;
 
 import java.util.Collection;
@@ -6,7 +5,7 @@ import java.util.Collection;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import javax.validation.Valid;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -15,13 +14,12 @@ public class Member extends Actor {
 
 	// Relationships----------------------------------------------
 
-	private Collection<Request>		requests;
-	private Collection<Enrolment>	enrolments;
-	private Collection<DropOut>		dropOuts;
-
+	private Collection<Request> requests;
+	private Collection<Enrolment> enrolments;
+	private Collection<DropOut> dropOuts;
 
 	@NotNull
-	@Valid
+	@OneToMany(mappedBy = "member")
 	public Collection<Request> getRequests() {
 		return this.requests;
 	}
@@ -31,7 +29,7 @@ public class Member extends Actor {
 	}
 
 	@NotNull
-	@Valid
+	@OneToMany(mappedBy = "member")
 	public Collection<Enrolment> getEnrolments() {
 		return this.enrolments;
 	}
@@ -41,7 +39,7 @@ public class Member extends Actor {
 	}
 
 	@NotNull
-	@Valid
+	@OneToMany(mappedBy = "member")
 	public Collection<DropOut> getDropOuts() {
 		return this.dropOuts;
 	}

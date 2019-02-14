@@ -3,6 +3,10 @@ package domain;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -14,6 +18,8 @@ public class Request extends DomainEntity {
 	private String status;
 	private String rejectionReason;
 	private Place place;
+	private Procession procession;
+	private Member member;
 
 	@NotBlank
 	@Pattern(regexp = "^PENDING|APROVED|REJECTED$")
@@ -25,6 +31,7 @@ public class Request extends DomainEntity {
 		this.status = status;
 	}
 
+	@NotBlank
 	public String getRejectionReason() {
 		return this.rejectionReason;
 	}
@@ -34,6 +41,10 @@ public class Request extends DomainEntity {
 	}
 
 	// Relationships----------------------------------------------
+
+	@NotNull
+	@Valid
+	@OneToOne(optional = false)
 	public Place getPlace() {
 		return this.place;
 	}
@@ -42,4 +53,25 @@ public class Request extends DomainEntity {
 		this.place = place;
 	}
 
+	@NotNull
+	@Valid
+	@ManyToOne(optional = false)
+	public Procession getProcession() {
+		return this.procession;
+	}
+
+	public void setProcession(final Procession procession) {
+		this.procession = procession;
+	}
+
+	@NotNull
+	@Valid
+	@ManyToOne(optional = false)
+	public Member getMember() {
+		return this.member;
+	}
+
+	public void setMember(final Member member) {
+		this.member = member;
+	}
 }

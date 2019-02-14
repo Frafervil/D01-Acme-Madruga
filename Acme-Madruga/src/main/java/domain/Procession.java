@@ -6,6 +6,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -68,5 +69,19 @@ public class Procession extends DomainEntity {
 
 	public void setIsDraft(final boolean isDraft) {
 		this.isDraft = isDraft;
+	}
+
+	// Relationships----------------------------------------------
+
+	private Request request;
+
+	@NotNull
+	@OneToMany(mappedBy = "procession")
+	public Request getRequest() {
+		return this.request;
+	}
+
+	public void setRequest(final Request request) {
+		this.request = request;
 	}
 }

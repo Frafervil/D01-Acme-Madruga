@@ -1,4 +1,3 @@
-
 package domain;
 
 import java.util.Date;
@@ -6,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -13,8 +14,7 @@ import javax.validation.constraints.NotNull;
 @Access(AccessType.PROPERTY)
 public class Enrolment extends DomainEntity {
 
-	private Date	moment;
-
+	private Date moment;
 
 	@NotNull
 	public Date getMoment() {
@@ -25,16 +25,15 @@ public class Enrolment extends DomainEntity {
 		this.moment = moment;
 	}
 
-
 	// Relationships----------------------------------------------
 
-	private Position	position;
-	private Member		member;
-	private Brotherhood	brotherhood;
-
+	private Position position;
+	private Member member;
+	private Brotherhood brotherhood;
 
 	@NotNull
 	@Valid
+	@OneToOne(optional = false)
 	public Position getPosition() {
 		return this.position;
 	}
@@ -45,6 +44,7 @@ public class Enrolment extends DomainEntity {
 
 	@NotNull
 	@Valid
+	@ManyToOne(optional = false)
 	public Member getMember() {
 		return this.member;
 	}
@@ -55,6 +55,7 @@ public class Enrolment extends DomainEntity {
 
 	@NotNull
 	@Valid
+	@ManyToOne(optional = false)
 	public Brotherhood getBrotherhood() {
 		return this.brotherhood;
 	}
