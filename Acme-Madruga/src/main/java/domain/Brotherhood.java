@@ -53,6 +53,8 @@ public class Brotherhood extends Actor {
 
 	private Collection<Procession>	processions;
 	private Collection<FloatB>		floatBs;
+	private Collection<Enrolment>	enrolments;
+	private Collection<DropOut>		dropOuts;
 
 
 	@NotNull
@@ -73,5 +75,25 @@ public class Brotherhood extends Actor {
 
 	public void setFloatBs(final Collection<FloatB> floatBs) {
 		this.floatBs = floatBs;
+	}
+
+	@NotNull
+	@Valid
+	public Collection<Enrolment> getEnrolments() {
+		return this.enrolments;
+	}
+
+	public void setEnrolments(final Collection<Enrolment> enrolments) {
+		this.enrolments = enrolments;
+	}
+
+	@NotNull
+	@Valid
+	public Collection<DropOut> getDropOuts() {
+		return this.dropOuts;
+	}
+
+	public void setDropOuts(final Collection<DropOut> dropOuts) {
+		this.dropOuts = dropOuts;
 	}
 }
