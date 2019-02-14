@@ -424,5 +424,96 @@
 		<property name="row" value="1" />
 		<property name="column" value="1" />
 	</bean>
-
+	
+	<bean class="domain.Place" id="place2">
+		<property name="row" value="1" />
+		<property name="column" value="2" />
+	</bean>
+	
+	<bean class="domain.Place" id="place3">
+		<property name="row" value="2" />
+		<property name="column" value="1" />
+	</bean>
+	
+	<bean class="domain.Place" id="place4">
+		<property name="row" value="2" />
+		<property name="column" value="2" />
+	</bean>
+	
+	<!-- Positions -->
+	
+	<bean class="domain.Position" id="position1">
+		<property name="languagePositions">
+			<list>
+				<ref bean="languagePosition1" />
+				<ref bean="languagePosition2" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="domain.Position" id="position2">
+		<property name="languagePositions">
+			<list>
+				<ref bean="languagePosition3" />
+				<ref bean="languagePosition4" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="domain.Position" id="position3">
+		<property name="languagePositions">
+			<list>
+				<ref bean="languagePosition5" />
+				<ref bean="languagePosition6" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="domain.Position" id="position4">
+		<property name="languagePositions">
+			<list>
+				<ref bean="languagePosition7" />
+				<ref bean="languagePosition8" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="domain.Position" id="position5">
+		<property name="languagePositions">
+			<list>
+				<ref bean="languagePosition9" />
+				<ref bean="languagePosition10" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="domain.Position" id="position6">
+		<property name="languagePositions">
+			<list>
+				<ref bean="languagePosition11" />
+				<ref bean="languagePosition12" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="domain.Position" id="position7">
+		<property name="languagePositions">
+			<list>
+				<ref bean="languagePosition13" />
+				<ref bean="languagePosition14" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Processions -->
+	
+	<bean class="domain.Procession" id="procession1">
+		<property name="title" value="title procession 1" />
+		<property name="description" value="description procession1" />
+		<property name="moment" value="2018/02/01 12:00" />
+		<property name="ticker" value="180201-AAAAAA" />
+		<property name="isDraft" value="true" />
+		<property name="request" ref="request1" />
+	</bean>
+	
 </beans>
