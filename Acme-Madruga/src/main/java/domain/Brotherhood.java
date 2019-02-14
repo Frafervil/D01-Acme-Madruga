@@ -31,12 +31,21 @@ public class Brotherhood extends Actor {
 	}
 
 	@NotNull
-	public Date getEstablishmentDatet() {
+	public Date getEstablishmentDate() {
 		return this.establishmentDate;
 	}
 
 	public void setEstablishmentDate(final Date establishmentDate) {
 		this.establishmentDate = establishmentDate;
+	}
+
+	@NotNull
+	public Collection<String> getPictures() {
+		return this.pictures;
+	}
+
+	public void setPictures(final Collection<String> pictures) {
+		this.pictures = pictures;
 	}
 
 
@@ -59,7 +68,7 @@ public class Brotherhood extends Actor {
 	@NotNull
 	@Valid
 	public Collection<FloatB> getFloatBs() {
-		return this.processions;
+		return this.floatBs;
 	}
 
 	public void setFloatBs(final Collection<FloatB> floatBs) {
