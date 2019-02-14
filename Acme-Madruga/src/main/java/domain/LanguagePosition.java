@@ -1,4 +1,3 @@
-
 package domain;
 
 import javax.persistence.Access;
@@ -11,14 +10,11 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Access(AccessType.PROPERTY)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {
-	"name", "language"
-}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "name", "language" }))
 public class LanguagePosition extends DomainEntity {
 
-	private String	name;
-	private String	language;
-
+	private String name;
+	private String language;
 
 	@NotBlank
 	public String getName() {
