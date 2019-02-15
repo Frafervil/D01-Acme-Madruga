@@ -1,3 +1,4 @@
+
 package domain;
 
 import java.util.Collection;
@@ -5,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -15,9 +17,10 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.PROPERTY)
 public class Brotherhood extends Actor {
 
-	private String title;
-	private Date establishmentDate;
-	private Collection<String> pictures;
+	private String				title;
+	private Date				establishmentDate;
+	private Collection<String>	pictures;
+
 
 	@NotBlank
 	public String getTitle() {
@@ -38,6 +41,7 @@ public class Brotherhood extends Actor {
 	}
 
 	@NotNull
+	@ElementCollection
 	public Collection<String> getPictures() {
 		return this.pictures;
 	}
@@ -46,12 +50,14 @@ public class Brotherhood extends Actor {
 		this.pictures = pictures;
 	}
 
+
 	// Relationships----------------------------------------------
 
-	private Collection<Procession> processions;
-	private Collection<FloatB> floatBs;
-	private Collection<Enrolment> enrolments;
-	private Collection<DropOut> dropOuts;
+	private Collection<Procession>	processions;
+	private Collection<FloatB>		floatBs;
+	private Collection<Enrolment>	enrolments;
+	private Collection<DropOut>		dropOuts;
+
 
 	@NotNull
 	@OneToMany

@@ -1,9 +1,11 @@
+
 package domain;
 
 import java.util.Collection;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
@@ -15,9 +17,10 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.PROPERTY)
 public class FloatB extends DomainEntity {
 
-	private String title;
-	private String description;
-	private Collection<String> pictures;
+	private String				title;
+	private String				description;
+	private Collection<String>	pictures;
+
 
 	@NotBlank
 	public String getTitle() {
@@ -38,6 +41,7 @@ public class FloatB extends DomainEntity {
 	}
 
 	@NotNull
+	@ElementCollection
 	public Collection<String> getPictures() {
 		return this.pictures;
 	}
@@ -46,9 +50,11 @@ public class FloatB extends DomainEntity {
 		this.pictures = pictures;
 	}
 
+
 	// Relationships----------------------------------------------
 
-	private Procession procession;
+	private Procession	procession;
+
 
 	@Valid
 	@OneToOne(optional = true)

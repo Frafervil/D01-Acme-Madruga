@@ -1,5 +1,7 @@
+
 package domain;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Access;
@@ -18,11 +20,12 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.PROPERTY)
 public class Procession extends DomainEntity {
 
-	private String title;
-	private String description;
-	private Date moment;
-	private String ticker;
-	private boolean isDraft;
+	private String	title;
+	private String	description;
+	private Date	moment;
+	private String	ticker;
+	private boolean	isDraft;
+
 
 	@NotBlank
 	public String getTitle() {
@@ -71,17 +74,19 @@ public class Procession extends DomainEntity {
 		this.isDraft = isDraft;
 	}
 
+
 	// Relationships----------------------------------------------
 
-	private Request request;
+	private Collection<Request>	requests;
+
 
 	@NotNull
 	@OneToMany(mappedBy = "procession")
-	public Request getRequest() {
-		return this.request;
+	public Collection<Request> getRequests() {
+		return this.requests;
 	}
 
-	public void setRequest(final Request request) {
-		this.request = request;
+	public void setRequests(final Collection<Request> requests) {
+		this.requests = requests;
 	}
 }
