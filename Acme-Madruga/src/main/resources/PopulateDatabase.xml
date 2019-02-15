@@ -346,6 +346,8 @@
 		
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="member" ref="member1" />
+		<property name="position" ref="position1" />
+
 	</bean>
 	
 	<bean id="enrolment2" class="domain.Enrolment">
@@ -353,6 +355,8 @@
 		
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="member" ref="member2" />
+		<property name="position" ref="position2" />
+
 	</bean>
 	
 	<bean id="enrolment3" class="domain.Enrolment">
@@ -360,6 +364,8 @@
 		
 		<property name="brotherhood" ref="brotherhood2" />
 		<property name="member" ref="member1" />
+		<property name="position" ref="position3" />
+
 	</bean>
 	
 	<!-- FloatBs -->
@@ -561,15 +567,15 @@
 	
 	<!-- Requests -->
 	<bean class="domain.Request" id="request1">
-		<property name="member" value="member1" />
+		<property name="member" ref="member1" />
 		<property name="status" value="PENDING" />
-		<property name="rejectionReason" value="test" />
+		<property name="rejectionReason" value="" />
 		<property name="place" ref="place1" />
 		<property name="procession" ref="procession1" />
 	</bean>
 	
 	<bean class="domain.Request" id="request2">
-		<property name="member" value="member2" />
+		<property name="member" ref="member2" />
 		<property name="status" value="REJECTED" />
 		<property name="rejectionReason" value="Demasiado mayor para desfilar" />
 		<property name="place" ref="place2" />
@@ -577,9 +583,9 @@
 	</bean>
 
 	<bean class="domain.Request" id="request3">
-		<property name="member" value="member1" />
+		<property name="member" ref="member1" />
 		<property name="status" value="APROVED" />
-		<property name="rejectionReason" value="test" />
+		<property name="rejectionReason" value="" />
 		<property name="place" ref="place3" />
 		<property name="procession" ref="procession1" />
 	</bean>
@@ -592,7 +598,7 @@
 		<property name="moment" value="2018/03/01 12:00" />
 		<property name="ticker" value="180301-AAAAAA" />
 		<property name="isDraft" value="false" />
-		<property name="request">
+		<property name="requests">
 			<list>
 				<ref bean="request1" />
 				<ref bean="request3" />
@@ -606,7 +612,7 @@
 		<property name="moment" value="2018/03/02 12:00" />
 		<property name="ticker" value="180302-AAABBB" />
 		<property name="isDraft" value="false" />
-		<property name="request">
+		<property name="requests">
 			<list>
 				<ref bean="request2" />
 			</list>
@@ -619,7 +625,7 @@
 		<property name="moment" value="2018/03/03 12:00" />
 		<property name="ticker" value="180303-CCCBBB" />
 		<property name="isDraft" value="true" />
-		<property name="request">
+		<property name="requests">
 			<list>
 			</list>
 		</property>

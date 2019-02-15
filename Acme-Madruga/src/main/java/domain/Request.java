@@ -1,3 +1,4 @@
+
 package domain;
 
 import javax.persistence.Access;
@@ -15,11 +16,12 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.PROPERTY)
 public class Request extends DomainEntity {
 
-	private String status;
-	private String rejectionReason;
-	private Place place;
-	private Procession procession;
-	private Member member;
+	private String		status;
+	private String		rejectionReason;
+	private Place		place;
+	private Procession	procession;
+	private Member		member;
+
 
 	@NotBlank
 	@Pattern(regexp = "^PENDING|APROVED|REJECTED$")
@@ -31,7 +33,6 @@ public class Request extends DomainEntity {
 		this.status = status;
 	}
 
-	@NotBlank
 	public String getRejectionReason() {
 		return this.rejectionReason;
 	}

@@ -4,8 +4,8 @@ package domain;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
 @Entity
@@ -16,7 +16,7 @@ public class Place extends DomainEntity {
 	private int	columnP;
 
 
-	@NotBlank
+	@NotNull
 	@Range(min = 1)
 	public int getrowP() {
 		return this.rowP;
@@ -26,7 +26,7 @@ public class Place extends DomainEntity {
 		this.rowP = rowP;
 	}
 
-	@NotBlank
+	@NotNull
 	@Range(min = 1)
 	public int getcolumnP() {
 		return this.columnP;
