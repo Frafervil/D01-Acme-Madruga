@@ -42,6 +42,7 @@
 		<security:intercept-url pattern="/welcome/index.do" access="permitAll" /> 
 
 		<security:intercept-url pattern="/brotherhood/list.do" access="permitAll" /> 
+		<security:intercept-url pattern="/brotherhood/display.do" access="permitAll" /> 
 
 	
 	

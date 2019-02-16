@@ -20,7 +20,7 @@
 	<spring:message code="brotherhood.title" var="titleHeader" />
 	<display:column property="title" title="${titleHeader}"
 		sortable="true" />
-		<spring:message code="brotherhood.establishmentDate" var="momentHeader" />
+	<spring:message code="brotherhood.establishmentDate" var="establishmentDateHeader" />
 	<display:column property="establishmentDate" title="${establishmentDateHeader}"
 		sortable="true" />
 	<!-- Action links -->
