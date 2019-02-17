@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.BrotherhoodRepository;
+import security.LoginService;
+import security.UserAccount;
 import domain.Brotherhood;
 
 @Service
@@ -39,6 +41,28 @@ public class BrotherhoodService {
 
 		result = this.brotherhoodRepository.findAll();
 		Assert.notNull(result);
+		return result;
+	}
+
+	// Other business methods
+
+	public Brotherhood findByPrincipal() {
+		Brotherhood result;
+		UserAccount userAccount;
+
+		userAccount = LoginService.getPrincipal();
+		Assert.notNull(userAccount);
+		result = this.findByUserAccountId(userAccount.getId());
+		Assert.notNull(result);
+
+		return result;
+
+	}
+
+	public Brotherhood findByUserAccountId(final int userAccountId) {
+		Assert.notNull(userAccountId);
+		Brotherhood result;
+		result = this.brotherhoodRepository.findByUserAccountId(userAccountId);
 		return result;
 	}
 

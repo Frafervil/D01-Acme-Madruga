@@ -54,7 +54,6 @@ public class Brotherhood extends Actor {
 	// Relationships----------------------------------------------
 
 	private Collection<Procession>	processions;
-	private Collection<FloatB>		floatBs;
 	private Collection<Enrolment>	enrolments;
 	private Collection<DropOut>		dropOuts;
 
@@ -67,16 +66,6 @@ public class Brotherhood extends Actor {
 
 	public void setProcessions(final Collection<Procession> processions) {
 		this.processions = processions;
-	}
-
-	@NotNull
-	@OneToMany
-	public Collection<FloatB> getFloatBs() {
-		return this.floatBs;
-	}
-
-	public void setFloatBs(final Collection<FloatB> floatBs) {
-		this.floatBs = floatBs;
 	}
 
 	@NotNull

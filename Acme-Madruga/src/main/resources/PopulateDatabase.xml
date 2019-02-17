@@ -137,12 +137,6 @@
 				<ref bean="procession2" />
 			</list>
 		</property>
-		<property name="floatBs">
-			<list>
-				<ref bean="floatB1" />
-				<ref bean="floatB2" />
-			</list>
-		</property>
 		<property name="enrolments">
 			<list>
 				<ref bean="enrolment1" />
@@ -178,11 +172,6 @@
 				<ref bean="procession3" />
 			</list>
 		</property>
-		<property name="floatBs">
-			<list>
-				<ref bean="floatB3" />
-			</list>
-		</property>
 		<property name="enrolments">
 			<list>
 				<ref bean="enrolment3" />
@@ -213,11 +202,6 @@
 			</list>
 		</property>
 		<property name="processions">
-			<list>
-				
-			</list>
-		</property>
-		<property name="floatBs">
 			<list>
 				
 			</list>
@@ -379,6 +363,7 @@
 				<value>http://www.fotolog5.com</value>
 			</list>
 		</property>
+		<property name="brotherhood" ref="brotherhood1" />
 		<property name="procession" ref="procession1" />
 	</bean>
 	
@@ -391,6 +376,7 @@
 				<value>http://www.fotolog7.com</value>
 			</list>
 		</property>
+		<property name="brotherhood" ref="brotherhood1" />
 		<property name="procession" ref="procession2" />
 	</bean>
 	
@@ -403,6 +389,7 @@
 				<value>http://www.fotolog9.com</value>
 			</list>
 		</property>
+		<property name="brotherhood" ref="brotherhood2" />
 		<property name="procession"><null /></property>
 	</bean>
 	
