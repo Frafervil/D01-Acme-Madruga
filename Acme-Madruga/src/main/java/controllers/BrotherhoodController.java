@@ -23,6 +23,8 @@ import domain.Procession;
 @RequestMapping("/brotherhood")
 public class BrotherhoodController extends AbstractController {
 
+	// Services
+
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
