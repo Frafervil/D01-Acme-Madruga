@@ -60,7 +60,7 @@
 <!-- Floats -->
 <h3> <spring:message code="brotherhood.floats" /> </h3>
 <jstl:choose>
-<jstl:when test="${not empty brotherhood.floatBs}">
+<jstl:when test="${not empty floats}">
 <display:table pagesize="5" class="displaytag" name="floats" requestURI="brotherhood/display.do" id="floats">
 		<spring:message code="brotherhood.floats.title" var="title" />
 		<display:column property="title" title="${title}" sortable="true"/>
