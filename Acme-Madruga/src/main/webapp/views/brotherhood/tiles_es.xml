@@ -13,5 +13,9 @@
 	<definition name="brotherhood/display" extends="master.page">
 		<put-attribute name="title" value="Mostrar hermandad" />
 		<put-attribute name="body" value="/views/brotherhood/display.jsp" />
-	</definition>	
+	</definition>
+	<definition name="brotherhood/edit" extends="master.page">
+		<put-attribute name="title" value="Editar hermandad" />
+		<put-attribute name="body" value="/views/brotherhood/edit.jsp" />
+	</definition>
 </tiles-definitions>

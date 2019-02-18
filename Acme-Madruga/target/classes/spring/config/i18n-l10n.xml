@@ -28,7 +28,6 @@
 		<value>/views/profile/messages</value>
 		<value>/views/brotherhood/messages</value>
 		<value>/views/member/messages</value>
-
 		<value>/views/floatB/messages</value>
 	</util:list>
 
