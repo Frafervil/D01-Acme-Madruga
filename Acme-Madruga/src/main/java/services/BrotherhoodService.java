@@ -89,22 +89,25 @@ public class BrotherhoodService {
 		return result;
 	}
 
+	// Other business methods
+
 	public Brotherhood findByPrincipal() {
 		Brotherhood result;
 		UserAccount userAccount;
 
 		userAccount = LoginService.getPrincipal();
 		Assert.notNull(userAccount);
-		result = this.findByUserAccount(userAccount);
+		result = this.findByUserAccountId(userAccount.getId());
 		Assert.notNull(result);
 
 		return result;
 
 	}
-	public Brotherhood findByUserAccount(final UserAccount userAccount) {
-		Assert.notNull(userAccount);
+
+	public Brotherhood findByUserAccountId(final int userAccountId) {
+		Assert.notNull(userAccountId);
 		Brotherhood result;
-		result = this.brotherhoodRepository.findByUserAccountId(userAccount.getId());
+		result = this.brotherhoodRepository.findByUserAccountId(userAccountId);
 		return result;
 	}
 

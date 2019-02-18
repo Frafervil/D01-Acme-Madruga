@@ -7,6 +7,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -54,6 +55,7 @@ public class FloatB extends DomainEntity {
 	// Relationships----------------------------------------------
 
 	private Procession	procession;
+	private Brotherhood	brotherhood;
 
 
 	@Valid
@@ -64,5 +66,16 @@ public class FloatB extends DomainEntity {
 
 	public void setProcession(final Procession procession) {
 		this.procession = procession;
+	}
+
+	@Valid
+	@ManyToOne(optional = false)
+	@NotNull
+	public Brotherhood getBrotherhood() {
+		return this.brotherhood;
+	}
+
+	public void setBrotherhood(final Brotherhood brotherhood) {
+		this.brotherhood = brotherhood;
 	}
 }

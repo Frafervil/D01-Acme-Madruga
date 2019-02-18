@@ -76,7 +76,7 @@ public class BrotherhoodController extends AbstractController {
 		brotherhood = this.brotherhoodService.findOne(brotherhoodId);
 		members = this.memberService.findAllMembersOfOneBrotherhood(brotherhoodId);
 		processions = this.processionService.findAllProcessionsOfOneBrotherhood(brotherhoodId);
-		floats = this.floatBService.findAllFloatsOfOneBrotherhood(brotherhoodId);
+		floats = this.floatBService.findByBrotherhoodId(brotherhoodId);
 
 		result = new ModelAndView("brotherhood/display");
 		result.addObject("brotherhood", brotherhood);

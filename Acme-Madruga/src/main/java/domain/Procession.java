@@ -1,4 +1,3 @@
-
 package domain;
 
 import java.util.Collection;
@@ -15,17 +14,17 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Access(AccessType.PROPERTY)
 public class Procession extends DomainEntity {
 
-	private String	title;
-	private String	description;
-	private Date	moment;
-	private String	ticker;
-	private boolean	isDraft;
-
+	private String title;
+	private String description;
+	private Date moment;
+	private String ticker;
+	private boolean isDraft;
 
 	@NotBlank
 	public String getTitle() {
@@ -46,7 +45,8 @@ public class Procession extends DomainEntity {
 	}
 
 	@NotNull
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	public Date getMoment() {
 		return this.moment;
 	}
@@ -74,11 +74,9 @@ public class Procession extends DomainEntity {
 		this.isDraft = isDraft;
 	}
 
-
 	// Relationships----------------------------------------------
 
-	private Collection<Request>	requests;
-
+	private Collection<Request> requests;
 
 	@NotNull
 	@OneToMany(mappedBy = "procession")
