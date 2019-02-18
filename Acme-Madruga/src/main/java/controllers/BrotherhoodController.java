@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
@@ -66,14 +65,15 @@ public class BrotherhoodController extends AbstractController {
 	// Display
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam final int brotherhoodId) {
+	public ModelAndView show() {
 		final ModelAndView result;
 		Brotherhood brotherhood;
 		Collection<Member> members;
 		final Collection<Procession> processions;
 		final Collection<FloatB> floats;
 
-		brotherhood = this.brotherhoodService.findOne(brotherhoodId);
+		brotherhood = this.brotherhoodService.findByPrincipal();
+		final int brotherhoodId = brotherhood.getId();
 		members = this.memberService.findAllMembersOfOneBrotherhood(brotherhoodId);
 		processions = this.processionService.findAllProcessionsOfOneBrotherhood(brotherhoodId);
 		floats = this.floatBService.findByBrotherhoodId(brotherhoodId);
@@ -129,6 +129,18 @@ public class BrotherhoodController extends AbstractController {
 				result = this.createEditModelAndView(brotherhood, "brotherhood.commit.error");
 
 			}
+
+		return result;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit() {
+		ModelAndView result;
+		Brotherhood brotherhood;
+
+		brotherhood = this.brotherhoodService.findByPrincipal();
+
+		result = this.createEditModelAndView(brotherhood);
 
 		return result;
 	}

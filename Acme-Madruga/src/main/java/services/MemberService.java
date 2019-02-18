@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MemberRepository;
+import security.Authority;
 import security.LoginService;
 import security.UserAccount;
 import domain.DropOut;
 import domain.Enrolment;
-import security.Authority;
 import domain.Member;
 import domain.Request;
 
@@ -44,26 +44,6 @@ public class MemberService {
 		result.setRequests(new ArrayList<Request>());
 
 		return result;
-	}
-
-	public Member save(final Member member) {
-		Member saved;
-		Assert.notNull(member);
-
-		if (member.getId() == 0) {
-
-			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-			member.getUserAccount().setPassword(passwordEncoder.encodePassword(member.getUserAccount().getPassword(), null));
-		} else {
-			Member principal;
-			principal = this.findByPrincipal();
-			Assert.notNull(principal);
-
-		}
-
-		saved = this.memberRepository.save(member);
-
-		return saved;
 	}
 
 	public Member findOne(final int memberId) {
@@ -128,9 +108,30 @@ public class MemberService {
 		return result;
 
 	}
-	public boolean exists(final Integer arg0) {
+
+	public Member save2(final Member member) {
+		Member saved;
+		Assert.notNull(member);
+
+		if (member.getId() == 0) {
+
+			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+			member.getUserAccount().setPassword(passwordEncoder.encodePassword(member.getUserAccount().getPassword(), null));
+		} else {
+			Member principal;
+			principal = this.findByPrincipal();
+			Assert.notNull(principal);
+
+		}
+
+		saved = this.memberRepository.save(member);
+
+		return saved;
 	}
+
+	public boolean exists(final Integer arg0) {
 		return this.memberRepository.exists(arg0);
+	}
 
 	// Business Method
 	public Collection<Member> findAllMembersOfOneBrotherhood(final int brotherhoodId) {

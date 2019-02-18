@@ -2,6 +2,7 @@
 package controllers;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -101,22 +103,18 @@ public class MemberController extends AbstractController {
 		return result;
 	}
 
-}
-
-
 	@RequestMapping("/display")
 	public ModelAndView view() {
 		ModelAndView result;
 
 		result = new ModelAndView("member/display");
-		result.addObject("actor", this.memberservice.findByPrincipal());
+		result.addObject("actor", this.memberService.findByPrincipal());
 
 		return result;
 	}
 
-
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Member member, final BindingResult binding) {
+	public ModelAndView save2(@Valid final Member member, final BindingResult binding) {
 		ModelAndView result;
 
 		if (binding.hasErrors()) {
@@ -125,7 +123,7 @@ public class MemberController extends AbstractController {
 				System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
 		} else
 			try {
-				this.memberservice.save(member);
+				this.memberService.save(member);
 				result = new ModelAndView("redirect:/welcome/index.do");
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(member, "member.commit.error");
@@ -133,16 +131,16 @@ public class MemberController extends AbstractController {
 		return result;
 	}
 
-}
-
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit() {
 		ModelAndView result;
 		Member member;
 
-		member = this.memberservice.findByPrincipal();
+		member = this.memberService.findByPrincipal();
 
 		result = this.createEditModelAndView(member);
 
 		return result;
 	}
+
+}

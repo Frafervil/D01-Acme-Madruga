@@ -17,7 +17,6 @@ import security.UserAccount;
 import domain.Brotherhood;
 import domain.DropOut;
 import domain.Enrolment;
-import domain.FloatB;
 import domain.Procession;
 
 @Service
@@ -43,7 +42,6 @@ public class BrotherhoodService {
 		result.setEnrolments(new ArrayList<Enrolment>());
 		result.setDropOuts(new ArrayList<DropOut>());
 		result.setProcessions(new ArrayList<Procession>());
-		result.setFloatBs(new ArrayList<FloatB>());
 
 		return result;
 	}
