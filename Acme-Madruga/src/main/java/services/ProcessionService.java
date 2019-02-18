@@ -1,6 +1,6 @@
-
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import repositories.BrotherhoodRepository;
 import repositories.ProcessionRepository;
+import domain.Brotherhood;
+import domain.Enrolment;
 import domain.Procession;
+import domain.Request;
 
 @Service
 @Transactional
@@ -17,13 +21,24 @@ public class ProcessionService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private ProcessionRepository	processionRepository;
-
+	private ProcessionRepository processionRepository;
 
 	// Supporting services ----------------------------------------------------
 
-	// Additional functions
+	@Autowired
+	private BrotherhoodService brotherhoodService;
+
 	// Simple CRUD Methods
+	public Procession create() {
+		Procession result;
+
+		result = new Procession();
+
+		result.setRequests(new ArrayList<Request>());
+		result.setIsDraft(true);
+		return result;
+	}
+
 	public Procession findOne(final int processionId) {
 		Procession result;
 
@@ -41,11 +56,13 @@ public class ProcessionService {
 		return result;
 	}
 
-	// Business Method
-	public Collection<Procession> findAllProcessionsOfOneBrotherhood(final int brotherhoodId) {
+	// Business Methods
+	public Collection<Procession> findAllProcessionsOfOneBrotherhood(
+			final int brotherhoodId) {
 		Collection<Procession> result;
 
-		result = this.processionRepository.findAllProcessionsOfOneBrotherhood(brotherhoodId);
+		result = this.processionRepository
+				.findAllProcessionsOfOneBrotherhood(brotherhoodId);
 		Assert.notNull(result);
 		return result;
 	}
