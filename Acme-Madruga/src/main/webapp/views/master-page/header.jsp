@@ -31,20 +31,20 @@
 			</li>
 		</security:authorize>
 		
-		<security:authorize access="hasRole('MEMBER')">
-			<li><a class="fNiv"><spring:message	code="master.page.member" /></a>
-				<ul>
-					<li class="arrow"></li>	
-					<li><a href="member/display.do"><spring:message code="master.page.member.display"/></a>					
-				</ul>
-			</li>
-		</security:authorize>
-		
 		<security:authorize access="hasRole('BROTHERHOOD')">
 			<li><a class="fNiv"><spring:message	code="master.page.brotherhood" /></a>
 				<ul>
 					<li class="arrow"></li>
 					<li><a href="floatB/brotherhood/list.do"><spring:message code="master.page.brotherhood.floatBs" /></a></li>					
+				</ul>
+			</li>
+		</security:authorize>
+		
+		<security:authorize access="hasRole('MEMBER')">
+			<li><a class="fNiv"><spring:message	code="master.page.brotherhood" /></a>
+				<ul>
+					<li class="arrow"></li>
+					<li><a href="request/member/list.do"><spring:message code="master.page.member.request" /></a></li>
 				</ul>
 			</li>
 		</security:authorize>

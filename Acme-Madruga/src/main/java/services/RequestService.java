@@ -22,6 +22,9 @@ public class RequestService {
 
 	// Supporting services
 
+    @Autowired
+	private MemberService	memberService;
+
 	// Simple CRUD methods
 
 	public Collection<Request> findAll() {
@@ -39,4 +42,60 @@ public class RequestService {
 
 		this.requestRepository.delete(request);
 	}
+}
+
+	public Request create() {
+		Request result;
+		Member principal;
+
+		principal = this.memberService.findByPrincipal();
+		Assert.notNull(principal);
+
+		result = new Request();
+		Assert.notNull(result);
+
+		return result;
+	}
+
+	public Collection<Request> findByPrincipal() {
+		Member principal;
+
+		principal = this.memberService.findByPrincipal();
+		Assert.notNull(principal);
+
+		Collection<Request> result;
+		result = this.requestRepository.findByMember(principal.getId());
+		Assert.notNull(result);
+		return result;
+
+	}
+	public Map<String, List<Request>> groupByStatus() {
+		final Map<String, List<Request>> result = new HashMap<String, List<Request>>();
+		final Member principal;
+		final Collection<Request> requests;
+
+		principal = this.memberService.findByPrincipal();
+		Assert.notNull(principal);
+
+		requests = this.findByPrincipal();
+		Assert.notNull(requests);
+		for (final Request r : requests)
+			if (result.containsKey(r.getStatus()))
+				result.get(r.getStatus()).add(r);
+			else {
+				final List<Request> l = new ArrayList<Request>();
+				l.add(r);
+				result.put(r.getStatus(), l);
+			}
+
+		if (!result.containsKey("ACCEPTED"))
+			result.put("APROVED", new ArrayList<Request>());
+		if (!result.containsKey("PENDING"))
+			result.put("PENDING", new ArrayList<Request>());
+		if (!result.containsKey("REJECTED"))
+			result.put("REJECTED", new ArrayList<Request>());
+
+		return result;
+	}
+
 }
