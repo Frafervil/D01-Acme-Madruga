@@ -24,7 +24,7 @@
 			<img src="${member.photo}" class="ui mini rounded image">
 			<div class="content">
 				<spring:message code="member.profile.title" />
-				${member.name}
+				${actor.name}
 			</div>
 
 		</tr>
@@ -32,27 +32,27 @@
 	<tbody>
 		<tr>
 			<td><spring:message code="member.name" />
-			<td data-label="name">${member.name}</td>
+			<td data-label="name">${actor.name}</td>
 		</tr>
 		<tr>
 			<td><spring:message code="member.middleName" />
-			<td data-label="MiddleName">${member.middleName}</td>
+			<td data-label="MiddleName">${actor.middleName}</td>
 		</tr>
 		<tr>
 			<td><spring:message code="member.surname" />
-			<td data-label="surname">${member.surname}</td>
+			<td data-label="surname">${actor.surname}</td>
 		</tr>
 		<tr>
 			<td><spring:message code="member.email" />
-			<td data-label="email">${member.email}</td>
+			<td data-label="email">${actor.email}</td>
 		</tr>
 		<tr>
 			<td><spring:message code="member.phone" />
-			<td data-label="phone">${member.phone}</td>
+			<td data-label="phone">${actor.phone}</td>
 		</tr>
 		<tr>
 			<td><spring:message code="member.address" />
-			<td data-label="address">${member.address}</td>
+			<td data-label="address">${actor.address}</td>
 		</tr>
 	</tbody>
 </table>

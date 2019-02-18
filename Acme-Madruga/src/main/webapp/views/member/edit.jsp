@@ -31,7 +31,7 @@
 	<br />
 	
 	<form:label path="middleName">
-		<spring:message code="member.middlename" />:
+		<spring:message code="member.middleName" />:
 	</form:label>
 	<form:input path="middleName" />
 	<form:errors cssClass="error" path="middleName" />

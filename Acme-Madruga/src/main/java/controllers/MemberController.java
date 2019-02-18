@@ -116,27 +116,23 @@ public class MemberController extends AbstractController {
 		return result;
 	}
 
-//	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-//	public ModelAndView save(@Valid final Member member,
-//			final BindingResult binding) {
-//		ModelAndView result;
-//
-//		if (binding.hasErrors()) {
-//			result = this.createEditModelAndView(member);
-//			for (final ObjectError e : binding.getAllErrors())
-//				System.out.println(e.getObjectName() + " error ["
-//						+ e.getDefaultMessage() + "] "
-//						+ Arrays.toString(e.getCodes()));
-//		} else
-//			try {
-//				this.memberService.save(member);
-//				result = new ModelAndView("redirect:/welcome/index.do");
-//			} catch (final Throwable oops) {
-//				result = this.createEditModelAndView(member,
-//						"member.commit.error");
-//			}
-//		return result;
-//	}
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView save2(@Valid final Member member, final BindingResult binding) {
+		ModelAndView result;
+
+		if (binding.hasErrors()) {
+			result = this.createEditModelAndView(member);
+			for (final ObjectError e : binding.getAllErrors())
+				System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+		} else
+			try {
+				this.memberService.save(member);
+				result = new ModelAndView("redirect:/welcome/index.do");
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(member, "member.commit.error");
+			}
+		return result;
+	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit() {
@@ -149,4 +145,6 @@ public class MemberController extends AbstractController {
 
 		return result;
 	}
+}
+
 }
