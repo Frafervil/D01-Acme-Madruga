@@ -44,9 +44,8 @@
 	<jstl:if test="${floatB.brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
 	<security:authorize access="hasRole('BROTHERHOOD')">
 			<a href="floatB/brotherhood/edit.do?floatBId=${floatB.id}"><spring:message code="floatB.edit"/></a><br/>
-			<a href="floatB/brotherhood/delete.do?floatBId=${floatB.id }"><spring:message code="floatB.delete"/></a><br/>
 	</security:authorize>
 	</jstl:if>
 	
-	<a href="floatB/list.do"><spring:message code="floatB.list"/></a>
+	<a href="floatB/brotherhood/list.do"><spring:message code="floatB.list"/></a>
 	<br/>

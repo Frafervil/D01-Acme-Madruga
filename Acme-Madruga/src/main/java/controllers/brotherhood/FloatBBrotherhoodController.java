@@ -1,6 +1,7 @@
 
 package controllers.brotherhood;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -16,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
 import services.FloatBService;
-import services.ProcessionService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.FloatB;
@@ -34,23 +34,28 @@ public class FloatBBrotherhoodController extends AbstractController {
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
-	@Autowired
-	private ProcessionService	processionService;
-
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView result;
 		Collection<FloatB> floats;
 
-		final Brotherhood hood = this.brotherhoodService.findByPrincipal();
-		Assert.notNull(hood);
+		try {
+			final Brotherhood hood = this.brotherhoodService.findByPrincipal();
+			Assert.notNull(hood);
 
-		floats = this.floatBService.findByBrotherhoodId(hood.getId());
+			floats = this.floatBService.findByBrotherhoodId(hood.getId());
 
-		result = new ModelAndView("floatB/list");
-		result.addObject("floatBs", floats);
-		result.addObject("requestURI", "floatB/brotherhood/list.do");
+			result = new ModelAndView("floatB/list");
+			result.addObject("floatBs", floats);
+			result.addObject("requestURI", "floatB/brotherhood/list.do");
+
+		} catch (final Throwable oops) {
+			oops.printStackTrace();
+			result = new ModelAndView("floatB/list");
+			result.addObject("message", "floatB.retrieve.error");
+			result.addObject("prolicks", new ArrayList<FloatB>());
+		}
 
 		return result;
 	}
@@ -89,8 +94,8 @@ public class FloatBBrotherhoodController extends AbstractController {
 		ModelAndView result;
 
 		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(floatB);
 			System.out.println(binding.getAllErrors());
+			result = this.createEditModelAndView(floatB);
 		} else
 			try {
 				floatB = this.floatBService.save(floatB);
@@ -123,7 +128,11 @@ public class FloatBBrotherhoodController extends AbstractController {
 
 	protected ModelAndView createEditModelAndView(final FloatB floatB, final String messageCode) {
 		ModelAndView result;
-		final Collection<Procession> processions = this.processionService.findAll();
+		Brotherhood brotherhood;
+		final Collection<Procession> processions;
+
+		brotherhood = floatB.getBrotherhood();
+		processions = brotherhood.getProcessions();
 
 		result = new ModelAndView("floatB/edit");
 		result.addObject("floatB", floatB);

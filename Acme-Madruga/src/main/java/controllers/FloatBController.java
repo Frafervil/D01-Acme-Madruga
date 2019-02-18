@@ -13,7 +13,7 @@ import services.FloatBService;
 import domain.FloatB;
 
 @Controller
-@RequestMapping("/prolick")
+@RequestMapping("/floatB")
 public class FloatBController extends AbstractController {
 
 	// Servicios
