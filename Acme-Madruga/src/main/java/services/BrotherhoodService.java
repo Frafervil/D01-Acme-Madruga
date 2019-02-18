@@ -17,7 +17,6 @@ import security.UserAccount;
 import domain.Brotherhood;
 import domain.DropOut;
 import domain.Enrolment;
-import domain.FloatB;
 import domain.Procession;
 
 @Service
@@ -37,29 +36,28 @@ public class BrotherhoodService {
 
 	public Brotherhood create() {
 		Brotherhood result;
+		Date moment;
 
 		result = new Brotherhood();
 
 		result.setEnrolments(new ArrayList<Enrolment>());
 		result.setDropOuts(new ArrayList<DropOut>());
 		result.setProcessions(new ArrayList<Procession>());
-		result.setFloatBs(new ArrayList<FloatB>());
-
+		moment = new Date(System.currentTimeMillis() - 1);
+		Assert.notNull(moment);
+		result.setEstablishmentDate(moment);
 		return result;
 	}
 
 	public Brotherhood save(final Brotherhood brotherhood) {
 		Brotherhood saved;
 		Assert.notNull(brotherhood);
-		Date moment;
 
 		if (brotherhood.getId() == 0) {
 
 			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
 			brotherhood.getUserAccount().setPassword(passwordEncoder.encodePassword(brotherhood.getUserAccount().getPassword(), null));
 
-			moment = new Date(System.currentTimeMillis() - 1);
-			brotherhood.setEstablishmentDate(moment);
 		} else {
 			Brotherhood principal;
 			principal = this.findByPrincipal();

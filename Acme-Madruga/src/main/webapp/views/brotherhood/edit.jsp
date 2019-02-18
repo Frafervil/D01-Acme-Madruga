@@ -18,7 +18,6 @@
 
 	<form:hidden path="id"/>
 	<form:hidden path="version"/>
-	<form:hidden path="floatBs"/>
 	<form:hidden path="processions"/>
 	<form:hidden path="enrolments"/>
 	<form:hidden path="dropOuts"/>
