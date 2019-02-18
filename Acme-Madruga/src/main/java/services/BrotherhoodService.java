@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.ArrayList;
@@ -25,12 +24,12 @@ public class BrotherhoodService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private BrotherhoodRepository	brotherhoodRepository;
-
+	private BrotherhoodRepository brotherhoodRepository;
 
 	// Supporting services ----------------------------------------------------
 
-	// Additional functions
+	@Autowired
+	private ProcessionService processionService;
 
 	// Simple CRUD Methods
 
@@ -56,7 +55,9 @@ public class BrotherhoodService {
 		if (brotherhood.getId() == 0) {
 
 			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-			brotherhood.getUserAccount().setPassword(passwordEncoder.encodePassword(brotherhood.getUserAccount().getPassword(), null));
+			brotherhood.getUserAccount().setPassword(
+					passwordEncoder.encodePassword(brotherhood.getUserAccount()
+							.getPassword(), null));
 
 		} else {
 			Brotherhood principal;
@@ -108,5 +109,4 @@ public class BrotherhoodService {
 		result = this.brotherhoodRepository.findByUserAccountId(userAccountId);
 		return result;
 	}
-
 }

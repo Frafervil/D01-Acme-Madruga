@@ -25,13 +25,23 @@
 				<ul>
 					<li class="arrow"></li>
 					<li><a href="administrator/action-1.do"><spring:message code="master.page.administrator.action.1" /></a></li>
-					<li><a href="administrator/action-2.do"><spring:message code="master.page.administrator.action.2" /></a></li>					
+					<li><a href="administrator/action-2.do"><spring:message code="master.page.administrator.action.2" /></a></li>	
+					<li><a href="administrator/viewProfile.do"><spring:message code="master.page.administrator.viewProfile"/></a>					
+				</ul>
+			</li>
+		</security:authorize>
+		
+		<security:authorize access="hasRole('BROTHERHOOD')">
+			<li><a class="fNiv"><spring:message	code="master.page.brotherhood" /></a>
+				<ul>
+					<li class="arrow"></li>
+					<li><a href="floatB/brotherhood/list.do"><spring:message code="master.page.brotherhood.floatBs" /></a></li>					
 				</ul>
 			</li>
 		</security:authorize>
 		
 		<security:authorize access="hasRole('MEMBER')">
-			<li><a class="fNiv"><spring:message	code="master.page.member" /></a>
+			<li><a class="fNiv"><spring:message	code="master.page.brotherhood" /></a>
 				<ul>
 					<li class="arrow"></li>
 					<li><a href="request/member/list.do"><spring:message code="master.page.member.request" /></a></li>

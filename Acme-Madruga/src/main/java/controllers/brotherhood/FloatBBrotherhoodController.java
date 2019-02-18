@@ -1,7 +1,6 @@
 
 package controllers.brotherhood;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -44,22 +43,15 @@ public class FloatBBrotherhoodController extends AbstractController {
 		ModelAndView result;
 		Collection<FloatB> floats;
 
-		try {
-			final Brotherhood hood = this.brotherhoodService.findByPrincipal();
-			Assert.notNull(hood);
+		final Brotherhood hood = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(hood);
 
-			floats = this.floatBService.findByBrotherhoodId(hood.getId());
+		floats = this.floatBService.findByBrotherhoodId(hood.getId());
 
-			result = new ModelAndView("floatB/list");
-			result.addObject("floatBs", floats);
-			result.addObject("requestURI", "floatBs/brotherhood/list.do");
+		result = new ModelAndView("floatB/list");
+		result.addObject("floatBs", floats);
+		result.addObject("requestURI", "floatB/brotherhood/list.do");
 
-		} catch (final Throwable oops) {
-			oops.printStackTrace();
-			result = new ModelAndView("floatB/list");
-			result.addObject("message", "floatB.retrieve.error");
-			result.addObject("floatBs", new ArrayList<FloatB>());
-		}
 		return result;
 	}
 
@@ -96,9 +88,10 @@ public class FloatBBrotherhoodController extends AbstractController {
 	public ModelAndView save(@Valid FloatB floatB, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors())
+		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(floatB);
-		else
+			System.out.println(binding.getAllErrors());
+		} else
 			try {
 				floatB = this.floatBService.save(floatB);
 				result = new ModelAndView("redirect:list.do");
