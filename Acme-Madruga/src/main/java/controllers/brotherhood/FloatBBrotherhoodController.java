@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
 import services.FloatBService;
-import services.ProcessionService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.FloatB;
@@ -35,9 +34,6 @@ public class FloatBBrotherhoodController extends AbstractController {
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
-	@Autowired
-	private ProcessionService	processionService;
-
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
@@ -52,14 +48,15 @@ public class FloatBBrotherhoodController extends AbstractController {
 
 			result = new ModelAndView("floatB/list");
 			result.addObject("floatBs", floats);
-			result.addObject("requestURI", "floatBs/brotherhood/list.do");
+			result.addObject("requestURI", "floatB/brotherhood/list.do");
 
 		} catch (final Throwable oops) {
 			oops.printStackTrace();
 			result = new ModelAndView("floatB/list");
 			result.addObject("message", "floatB.retrieve.error");
-			result.addObject("floatBs", new ArrayList<FloatB>());
+			result.addObject("prolicks", new ArrayList<FloatB>());
 		}
+
 		return result;
 	}
 
@@ -96,9 +93,10 @@ public class FloatBBrotherhoodController extends AbstractController {
 	public ModelAndView save(@Valid FloatB floatB, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors())
+		if (binding.hasErrors()) {
+			System.out.println(binding.getAllErrors());
 			result = this.createEditModelAndView(floatB);
-		else
+		} else
 			try {
 				floatB = this.floatBService.save(floatB);
 				result = new ModelAndView("redirect:list.do");
@@ -130,7 +128,11 @@ public class FloatBBrotherhoodController extends AbstractController {
 
 	protected ModelAndView createEditModelAndView(final FloatB floatB, final String messageCode) {
 		ModelAndView result;
-		final Collection<Procession> processions = this.processionService.findAll();
+		Brotherhood brotherhood;
+		final Collection<Procession> processions;
+
+		brotherhood = floatB.getBrotherhood();
+		processions = brotherhood.getProcessions();
 
 		result = new ModelAndView("floatB/edit");
 		result.addObject("floatB", floatB);

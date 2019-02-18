@@ -43,8 +43,8 @@
 		<security:authorize access="hasRole('BROTHERHOOD')">
 			<li><a class="fNiv"><spring:message	code="master.page.brotherhood" /></a>
 				<ul>
-					<li class="arrow"></li>	
-					<li><a href="brotherhood/display.do"><spring:message code="master.page.brotherhood.display"/></a>					
+					<li class="arrow"></li>
+					<li><a href="floatB/brotherhood/list.do"><spring:message code="master.page.brotherhood.floatBs" /></a></li>					
 				</ul>
 			</li>
 		</security:authorize>
