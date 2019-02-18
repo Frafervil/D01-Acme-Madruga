@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MemberRepository;
-import security.Authority;
 import security.LoginService;
 import security.UserAccount;
+import domain.DropOut;
+import domain.Enrolment;
+import security.Authority;
 import domain.Member;
+import domain.Request;
 
 @Service
 @Transactional
@@ -29,6 +33,39 @@ public class MemberService {
 	// Additional functions
 
 	// Simple CRUD Methods
+
+	public Member create() {
+		Member result;
+
+		result = new Member();
+
+		result.setEnrolments(new ArrayList<Enrolment>());
+		result.setDropOuts(new ArrayList<DropOut>());
+		result.setRequests(new ArrayList<Request>());
+
+		return result;
+	}
+
+	public Member save(final Member member) {
+		Member saved;
+		Assert.notNull(member);
+
+		if (member.getId() == 0) {
+
+			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+			member.getUserAccount().setPassword(passwordEncoder.encodePassword(member.getUserAccount().getPassword(), null));
+		} else {
+			Member principal;
+			principal = this.findByPrincipal();
+			Assert.notNull(principal);
+
+		}
+
+		saved = this.memberRepository.save(member);
+
+		return saved;
+	}
+
 	public Member findOne(final int memberId) {
 		Member result;
 
@@ -47,26 +84,30 @@ public class MemberService {
 	}
 
 	public Member findByPrincipal() {
-		Member res;
+		Member result;
 		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
-		if (userAccount == null)
-			res = null;
-		else
-			res = this.memberRepository.findByUserAccountId(userAccount.getId());
-		return res;
-	}
 
-	public boolean exists(final Integer arg0) {
-		return this.memberRepository.exists(arg0);
+		userAccount = LoginService.getPrincipal();
+		Assert.notNull(userAccount);
+		result = this.findByUserAccount(userAccount);
+		Assert.notNull(result);
+
+		return result;
+
+	}
+	public Member findByUserAccount(final UserAccount userAccount) {
+		Assert.notNull(userAccount);
+		Member result;
+		result = this.memberRepository.findByUserAccountId(userAccount.getId());
+		return result;
 	}
 
 	public Member save(final Member member) {
 		final Member result, saved;
 		final UserAccount logedUserAccount;
 		Authority authority;
-		Md5PasswordEncoder encoder;
 
+		Md5PasswordEncoder encoder;
 		encoder = new Md5PasswordEncoder();
 		authority = new Authority();
 		authority.setAuthority("MEMBER");
@@ -85,7 +126,11 @@ public class MemberService {
 		result = this.memberRepository.save(member);
 
 		return result;
+
 	}
+	public boolean exists(final Integer arg0) {
+	}
+		return this.memberRepository.exists(arg0);
 
 	// Business Method
 	public Collection<Member> findAllMembersOfOneBrotherhood(final int brotherhoodId) {
@@ -95,4 +140,5 @@ public class MemberService {
 		Assert.notNull(result);
 		return result;
 	}
+
 }

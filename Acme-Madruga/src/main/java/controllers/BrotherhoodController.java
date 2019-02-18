@@ -1,16 +1,22 @@
 
 package controllers;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
+import services.CustomisationService;
 import services.FloatBService;
 import services.MemberService;
 import services.ProcessionService;
@@ -23,17 +29,22 @@ import domain.Procession;
 @RequestMapping("/brotherhood")
 public class BrotherhoodController extends AbstractController {
 
-	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	// Services
 
 	@Autowired
-	private MemberService		memberService;
+	private BrotherhoodService		brotherhoodService;
 
 	@Autowired
-	private ProcessionService	processionService;
+	private MemberService			memberService;
 
 	@Autowired
-	private FloatBService		floatBService;
+	private ProcessionService		processionService;
+
+	@Autowired
+	private FloatBService			floatBService;
+
+	@Autowired
+	private CustomisationService	customisationService;
 
 
 	// List
@@ -65,7 +76,7 @@ public class BrotherhoodController extends AbstractController {
 		brotherhood = this.brotherhoodService.findOne(brotherhoodId);
 		members = this.memberService.findAllMembersOfOneBrotherhood(brotherhoodId);
 		processions = this.processionService.findAllProcessionsOfOneBrotherhood(brotherhoodId);
-		floats = this.floatBService.findAllFloatsOfOneBrotherhood(brotherhoodId);
+		floats = this.floatBService.findByBrotherhoodId(brotherhoodId);
 
 		result = new ModelAndView("brotherhood/display");
 		result.addObject("brotherhood", brotherhood);
@@ -75,5 +86,78 @@ public class BrotherhoodController extends AbstractController {
 
 		return result;
 
+	}
+
+	//Create
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public ModelAndView create() {
+		ModelAndView result;
+		Brotherhood brotherhood;
+
+		brotherhood = this.brotherhoodService.create();
+		result = this.createEditModelAndView(brotherhood);
+
+		return result;
+	}
+	//Edit
+	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+	public ModelAndView save(@Valid final Brotherhood brotherhood, final BindingResult binding) {
+		ModelAndView result;
+
+		if (binding.hasErrors()) {
+			result = this.createEditModelAndView(brotherhood);
+			System.out.println(binding.getAllErrors());
+		} else
+			try {
+				this.brotherhoodService.save(brotherhood);
+				result = new ModelAndView("welcome/index");
+
+				SimpleDateFormat formatter;
+				String moment;
+				final String welcomeMessage;
+
+				formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				moment = formatter.format(new Date());
+
+				welcomeMessage = "welcome.greeting.signUp.brotherhood";
+
+				result.addObject("welcomeMessage", welcomeMessage);
+				result.addObject("moment", moment);
+				result.addObject("signUp", true);
+
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(brotherhood, "brotherhood.commit.error");
+
+			}
+
+		return result;
+	}
+
+	// Ancillary methods ------------------------------------------------------
+
+	protected ModelAndView createEditModelAndView(final Brotherhood brotherhood) {
+		ModelAndView result;
+
+		result = this.createEditModelAndView(brotherhood, null);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(final Brotherhood brotherhood, final String message) {
+		ModelAndView result;
+		String countryCode;
+
+		countryCode = this.customisationService.find().getCountryCode();
+
+		result = new ModelAndView("brotherhood/edit");
+		result.addObject("brotherhood", brotherhood);
+		result.addObject("actionURI", "brotherhood/edit.do");
+		result.addObject("redirectURI", "welcome/index.do");
+		result.addObject("countryCode", countryCode);
+		result.addObject("permission", true);
+
+		result.addObject("message", message);
+
+		return result;
 	}
 }

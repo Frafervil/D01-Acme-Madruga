@@ -22,12 +22,35 @@
 			Add your own converters using entries of the following form: 
 			<bean class="converters.Class1ToClass2" /> 
 		-->
+		<bean class="converters.ActorToStringConverter" />
+		<bean class="converters.StringToActorConverter" />
+
+		<bean class="converters.BrotherhoodToStringConverter" />
+		<bean class="converters.StringToBrotherhoodConverter" />
+
+		<bean class="converters.DropOutToStringConverter" />
+		<bean class="converters.StringToDropOutConverter" />
+
+		<bean class="converters.EnrolmentToStringConverter" />
+		<bean class="converters.StringToEnrolmentConverter" />
+		
+		<bean class="converters.FloatBToStringConverter" />
+		<bean class="converters.StringToFloatBConverter" />
+
+		<bean class="converters.ProcessionToStringConverter" />
+		<bean class="converters.StringToProcessionConverter" />
+		
+		<bean class="converters.MemberToStringConverter" />
+		<bean class="converters.StringToMemberConverter" />
+		
+		<bean class="converters.RequestToStringConverter" />
+		<bean class="converters.StringToRequestConverter" />
+		
+		<bean class="converters.RequestToStringConverter" />
+		<bean class="converters.StringToRequestConverter" />		
 		
 		<bean class="converters.UserAccountToStringConverter"/>
 		<bean class="converters.StringToUserAccount"/>
-		
-		<bean class="converters.MemberToStringConverter"/>
-		<bean class="converters.StringToMemberConverter"/>
 	</util:list>
 	
 </beans>
