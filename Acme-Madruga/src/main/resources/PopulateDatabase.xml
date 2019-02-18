@@ -118,7 +118,7 @@
 		<property name="userAccount" ref="userAccount2" />
 
 		<property name="title" value="title1" />
-		<property name="establishmentDate" value="2017/10/01 17:34" />
+		<property name="establishmentDate" value="01/10/2017" />
 		<property name="pictures">
 			<list>
 				<value>http://www.fotolog1.com</value>
@@ -155,7 +155,7 @@
 		<property name="userAccount" ref="userAccount3" />
 
 		<property name="title" value="title2" />
-		<property name="establishmentDate" value="2016/01/01 16:34" />
+		<property name="establishmentDate" value="01/01/2016" />
 		<property name="pictures">
 			<list>
 				<value>http://www.fotolog3.com</value>
@@ -189,7 +189,7 @@
 		<property name="userAccount" ref="userAccount4" />
 
 		<property name="title" value="title3" />
-		<property name="establishmentDate" value="2016/03/11 9:00" />
+		<property name="establishmentDate" value="11/03/2016" />
 		<property name="pictures">
 			<list>
 
@@ -310,7 +310,7 @@
 	<!-- DropOuts -->
 
 	<bean id="dropOut1" class="domain.DropOut">
-		<property name="moment" value="2017/12/01 17:34" />
+		<property name="moment" value="01/12/2017 17:34" />
 
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="member" ref="member1" />
@@ -319,7 +319,7 @@
 	<!-- Enrolments -->
 
 	<bean id="enrolment1" class="domain.Enrolment">
-		<property name="moment" value="2017/11/01 15:31" />
+		<property name="moment" value="01/11/2017 15:31" />
 
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="member" ref="member1" />
@@ -328,7 +328,7 @@
 	</bean>
 
 	<bean id="enrolment2" class="domain.Enrolment">
-		<property name="moment" value="2017/12/04 15:31" />
+		<property name="moment" value="04/12/2017 15:31" />
 
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="member" ref="member2" />
@@ -337,7 +337,7 @@
 	</bean>
 
 	<bean id="enrolment3" class="domain.Enrolment">
-		<property name="moment" value="2017/11/01 15:31" />
+		<property name="moment" value="01/11/2017 15:31" />
 
 		<property name="brotherhood" ref="brotherhood2" />
 		<property name="member" ref="member1" />
@@ -577,7 +577,7 @@
 	<bean class="domain.Procession" id="procession1">
 		<property name="title" value="title procession 1" />
 		<property name="description" value="description procession1" />
-		<property name="moment" value="2018/03/01 12:00" />
+		<property name="moment" value="01/03/2018 12:00" />
 		<property name="ticker" value="180301-AAAAAA" />
 		<property name="isDraft" value="false" />
 		<property name="requests">
@@ -591,7 +591,7 @@
 	<bean class="domain.Procession" id="procession2">
 		<property name="title" value="title procession 2" />
 		<property name="description" value="description procession2" />
-		<property name="moment" value="2018/03/02 12:00" />
+		<property name="moment" value="02/03/2018 12:00" />
 		<property name="ticker" value="180302-AAABBB" />
 		<property name="isDraft" value="false" />
 		<property name="requests">
@@ -604,7 +604,7 @@
 	<bean class="domain.Procession" id="procession3">
 		<property name="title" value="title procession 3" />
 		<property name="description" value="description procession3" />
-		<property name="moment" value="2018/03/03 12:00" />
+		<property name="moment" value="03/03/2018 12:00" />
 		<property name="ticker" value="180303-CCCBBB" />
 		<property name="isDraft" value="true" />
 		<property name="requests">
