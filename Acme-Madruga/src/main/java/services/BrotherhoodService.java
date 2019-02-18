@@ -28,9 +28,6 @@ public class BrotherhoodService {
 
 	// Supporting services ----------------------------------------------------
 
-	@Autowired
-	private ProcessionService processionService;
-
 	// Simple CRUD Methods
 
 	public Brotherhood create() {
