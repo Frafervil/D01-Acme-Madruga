@@ -27,9 +27,10 @@
 		<value>/views/customer/messages</value>
 		<value>/views/profile/messages</value>
 		<value>/views/brotherhood/messages</value>
-		<value>/views/member/messages</value>
-
 		<value>/views/floatB/messages</value>
+		<value>/views/member/messages</value>
+		<value>/views/request/messages</value>
+
 	</util:list>
 
 </beans>
