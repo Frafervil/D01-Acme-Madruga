@@ -1,6 +1,5 @@
 package services;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import repositories.MemberRepository;
 import security.LoginService;
 import security.UserAccount;
 import domain.Member;
-import domain.Request;
 
 @Service
 @Transactional
@@ -33,8 +31,6 @@ public class MemberService {
 		Member result;
 
 		result = new Member();
-
-		result.setRequests(new ArrayList<Request>());
 
 		return result;
 	}

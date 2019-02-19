@@ -1,7 +1,5 @@
-
 package services;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -15,7 +13,6 @@ import repositories.BrotherhoodRepository;
 import security.LoginService;
 import security.UserAccount;
 import domain.Brotherhood;
-import domain.Procession;
 
 @Service
 @Transactional
@@ -23,8 +20,7 @@ public class BrotherhoodService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private BrotherhoodRepository	brotherhoodRepository;
-
+	private BrotherhoodRepository brotherhoodRepository;
 
 	// Supporting services ----------------------------------------------------
 
@@ -36,7 +32,6 @@ public class BrotherhoodService {
 
 		result = new Brotherhood();
 
-		result.setProcessions(new ArrayList<Procession>());
 		moment = new Date(System.currentTimeMillis() - 1);
 		Assert.notNull(moment);
 		result.setEstablishmentDate(moment);
@@ -50,7 +45,9 @@ public class BrotherhoodService {
 		if (brotherhood.getId() == 0) {
 
 			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-			brotherhood.getUserAccount().setPassword(passwordEncoder.encodePassword(brotherhood.getUserAccount().getPassword(), null));
+			brotherhood.getUserAccount().setPassword(
+					passwordEncoder.encodePassword(brotherhood.getUserAccount()
+							.getPassword(), null));
 
 		} else {
 			Brotherhood principal;

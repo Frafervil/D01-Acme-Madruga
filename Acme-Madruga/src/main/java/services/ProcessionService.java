@@ -1,6 +1,5 @@
 package services;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Random;
@@ -65,7 +64,6 @@ public class ProcessionService {
 
 		result = new Procession();
 		result.setTicker(this.generateTicker());
-		result.setRequests(new ArrayList<Request>());
 		result.setIsDraft(true);
 		return result;
 	}
@@ -90,26 +88,20 @@ public class ProcessionService {
 	public Procession save(final Procession procession) {
 		Brotherhood principal;
 		Procession result;
-		Collection<Procession> processions;
 
 		Assert.notNull(procession);
 
 		principal = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(principal);
 
-		processions = principal.getProcessions();
 		result = this.processionRepository.save(procession);
 		Assert.notNull(result);
-		if (procession.getId() == 0)
-			processions.add(result);
-		principal.setProcessions(processions);
 
 		return result;
 	}
 
 	public void delete(final Procession procession) {
 		Brotherhood principal;
-		Collection<Procession> processions;
 		Collection<Request> requests;
 
 		Assert.notNull(procession);
@@ -118,9 +110,6 @@ public class ProcessionService {
 		principal = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(principal);
 
-		processions = principal.getProcessions();
-		processions.remove(procession);
-		principal.setProcessions(processions);
 		this.brotherhoodService.save(principal);
 
 		requests = this.requestService.findAll();
