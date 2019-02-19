@@ -12,6 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
+import domain.Brotherhood;
+import domain.FloatB;
 import domain.Procession;
 
 import utilities.AbstractTest;
@@ -29,17 +31,16 @@ public class ProcessionServiceTest extends AbstractTest {
 
 	// Tests
 
-	@Test
-	public void testFindOne() {
-		Procession result;
-
-		super.authenticate("brotherhood1");
-		result = this.processionService
-				.findOne(this.getEntityId("procession1"));
-
-		System.out.println(result);
-		super.unauthenticate();
-	}
+	// @Test
+	// public void testFindOne() {
+	// Procession result;
+	//
+	// super.authenticate("brotherhood1");
+	// result = this.processionService.findOne(289);
+	//
+	// System.out.println(result);
+	// super.unauthenticate();
+	// }
 
 	@Test
 	public void testCreateAndSave() {
@@ -51,6 +52,9 @@ public class ProcessionServiceTest extends AbstractTest {
 		procession.setTitle("Título 1");
 		procession.setDescription("Descripción 1");
 		procession.setMoment(new Date(1531526400000L));
+		procession.setMaxRow(50);
+		procession.setMaxColumn(50);
+		procession.setBrotherhood(new Brotherhood());
 
 		saved = this.processionService.save(procession);
 		System.out.println(procession.getTicker());
@@ -59,16 +63,16 @@ public class ProcessionServiceTest extends AbstractTest {
 		super.unauthenticate();
 	}
 
-	@Test
-	public void testFindAll() {
-		Collection<Procession> result;
-
-		super.authenticate("brotherhood1");
-		result = this.processionService.findAll();
-
-		System.out.println(result.size());
-		super.unauthenticate();
-	}
+	// @Test
+	// public void testFindAll() {
+	// Collection<Procession> result;
+	//
+	// super.authenticate("brotherhood1");
+	// result = this.processionService.findAll();
+	//
+	// System.out.println(result.size());
+	// super.unauthenticate();
+	// }
 
 	@Test
 	public void testDelete() {
