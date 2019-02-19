@@ -1,6 +1,6 @@
-
 package controllers.brotherhood;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -16,11 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
 import services.FloatBService;
-import services.ProcessionService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.FloatB;
-import domain.Procession;
 
 @Controller
 @RequestMapping("/floatB/brotherhood")
@@ -29,31 +27,39 @@ public class FloatBBrotherhoodController extends AbstractController {
 	// Servicios
 
 	@Autowired
-	private FloatBService		floatBService;
+	private FloatBService floatBService;
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService brotherhoodService;
 
-	@Autowired
-	private ProcessionService	processionService;
-
+	// List
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView result;
 		Collection<FloatB> floats;
 
-		final Brotherhood hood = this.brotherhoodService.findByPrincipal();
-		Assert.notNull(hood);
+		try {
+			final Brotherhood hood = this.brotherhoodService.findByPrincipal();
+			Assert.notNull(hood);
 
-		floats = this.floatBService.findByBrotherhoodId(hood.getId());
+			floats = this.floatBService.findByBrotherhoodId(hood.getId());
 
-		result = new ModelAndView("floatB/list");
-		result.addObject("floatBs", floats);
-		result.addObject("requestURI", "floatB/brotherhood/list.do");
+			result = new ModelAndView("floatB/list");
+			result.addObject("floatBs", floats);
+			result.addObject("requestURI", "floatB/brotherhood/list.do");
+
+		} catch (final Throwable oops) {
+			oops.printStackTrace();
+			result = new ModelAndView("floatB/list");
+			result.addObject("message", "floatB.retrieve.error");
+			result.addObject("prolicks", new ArrayList<FloatB>());
+		}
 
 		return result;
 	}
+
+	// Create
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
@@ -66,6 +72,8 @@ public class FloatBBrotherhoodController extends AbstractController {
 
 		return result;
 	}
+
+	// Edit
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam final int floatBId) {
@@ -89,15 +97,16 @@ public class FloatBBrotherhoodController extends AbstractController {
 		ModelAndView result;
 
 		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(floatB);
 			System.out.println(binding.getAllErrors());
+			result = this.createEditModelAndView(floatB);
 		} else
 			try {
 				floatB = this.floatBService.save(floatB);
 				result = new ModelAndView("redirect:list.do");
 			} catch (final Throwable oops) {
 				oops.printStackTrace();
-				result = this.createEditModelAndView(floatB, "floatB.commit.error");
+				result = this.createEditModelAndView(floatB,
+						"floatB.commit.error");
 			}
 		return result;
 	}
@@ -121,13 +130,12 @@ public class FloatBBrotherhoodController extends AbstractController {
 		return this.createEditModelAndView(floatB, null);
 	}
 
-	protected ModelAndView createEditModelAndView(final FloatB floatB, final String messageCode) {
+	protected ModelAndView createEditModelAndView(final FloatB floatB,
+			final String messageCode) {
 		ModelAndView result;
-		final Collection<Procession> processions = this.processionService.findAll();
 
 		result = new ModelAndView("floatB/edit");
 		result.addObject("floatB", floatB);
-		result.addObject("processions", processions);
 		result.addObject("message", messageCode);
 
 		return result;

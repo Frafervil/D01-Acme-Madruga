@@ -1,6 +1,5 @@
 package services;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -14,9 +13,6 @@ import repositories.BrotherhoodRepository;
 import security.LoginService;
 import security.UserAccount;
 import domain.Brotherhood;
-import domain.DropOut;
-import domain.Enrolment;
-import domain.Procession;
 
 @Service
 @Transactional
@@ -28,9 +24,6 @@ public class BrotherhoodService {
 
 	// Supporting services ----------------------------------------------------
 
-	@Autowired
-	private ProcessionService processionService;
-
 	// Simple CRUD Methods
 
 	public Brotherhood create() {
@@ -39,9 +32,6 @@ public class BrotherhoodService {
 
 		result = new Brotherhood();
 
-		result.setEnrolments(new ArrayList<Enrolment>());
-		result.setDropOuts(new ArrayList<DropOut>());
-		result.setProcessions(new ArrayList<Procession>());
 		moment = new Date(System.currentTimeMillis() - 1);
 		Assert.notNull(moment);
 		result.setEstablishmentDate(moment);

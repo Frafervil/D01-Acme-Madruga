@@ -98,7 +98,7 @@ public class FloatBService {
 		return result;
 	}
 
-	// Business Method
+	// Other business methods
 
 	public Collection<FloatB> findByBrotherhoodId(final int brotherhoodId) {
 		Collection<FloatB> result;

@@ -74,3 +74,7 @@
 <spring:message code="brotherhood.floats.empty" /> 
 </jstl:otherwise>
 </jstl:choose>
+
+<input type="button" name="save" class="ui button"
+	value="<spring:message code="brotherhood.edit" />"
+	onclick="javascript: relativeRedir('brotherhood/edit.do');" />

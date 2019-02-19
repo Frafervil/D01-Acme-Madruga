@@ -1,7 +1,6 @@
 
 package services;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import security.UserAccount;
 import domain.DropOut;
 import domain.Enrolment;
 import domain.Member;
-import domain.Request;
 
 @Service
 @Transactional
@@ -37,10 +35,6 @@ public class MemberService {
 		Member result;
 
 		result = new Member();
-
-		result.setEnrolments(new ArrayList<Enrolment>());
-		result.setDropOuts(new ArrayList<DropOut>());
-		result.setRequests(new ArrayList<Request>());
 
 		return result;
 	}
@@ -136,6 +130,51 @@ public class MemberService {
 	//		return result;
 	//
 	//	}
+
+	// Md5PasswordEncoder encoder;
+	// encoder = new Md5PasswordEncoder();
+	// authority = new Authority();
+	// authority.setAuthority("MEMBER");
+	// Assert.notNull(member, "member.not.null");
+	//
+	// if (this.exists(member.getId())) {
+	// logedUserAccount = LoginService.getPrincipal();
+	// Assert.notNull(logedUserAccount, "member.notLogged");
+	// Assert.isTrue(logedUserAccount.equals(member.getUserAccount()));
+	// saved = this.memberRepository.findOne(member.getId());
+	// Assert.notNull(saved, "member.not.null");
+	// Assert.isTrue(saved.getUserAccount().getUsername().equals(member.getUserAccount().getUsername()),
+	// "member.notEqual.username");
+	// Assert.isTrue(member.getUserAccount().getPassword().equals(saved.getUserAccount().getPassword()),
+	// "member.notEqual.password");
+	// } else
+	// member.getUserAccount().setPassword(encoder.encodePassword(member.getUserAccount().getPassword(),
+	// null));
+	// result = this.memberRepository.save(member);
+	//
+	// return result;
+
+	public Member save(final Member member) {
+		Member saved;
+		Assert.notNull(member);
+
+		if (member.getId() == 0) {
+
+			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+			member.getUserAccount().setPassword(
+					passwordEncoder.encodePassword(member.getUserAccount()
+							.getPassword(), null));
+		} else {
+			Member principal;
+			principal = this.findByPrincipal();
+			Assert.notNull(principal);
+
+		}
+
+		saved = this.memberRepository.save(member);
+
+		return saved;
+	}
 
 	public boolean exists(final Integer arg0) {
 		return this.memberRepository.exists(arg0);

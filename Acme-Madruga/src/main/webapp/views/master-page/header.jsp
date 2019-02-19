@@ -49,6 +49,7 @@
 			</li>
 		</security:authorize>
 		
+		
 		<security:authorize access="isAnonymous()">
 			<li><a class="fNiv"><spring:message code="master.page.brotherhoods" /></a>
 				<ul>
