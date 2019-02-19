@@ -32,6 +32,8 @@ public class FloatBBrotherhoodController extends AbstractController {
 	@Autowired
 	private BrotherhoodService brotherhoodService;
 
+	// List
+
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView result;
@@ -57,6 +59,8 @@ public class FloatBBrotherhoodController extends AbstractController {
 		return result;
 	}
 
+	// Create
+
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
 		ModelAndView result;
@@ -68,6 +72,8 @@ public class FloatBBrotherhoodController extends AbstractController {
 
 		return result;
 	}
+
+	// Edit
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam final int floatBId) {

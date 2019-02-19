@@ -19,6 +19,6 @@ public interface DropOutRepository extends JpaRepository<DropOut, Integer> {
 	Collection<DropOut> findByMemberId(int memberId);
 
 	@Query("select d from Enrolment d where d.brotherhood.id = ?1 and d.member.id = ?2")
-	DropOut findByBrotherhoodIdAndMemberId(int brotherhoodId, int memberId);
+	Collection<DropOut> findByBrotherhoodIdAndMemberId(int brotherhoodId, int memberId);
 
 }
