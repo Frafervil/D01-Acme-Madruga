@@ -1,12 +1,17 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import domain.Member;
 import domain.Request;
 
 import repositories.RequestRepository;
@@ -22,8 +27,8 @@ public class RequestService {
 
 	// Supporting services
 
-    @Autowired
-	private MemberService	memberService;
+	@Autowired
+	private MemberService memberService;
 
 	// Simple CRUD methods
 
@@ -42,7 +47,6 @@ public class RequestService {
 
 		this.requestRepository.delete(request);
 	}
-}
 
 	public Request create() {
 		Request result;
@@ -69,6 +73,9 @@ public class RequestService {
 		return result;
 
 	}
+
+	// Other business methods
+
 	public Map<String, List<Request>> groupByStatus() {
 		final Map<String, List<Request>> result = new HashMap<String, List<Request>>();
 		final Member principal;

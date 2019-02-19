@@ -136,8 +136,6 @@ public class MemberService {
 
 		return result;
 
-	}
-
 	public Member save2(final Member member) {
 		Member saved;
 		Assert.notNull(member);
@@ -173,4 +171,5 @@ public class MemberService {
 		return result;
 	}
 
+}
 }

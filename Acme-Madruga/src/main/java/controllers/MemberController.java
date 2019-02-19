@@ -117,19 +117,23 @@ public class MemberController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save2(@Valid final Member member, final BindingResult binding) {
+	public ModelAndView save2(@Valid final Member member,
+			final BindingResult binding) {
 		ModelAndView result;
 
 		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(member);
 			for (final ObjectError e : binding.getAllErrors())
-				System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+				System.out.println(e.getObjectName() + " error ["
+						+ e.getDefaultMessage() + "] "
+						+ Arrays.toString(e.getCodes()));
 		} else
 			try {
 				this.memberService.save(member);
 				result = new ModelAndView("redirect:/welcome/index.do");
 			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(member, "member.commit.error");
+				result = this.createEditModelAndView(member,
+						"member.commit.error");
 			}
 		return result;
 	}
@@ -145,6 +149,4 @@ public class MemberController extends AbstractController {
 
 		return result;
 	}
-}
-
 }
