@@ -1,4 +1,3 @@
-
 package services;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +14,14 @@ public class PlaceService {
 	// Managed Repository
 
 	@Autowired
-	PlaceRepository	placeRepository;
-
+	PlaceRepository placeRepository;
 
 	public void delete(final Place place) {
 		this.placeRepository.delete(place);
 	}
+
 	public Place create() {
-		final Place result;
+		final Place result = null;
 
 		return result;
 	}

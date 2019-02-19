@@ -1,4 +1,3 @@
-
 package controllers.member;
 
 import java.util.ArrayList;
@@ -27,11 +26,10 @@ public class RequestMemberController extends AbstractController {
 	// Services
 
 	@Autowired
-	private RequestService	requestService;
+	private RequestService requestService;
 
 	@Autowired
-	private MemberService	memberService;
-
+	private MemberService memberService;
 
 	// Listing
 
@@ -83,24 +81,21 @@ public class RequestMemberController extends AbstractController {
 		final ModelAndView result;
 		Request request;
 		Member member;
-		Boolean permission = false;
 
 		request = this.requestService.findOne(requestId);
 		member = this.memberService.findByPrincipal();
-		if (member.getRequests().contains(request))
-			permission = true;
 
 		result = new ModelAndView("request/display");
 		result.addObject("request", request);
 		result.addObject("member", member);
-		result.addObject("permission", permission);
 
 		return result;
 	}
 
 	// Delete
 	@RequestMapping(value = "/display", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final Request request, final BindingResult binding) {
+	public ModelAndView delete(final Request request,
+			final BindingResult binding) {
 		ModelAndView result;
 		System.out.println("AQUI");
 		try {
@@ -108,7 +103,8 @@ public class RequestMemberController extends AbstractController {
 			result = new ModelAndView("redirect:list.do");
 		} catch (final Throwable oops) {
 
-			result = this.createEditModelAndView(request, "request.commit.error");
+			result = this.createEditModelAndView(request,
+					"request.commit.error");
 			result.addObject("permission", true);
 
 		}
@@ -116,7 +112,7 @@ public class RequestMemberController extends AbstractController {
 		return result;
 	}
 
-	//Creation
+	// Creation
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
@@ -141,7 +137,8 @@ public class RequestMemberController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final Request request, final String message) {
+	protected ModelAndView createEditModelAndView(final Request request,
+			final String message) {
 		ModelAndView result;
 
 		result = new ModelAndView("request/edit");

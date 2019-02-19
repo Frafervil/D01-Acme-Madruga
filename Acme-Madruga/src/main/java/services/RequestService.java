@@ -32,8 +32,7 @@ public class RequestService {
 	private MemberService memberService;
 
 	@Autowired
-	private PlaceService	placeService;
-
+	private PlaceService placeService;
 
 	// Simple CRUD methods
 
@@ -43,14 +42,6 @@ public class RequestService {
 		result = this.requestRepository.findAll();
 		Assert.notNull(result);
 		return result;
-	}
-
-	public void delete(final Request request) {
-
-		Assert.notNull(request);
-		Assert.isTrue(request.getId() != 0);
-
-		this.requestRepository.delete(request);
 	}
 
 	public Request create() {
@@ -128,8 +119,6 @@ public class RequestService {
 
 		principal = this.memberService.findByPrincipal();
 		Assert.notNull(principal); // Checks if the principal is a manager
-
-		Assert.isTrue(principal.getRequests().contains(request));
 
 		place = request.getPlace();
 
