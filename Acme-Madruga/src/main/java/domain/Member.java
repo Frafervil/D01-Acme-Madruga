@@ -1,3 +1,4 @@
+
 package domain;
 
 import java.util.Collection;
@@ -14,9 +15,8 @@ public class Member extends Actor {
 
 	// Relationships----------------------------------------------
 
-	private Collection<Request> requests;
-	private Collection<Enrolment> enrolments;
-	private Collection<DropOut> dropOuts;
+	private Collection<Request>	requests;
+
 
 	@NotNull
 	@OneToMany(mappedBy = "member")
@@ -26,26 +26,6 @@ public class Member extends Actor {
 
 	public void setRequests(final Collection<Request> requests) {
 		this.requests = requests;
-	}
-
-	@NotNull
-	@OneToMany(mappedBy = "member")
-	public Collection<Enrolment> getEnrolments() {
-		return this.enrolments;
-	}
-
-	public void setEnrolments(final Collection<Enrolment> enrolments) {
-		this.enrolments = enrolments;
-	}
-
-	@NotNull
-	@OneToMany(mappedBy = "member")
-	public Collection<DropOut> getDropOuts() {
-		return this.dropOuts;
-	}
-
-	public void setDropOuts(final Collection<DropOut> dropOuts) {
-		this.dropOuts = dropOuts;
 	}
 
 }

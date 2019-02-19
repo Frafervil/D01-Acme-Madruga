@@ -1,3 +1,4 @@
+
 package domain;
 
 import java.util.Collection;
@@ -19,9 +20,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Access(AccessType.PROPERTY)
 public class Brotherhood extends Actor {
 
-	private String title;
-	private Date establishmentDate;
-	private Collection<String> pictures;
+	private String				title;
+	private Date				establishmentDate;
+	private Collection<String>	pictures;
+
 
 	@NotBlank
 	public String getTitle() {
@@ -53,11 +55,11 @@ public class Brotherhood extends Actor {
 		this.pictures = pictures;
 	}
 
+
 	// Relationships----------------------------------------------
 
-	private Collection<Procession> processions;
-	private Collection<Enrolment> enrolments;
-	private Collection<DropOut> dropOuts;
+	private Collection<Procession>	processions;
+
 
 	@NotNull
 	@OneToMany
@@ -67,25 +69,5 @@ public class Brotherhood extends Actor {
 
 	public void setProcessions(final Collection<Procession> processions) {
 		this.processions = processions;
-	}
-
-	@NotNull
-	@OneToMany(mappedBy = "brotherhood")
-	public Collection<Enrolment> getEnrolments() {
-		return this.enrolments;
-	}
-
-	public void setEnrolments(final Collection<Enrolment> enrolments) {
-		this.enrolments = enrolments;
-	}
-
-	@NotNull
-	@OneToMany(mappedBy = "brotherhood")
-	public Collection<DropOut> getDropOuts() {
-		return this.dropOuts;
-	}
-
-	public void setDropOuts(final Collection<DropOut> dropOuts) {
-		this.dropOuts = dropOuts;
 	}
 }

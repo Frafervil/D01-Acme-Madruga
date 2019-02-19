@@ -131,17 +131,6 @@
 				<ref bean="procession2" />
 			</list>
 		</property>
-		<property name="enrolments">
-			<list>
-				<ref bean="enrolment1" />
-				<ref bean="enrolment2" />
-			</list>
-		</property>
-		<property name="dropOuts">
-			<list>
-				<ref bean="dropOut1" />
-			</list>
-		</property>
 	</bean>
 
 	<bean class="domain.Brotherhood" id="brotherhood2">
@@ -164,16 +153,6 @@
 		<property name="processions">
 			<list>
 				<ref bean="procession3" />
-			</list>
-		</property>
-		<property name="enrolments">
-			<list>
-				<ref bean="enrolment3" />
-			</list>
-		</property>
-		<property name="dropOuts">
-			<list>
-
 			</list>
 		</property>
 	</bean>
@@ -200,16 +179,6 @@
 
 			</list>
 		</property>
-		<property name="enrolments">
-			<list>
-
-			</list>
-		</property>
-		<property name="dropOuts">
-			<list>
-
-			</list>
-		</property>
 	</bean>
 
 	<!-- Members -->
@@ -230,17 +199,6 @@
 				<ref bean="request3" />
 			</list>
 		</property>
-		<property name="enrolments">
-			<list>
-				<ref bean="enrolment1" />
-				<ref bean="enrolment3" />
-			</list>
-		</property>
-		<property name="dropOuts">
-			<list>
-				<ref bean="dropOut1" />
-			</list>
-		</property>
 	</bean>
 
 	<bean class="domain.Member" id="member2">
@@ -258,16 +216,6 @@
 				<ref bean="request2" />
 			</list>
 		</property>
-		<property name="enrolments">
-			<list>
-				<ref bean="enrolment2" />
-			</list>
-		</property>
-		<property name="dropOuts">
-			<list>
-
-			</list>
-		</property>
 	</bean>
 
 	<bean class="domain.Member" id="member3">
@@ -281,16 +229,6 @@
 		<property name="userAccount" ref="userAccount4" />
 
 		<property name="requests">
-			<list>
-
-			</list>
-		</property>
-		<property name="enrolments">
-			<list>
-
-			</list>
-		</property>
-		<property name="dropOuts">
 			<list>
 
 			</list>

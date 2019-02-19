@@ -37,8 +37,6 @@ public class MemberService {
 
 		result = new Member();
 
-		result.setEnrolments(new ArrayList<Enrolment>());
-		result.setDropOuts(new ArrayList<DropOut>());
 		result.setRequests(new ArrayList<Request>());
 
 		return result;
