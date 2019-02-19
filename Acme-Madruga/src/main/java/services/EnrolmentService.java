@@ -3,6 +3,7 @@ package services;
 import java.util.Collection;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import repositories.EnrolmentRepository;
@@ -19,11 +20,10 @@ public class EnrolmentService {
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService brotherhoodService;
 
 	@Autowired
-	private DropOutService		dropOutService;
-
+	private DropOutService dropOutService;
 
 	// Simple CRUD Methods
 
@@ -112,7 +112,8 @@ public class EnrolmentService {
 		return result;
 	}
 
-	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(final int brotherhoodId, final int memberId) {
+	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(
+			final int brotherhoodId, final int memberId) {
 		Collection<Enrolment> result;
 
 		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(
