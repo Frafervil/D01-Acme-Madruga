@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 
 import repositories.RequestRepository;
 import domain.Member;
+import domain.Place;
 import domain.Request;
 
 @Service
@@ -28,6 +29,9 @@ public class RequestService {
 	// Supporting services
 	@Autowired
 	private MemberService	memberService;
+
+	@Autowired
+	private PlaceService	placeService;
 
 
 	// Simple CRUD methods
@@ -86,4 +90,32 @@ public class RequestService {
 		return result;
 	}
 
+	public Request findOne(final int requestId) {
+		Request result;
+
+		result = this.requestRepository.findOne(requestId);
+		Assert.notNull(result);
+		return result;
+
+	}
+
+	public void delete(final Request request) {
+		Member principal;
+		final Place place;
+
+		Assert.notNull(request);
+		Assert.isTrue(request.getId() != 0);
+
+		principal = this.memberService.findByPrincipal();
+		Assert.notNull(principal); // Checks if the principal is a manager
+
+		Assert.isTrue(principal.getRequests().contains(request));
+
+		place = request.getPlace();
+
+		this.placeService.delete(place);
+
+		this.requestRepository.delete(request);
+
+	}
 }

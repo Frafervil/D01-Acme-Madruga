@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import security.LoginService;
 import security.UserAccount;
 import domain.DropOut;
 import domain.Enrolment;
-import security.Authority;
 import domain.Member;
 import domain.Request;
 
@@ -24,7 +24,8 @@ public class MemberService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private MemberRepository memberRepository;
+	private MemberRepository	memberRepository;
+
 
 	// Supporting services ----------------------------------------------------
 
@@ -51,9 +52,7 @@ public class MemberService {
 		if (member.getId() == 0) {
 
 			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-			member.getUserAccount().setPassword(
-					passwordEncoder.encodePassword(member.getUserAccount()
-							.getPassword(), null));
+			member.getUserAccount().setPassword(passwordEncoder.encodePassword(member.getUserAccount().getPassword(), null));
 		} else {
 			Member principal;
 			principal = this.findByPrincipal();
@@ -103,52 +102,50 @@ public class MemberService {
 		return result;
 	}
 
-//	public Member save(final Member member) {
-//		final Member result, saved;
-//		final UserAccount logedUserAccount;
-//		Authority authority;
-//
-//		Md5PasswordEncoder encoder;
-//		encoder = new Md5PasswordEncoder();
-//		authority = new Authority();
-//		authority.setAuthority("MEMBER");
-//		Assert.notNull(member, "member.not.null");
-//
-//		if (this.exists(member.getId())) {
-//			logedUserAccount = LoginService.getPrincipal();
-//			Assert.notNull(logedUserAccount, "member.notLogged");
-//			Assert.isTrue(logedUserAccount.equals(member.getUserAccount()));
-//			saved = this.memberRepository.findOne(member.getId());
-//			Assert.notNull(saved, "member.not.null");
-//			Assert.isTrue(
-//					saved.getUserAccount().getUsername()
-//							.equals(member.getUserAccount().getUsername()),
-//					"member.notEqual.username");
-//			Assert.isTrue(
-//					member.getUserAccount().getPassword()
-//							.equals(saved.getUserAccount().getPassword()),
-//					"member.notEqual.password");
-//		} else
-//			member.getUserAccount().setPassword(
-//					encoder.encodePassword(member.getUserAccount()
-//							.getPassword(), null));
-//		result = this.memberRepository.save(member);
-//
-//		return result;
-//
-//	}
+	//	public Member save(final Member member) {
+	//		final Member result, saved;
+	//		final UserAccount logedUserAccount;
+	//		Authority authority;
+	//
+	//		Md5PasswordEncoder encoder;
+	//		encoder = new Md5PasswordEncoder();
+	//		authority = new Authority();
+	//		authority.setAuthority("MEMBER");
+	//		Assert.notNull(member, "member.not.null");
+	//
+	//		if (this.exists(member.getId())) {
+	//			logedUserAccount = LoginService.getPrincipal();
+	//			Assert.notNull(logedUserAccount, "member.notLogged");
+	//			Assert.isTrue(logedUserAccount.equals(member.getUserAccount()));
+	//			saved = this.memberRepository.findOne(member.getId());
+	//			Assert.notNull(saved, "member.not.null");
+	//			Assert.isTrue(
+	//					saved.getUserAccount().getUsername()
+	//							.equals(member.getUserAccount().getUsername()),
+	//					"member.notEqual.username");
+	//			Assert.isTrue(
+	//					member.getUserAccount().getPassword()
+	//							.equals(saved.getUserAccount().getPassword()),
+	//					"member.notEqual.password");
+	//		} else
+	//			member.getUserAccount().setPassword(
+	//					encoder.encodePassword(member.getUserAccount()
+	//							.getPassword(), null));
+	//		result = this.memberRepository.save(member);
+	//
+	//		return result;
+	//
+	//	}
 
 	public boolean exists(final Integer arg0) {
 		return this.memberRepository.exists(arg0);
 	}
 
 	// Business Method
-	public Collection<Member> findAllMembersOfOneBrotherhood(
-			final int brotherhoodId) {
+	public Collection<Member> findAllMembersOfOneBrotherhood(final int brotherhoodId) {
 		Collection<Member> result;
 
-		result = this.memberRepository
-				.findAllMembersOfOneBrotherhood(brotherhoodId);
+		result = this.memberRepository.findAllMembersOfOneBrotherhood(brotherhoodId);
 		Assert.notNull(result);
 		return result;
 	}

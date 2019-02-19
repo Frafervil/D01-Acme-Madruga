@@ -45,9 +45,7 @@
 		
 		<bean class="converters.RequestToStringConverter" />
 		<bean class="converters.StringToRequestConverter" />		
-		
-		<bean class="converters.UserAccountToStringConverter"/>
-		<bean class="converters.StringToUserAccount"/>
+
 	</util:list>
 	
 </beans>
