@@ -58,4 +58,33 @@ public class ProcessionServiceTest extends AbstractTest {
 		Assert.isTrue(processions.contains(saved));
 		super.unauthenticate();
 	}
+
+	@Test
+	public void testFindAll() {
+		Collection<Procession> result;
+
+		super.authenticate("brotherhood1");
+		result = this.processionService.findAll();
+
+		System.out.println(result.size());
+		super.unauthenticate();
+	}
+
+	@Test
+	public void testDelete() {
+		Procession procession;
+		Collection<Procession> processions1;
+		Collection<Procession> processions2;
+
+		super.authenticate("brotherhood1");
+		procession = this.processionService.findOne(this
+				.getEntityId("procession1"));
+		processions1 = this.processionService.findAll();
+		this.processionService.delete(procession);
+
+		processions2 = this.processionService.findAll();
+		Assert.isTrue(processions2.size() != processions1.size());
+		super.unauthenticate();
+	}
+
 }

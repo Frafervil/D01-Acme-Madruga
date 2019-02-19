@@ -1,9 +1,7 @@
-
 package services;
 
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import repositories.EnrolmentRepository;
@@ -13,16 +11,9 @@ public class EnrolmentService {
 
 	// Managed repository -----------------------------------------------------
 
-	private EnrolmentRepository	enrolmentRepository;
+	private EnrolmentRepository enrolmentRepository;
 
 	// Supporting services ----------------------------------------------------
-
-	@Autowired
-	private BrotherhoodService	brotherhoodService;
-
-	@Autowired
-	private MemberService		memberService;
-
 
 	// Simple CRUD Methods
 
@@ -89,10 +80,12 @@ public class EnrolmentService {
 		return result;
 	}
 
-	public Enrolment findByBrotherhoodIdAndMemberId(final int brotherhoodId, final int memberId) {
+	public Enrolment findByBrotherhoodIdAndMemberId(final int brotherhoodId,
+			final int memberId) {
 		Enrolment result;
 
-		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(brotherhoodId, memberId);
+		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(
+				brotherhoodId, memberId);
 		Assert.notNull(result);
 		return result;
 	}

@@ -37,9 +37,10 @@ public class ProcessionService {
 		final Calendar now = Calendar.getInstance();
 		String year = String.valueOf(now.get(Calendar.YEAR));
 		year = year.substring(year.length() - 2, year.length());
-		final String month = String.valueOf(now.get(Calendar.MONTH) + 1);
 		String date = String.valueOf(now.get(Calendar.DATE));
 		date = date.length() == 1 ? "0".concat(date) : date;
+		String month = String.valueOf(now.get(Calendar.MONTH) + 1);
+		month = month.length() == 1 ? "0".concat(month) : month;
 		final Random r = new Random();
 		final char a = (char) (r.nextInt(26) + 'a');
 		final char b = (char) (r.nextInt(26) + 'a');
