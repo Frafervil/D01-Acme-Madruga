@@ -2,11 +2,14 @@
 package services;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import repositories.EnrolmentRepository;
+import domain.Brotherhood;
+import domain.DropOut;
 import domain.Enrolment;
 
 public class EnrolmentService {
@@ -21,25 +24,39 @@ public class EnrolmentService {
 	private BrotherhoodService	brotherhoodService;
 
 	@Autowired
-	private MemberService		memberService;
+	private DropOutService		dropOutService;
 
 
 	// Simple CRUD Methods
 
 	public Enrolment create() {
 
+		Brotherhood principal;
 		Enrolment result;
+		Date moment;
 
+		principal = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(principal);
 		result = new Enrolment();
+		moment = new Date(System.currentTimeMillis() - 1000);
+
+		result.setBrotherhood(principal);
+		result.setMoment(moment);
 
 		return result;
 	}
 
 	public Enrolment save(final Enrolment enrolment) {
 
+		Brotherhood principal;
 		Enrolment result;
 
 		Assert.notNull(enrolment);
+
+		principal = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(principal);
+
+		Assert.isTrue(enrolment.getBrotherhood().getId() == principal.getId());
 
 		result = this.enrolmentRepository.save(enrolment);
 		Assert.notNull(result);
@@ -49,9 +66,18 @@ public class EnrolmentService {
 
 	public void delete(final Enrolment enrolment) {
 
+		Brotherhood principal;
+		DropOut dO;
+
 		Assert.notNull(enrolment);
 
-		this.enrolmentRepository.delete(enrolment);
+		principal = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(principal);
+
+		Assert.isTrue(enrolment.getBrotherhood().getId() == principal.getId());
+
+		dO = this.dropOutService.create(enrolment.getMember());
+		dO = this.dropOutService.save(dO);
 	}
 
 	public Enrolment findOne(final int enrolmentId) {
@@ -60,7 +86,6 @@ public class EnrolmentService {
 		result = this.enrolmentRepository.findOne(enrolmentId);
 		Assert.notNull(result);
 		return result;
-
 	}
 
 	public Collection<Enrolment> findAll() {
@@ -89,8 +114,8 @@ public class EnrolmentService {
 		return result;
 	}
 
-	public Enrolment findByBrotherhoodIdAndMemberId(final int brotherhoodId, final int memberId) {
-		Enrolment result;
+	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(final int brotherhoodId, final int memberId) {
+		Collection<Enrolment> result;
 
 		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(brotherhoodId, memberId);
 		Assert.notNull(result);

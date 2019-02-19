@@ -18,27 +18,29 @@
 
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<form:form action="floatB/brotherhood/edit.do" modelAttribute="floatB">
+<form:form action="enrolment/brotherhood/edit.do" modelAttribute="enrolment">
 		<form:hidden path="id"/>
 		<form:hidden path="version"/>
 		<form:hidden path="brotherhood"/>
 		
-		<acme:textbox code="floatB.title" path="title"/>
+		<acme:select code="enrolment.member" path="member"
+		items="${members}" itemLabel="userAccount.username" id="member"/>
 		
-		<acme:textarea code="floatB.description" path="description"/>
+		<jstl:if test="${cookie['language'].getValue()=='en'}">
+		<acme:select code="enrolment.position" path="position"
+		items="${positions}" itemLabel="languageCategories[0].name" id="position"/>
+		<br /></jstl:if>
+		<jstl:if test="${cookie['language'].getValue()=='es'}">
+		<acme:select code="enrolment.position" path="position"
+		items="${positions}" itemLabel="languageCategories[1].name" id="position"/>
+		<br /></jstl:if>
 		
-		<spring:message code = "floatB.pictures.placeholder" var="picturePlaceholder"/>
-		<acme:textarea code="floatB.pictures" path="pictures"/>
+		<acme:submit name="save" code="enrolment.save"/>
 		
-		<acme:select code="floatB.procession" path="procession"
-		items="${processions}" itemLabel="title" id="procession"/>
-		
-		<acme:submit name="save" code="floatB.save"/>
-		
-		<jstl:if test="${floatB.id != 0 }">
-			<acme:submit name="delete" code="floatB.delete"/>
+		<jstl:if test="${enrolment.id != 0 }">
+			<acme:submit name="delete" code="enrolment.delete"/>
 		</jstl:if>
 		
-		<acme:cancel url="floatB/brotherhood/list.do" code="floatB.cancel"/>
+		<acme:cancel url="enrolment/brotherhood/list.do" code="enrolment.cancel"/>
 		
 </form:form>
