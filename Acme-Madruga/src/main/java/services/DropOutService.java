@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.DropOutRepository;
@@ -12,10 +14,12 @@ import domain.Brotherhood;
 import domain.DropOut;
 import domain.Member;
 
+@Service
+@Transactional
 public class DropOutService {
 
 	// Managed repository -----------------------------------------------------
-
+	@Autowired
 	private DropOutRepository	dropOutRepository;
 
 	// Supporting services ----------------------------------------------------

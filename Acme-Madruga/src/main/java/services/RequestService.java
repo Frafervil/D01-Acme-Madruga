@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.ArrayList;
@@ -11,11 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import repositories.RequestRepository;
 import domain.Member;
 import domain.Place;
+import domain.Procession;
 import domain.Request;
-
-import repositories.RequestRepository;
 
 @Service
 @Transactional
@@ -24,15 +25,18 @@ public class RequestService {
 	// Managed Repository
 
 	@Autowired
-	private RequestRepository requestRepository;
+	private RequestRepository	requestRepository;
 
 	// Supporting services
 
 	@Autowired
-	private MemberService memberService;
+	private MemberService		memberService;
 
 	@Autowired
-	private PlaceService	placeService;
+	private PlaceService		placeService;
+
+	@Autowired
+	private ProcessionService	processionService;
 
 
 	// Simple CRUD methods
@@ -45,23 +49,27 @@ public class RequestService {
 		return result;
 	}
 
-	public void delete(final Request request) {
-
-		Assert.notNull(request);
-		Assert.isTrue(request.getId() != 0);
-
-		this.requestRepository.delete(request);
-	}
-
-	public Request create() {
+	public Request create(final int processionId) {
 		Request result;
 		Member principal;
+		Place place;
+		Procession procession;
+
+		result = new Request();
 
 		principal = this.memberService.findByPrincipal();
 		Assert.notNull(principal);
+		result.setMember(principal);
 
-		result = new Request();
-		Assert.notNull(result);
+		procession = this.processionService.findOne(processionId);
+		Assert.notNull(procession);
+		result.setProcession(procession);
+
+		place = this.placeService.create(processionId);
+		this.placeService.save(place);
+		result.setPlace(place);
+
+		result.setStatus("PENDING");
 
 		return result;
 	}
@@ -77,6 +85,37 @@ public class RequestService {
 		Assert.notNull(result);
 		return result;
 
+	}
+	public void delete(final Request request) {
+		Member principal;
+		final Place place;
+
+		Assert.notNull(request);
+		Assert.isTrue(request.getId() != 0);
+
+		principal = this.memberService.findByPrincipal();
+		Assert.notNull(principal);
+
+		place = request.getPlace();
+
+		this.placeService.delete(place);
+
+		this.requestRepository.delete(request);
+
+	}
+	public Request findOne(final int requestId) {
+		Request result;
+
+		result = this.requestRepository.findOne(requestId);
+		Assert.notNull(result);
+		return result;
+
+	}
+	public void save(final Request request) {
+		Request result;
+		this.placeService.save(request.getPlace());
+		result = this.requestRepository.save(request);
+		Assert.notNull(result);
 	}
 
 	// Other business methods
@@ -110,32 +149,22 @@ public class RequestService {
 		return result;
 	}
 
-	public Request findOne(final int requestId) {
-		Request result;
+	public Collection<Request> findAllByProcession(final int processionId) {
+		Collection<Request> result;
 
-		result = this.requestRepository.findOne(requestId);
+		result = this.requestRepository.findAllByProcession(processionId);
 		Assert.notNull(result);
+
 		return result;
-
 	}
 
-	public void delete(final Request request) {
-		Member principal;
-		final Place place;
+	public Collection<Request> findAllByMember(final int memberId) {
+		Collection<Request> result;
 
-		Assert.notNull(request);
-		Assert.isTrue(request.getId() != 0);
+		result = this.requestRepository.findByMember(memberId);
+		Assert.notNull(result);
 
-		principal = this.memberService.findByPrincipal();
-		Assert.notNull(principal); // Checks if the principal is a manager
-
-		Assert.isTrue(principal.getRequests().contains(request));
-
-		place = request.getPlace();
-
-		this.placeService.delete(place);
-
-		this.requestRepository.delete(request);
-
+		return result;
 	}
+
 }

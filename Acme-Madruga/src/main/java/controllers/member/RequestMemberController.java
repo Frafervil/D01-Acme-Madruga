@@ -6,8 +6,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.MemberService;
+import services.ProcessionService;
 import services.RequestService;
 import controllers.AbstractController;
 import domain.Member;
+import domain.Procession;
 import domain.Request;
 
 @Controller
@@ -27,10 +32,13 @@ public class RequestMemberController extends AbstractController {
 	// Services
 
 	@Autowired
-	private RequestService	requestService;
+	private RequestService		requestService;
 
 	@Autowired
-	private MemberService	memberService;
+	private MemberService		memberService;
+
+	@Autowired
+	private ProcessionService	processionService;
 
 
 	// Listing
@@ -39,11 +47,14 @@ public class RequestMemberController extends AbstractController {
 	public ModelAndView list() {
 		final ModelAndView result;
 		final Collection<Request> requests;
+		Collection<Procession> processions;
 
 		requests = this.requestService.findByPrincipal();
+		processions = this.processionService.findAllFinal();
 
 		result = new ModelAndView("request/list");
 		result.addObject("requests", requests);
+		result.addObject("processions", processions);
 		result.addObject("requestURI", "request/member/list.do");
 
 		return result;
@@ -87,7 +98,7 @@ public class RequestMemberController extends AbstractController {
 
 		request = this.requestService.findOne(requestId);
 		member = this.memberService.findByPrincipal();
-		if (member.getRequests().contains(request))
+		if (this.requestService.findAllByMember(member.getId()).contains(request))
 			permission = true;
 
 		result = new ModelAndView("request/display");
@@ -98,11 +109,10 @@ public class RequestMemberController extends AbstractController {
 		return result;
 	}
 
-	// Delete
+	// Delete ------------------ERRORES
 	@RequestMapping(value = "/display", method = RequestMethod.POST, params = "delete")
 	public ModelAndView delete(final Request request, final BindingResult binding) {
 		ModelAndView result;
-		System.out.println("AQUI");
 		try {
 			this.requestService.delete(request);
 			result = new ModelAndView("redirect:list.do");
@@ -119,16 +129,48 @@ public class RequestMemberController extends AbstractController {
 	//Creation
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create() {
+	public ModelAndView create(@RequestParam final int processionId) {
 		ModelAndView result;
 		final Request request;
 
-		request = this.requestService.create();
+		request = this.requestService.create(processionId);
 
 		result = this.createEditModelAndView(request);
 
 		return result;
 
+	}
+
+	// Edition
+
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit(@RequestParam final int requestId) {
+		ModelAndView result;
+		Request request;
+
+		request = this.requestService.findOne(requestId);
+		Assert.notNull(request);
+		result = this.createEditModelAndView(request);
+
+		return result;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView save(@Valid final Request request, final BindingResult binding) {
+		ModelAndView result;
+
+		if (binding.hasErrors()) {
+			result = this.createEditModelAndView(request);
+			System.out.println(binding.getAllErrors());
+		} else
+			try {
+				this.requestService.save(request);
+				result = new ModelAndView("redirect:list.do");
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(request, "request.commit.error");
+			}
+
+		return result;
 	}
 
 	// Ancillary methods ------------------------------------------------------

@@ -1,8 +1,12 @@
+
 package services;
 
 import java.util.Collection;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.EnrolmentRepository;
@@ -10,11 +14,13 @@ import domain.Brotherhood;
 import domain.DropOut;
 import domain.Enrolment;
 
+@Service
+@Transactional
 public class EnrolmentService {
 
 	// Managed repository -----------------------------------------------------
-
-	private EnrolmentRepository enrolmentRepository;
+	@Autowired
+	private EnrolmentRepository	enrolmentRepository;
 
 	// Supporting services ----------------------------------------------------
 
@@ -115,8 +121,7 @@ public class EnrolmentService {
 	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(final int brotherhoodId, final int memberId) {
 		Collection<Enrolment> result;
 
-		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(
-				brotherhoodId, memberId);
+		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(brotherhoodId, memberId);
 		Assert.notNull(result);
 		return result;
 	}

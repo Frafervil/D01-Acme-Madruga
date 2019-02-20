@@ -12,8 +12,6 @@ import org.springframework.util.Assert;
 import repositories.MemberRepository;
 import security.LoginService;
 import security.UserAccount;
-import domain.DropOut;
-import domain.Enrolment;
 import domain.Member;
 
 @Service
@@ -94,86 +92,6 @@ public class MemberService {
 		Member result;
 		result = this.memberRepository.findByUserAccountId(userAccount.getId());
 		return result;
-	}
-
-	//	public Member save(final Member member) {
-	//		final Member result, saved;
-	//		final UserAccount logedUserAccount;
-	//		Authority authority;
-	//
-	//		Md5PasswordEncoder encoder;
-	//		encoder = new Md5PasswordEncoder();
-	//		authority = new Authority();
-	//		authority.setAuthority("MEMBER");
-	//		Assert.notNull(member, "member.not.null");
-	//
-	//		if (this.exists(member.getId())) {
-	//			logedUserAccount = LoginService.getPrincipal();
-	//			Assert.notNull(logedUserAccount, "member.notLogged");
-	//			Assert.isTrue(logedUserAccount.equals(member.getUserAccount()));
-	//			saved = this.memberRepository.findOne(member.getId());
-	//			Assert.notNull(saved, "member.not.null");
-	//			Assert.isTrue(
-	//					saved.getUserAccount().getUsername()
-	//							.equals(member.getUserAccount().getUsername()),
-	//					"member.notEqual.username");
-	//			Assert.isTrue(
-	//					member.getUserAccount().getPassword()
-	//							.equals(saved.getUserAccount().getPassword()),
-	//					"member.notEqual.password");
-	//		} else
-	//			member.getUserAccount().setPassword(
-	//					encoder.encodePassword(member.getUserAccount()
-	//							.getPassword(), null));
-	//		result = this.memberRepository.save(member);
-	//
-	//		return result;
-	//
-	//	}
-
-	// Md5PasswordEncoder encoder;
-	// encoder = new Md5PasswordEncoder();
-	// authority = new Authority();
-	// authority.setAuthority("MEMBER");
-	// Assert.notNull(member, "member.not.null");
-	//
-	// if (this.exists(member.getId())) {
-	// logedUserAccount = LoginService.getPrincipal();
-	// Assert.notNull(logedUserAccount, "member.notLogged");
-	// Assert.isTrue(logedUserAccount.equals(member.getUserAccount()));
-	// saved = this.memberRepository.findOne(member.getId());
-	// Assert.notNull(saved, "member.not.null");
-	// Assert.isTrue(saved.getUserAccount().getUsername().equals(member.getUserAccount().getUsername()),
-	// "member.notEqual.username");
-	// Assert.isTrue(member.getUserAccount().getPassword().equals(saved.getUserAccount().getPassword()),
-	// "member.notEqual.password");
-	// } else
-	// member.getUserAccount().setPassword(encoder.encodePassword(member.getUserAccount().getPassword(),
-	// null));
-	// result = this.memberRepository.save(member);
-	//
-	// return result;
-
-	public Member save(final Member member) {
-		Member saved;
-		Assert.notNull(member);
-
-		if (member.getId() == 0) {
-
-			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-			member.getUserAccount().setPassword(
-					passwordEncoder.encodePassword(member.getUserAccount()
-							.getPassword(), null));
-		} else {
-			Member principal;
-			principal = this.findByPrincipal();
-			Assert.notNull(principal);
-
-		}
-
-		saved = this.memberRepository.save(member);
-
-		return saved;
 	}
 
 	public boolean exists(final Integer arg0) {

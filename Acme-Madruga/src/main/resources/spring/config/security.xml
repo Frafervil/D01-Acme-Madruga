@@ -60,6 +60,8 @@
 		<security:intercept-url pattern="/request/member/list.do" access="hasRole('MEMBER')" />			
 		<security:intercept-url pattern="/request/member/display.do" access="hasRole('MEMBER')" />			
 		<security:intercept-url pattern="/request/member/delete.do" access="hasRole('MEMBER')" />			
+		<security:intercept-url pattern="/request/member/create.do" access="hasRole('MEMBER')" />			
+		<security:intercept-url pattern="/request/member/edit.do" access="hasRole('MEMBER')" />			
 
 
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />
