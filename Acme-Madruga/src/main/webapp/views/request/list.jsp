@@ -133,5 +133,23 @@
 
 </display:table>
 
+<br/>
+<br/>
+<security:authorize access="hasRole('MEMBER')">
+<h3><spring:message code="request.procession.list" /></h3>
+<display:table name="processions" id="row" requestURI="${requestURI}" pagesize="5" class="displaytag">
+	<spring:message code="request.procession.title" var="titleHeader" />
+	<display:column property="title" title="${titleHeader}" sortable="true"/>
+
+		<display:column>
+		
+				<a href="request/member/create.do?processionId=${row.id}" >
+						<spring:message code="request.create" />
+				</a>					
+				
+		</display:column>
+		
+</display:table>	
+</security:authorize>
 
 

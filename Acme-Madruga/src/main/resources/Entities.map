@@ -1,4 +1,5 @@
 #./src/main/resources/Entities.map
+<<<<<<< HEAD
 #Wed Feb 20 20:27:15 CET 2019
 languagePosition12=280
 languagePosition11=279
@@ -55,3 +56,58 @@ position2=288
 position1=287
 languagePosition14=282
 languagePosition13=281
+=======
+#Wed Feb 20 18:45:09 CET 2019
+languagePosition12=262
+languagePosition11=261
+languagePosition10=260
+place4=268
+place3=267
+place2=266
+place1=265
+request3=284
+request2=283
+request1=282
+languagePosition9=259
+languagePosition8=258
+languagePosition7=257
+languagePosition6=256
+enrolment3=281
+languagePosition5=255
+enrolment2=280
+languagePosition4=254
+enrolment1=279
+languagePosition3=253
+languagePosition2=252
+languagePosition1=251
+brotherhood3=243
+member3=246
+brotherhood2=242
+member2=245
+brotherhood1=241
+member1=244
+procession3=278
+procession2=277
+procession1=276
+administrator1=240
+userAccount7=239
+customisation=247
+userAccount6=238
+userAccount5=237
+userAccount4=236
+userAccount3=235
+userAccount2=234
+userAccount1=233
+position7=275
+position6=274
+position5=273
+floatB3=250
+position4=272
+floatB2=249
+position3=271
+floatB1=248
+position2=270
+position1=269
+languagePosition14=264
+languagePosition13=263
+>>>>>>> Developer-Javi

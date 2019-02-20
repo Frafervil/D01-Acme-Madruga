@@ -1,33 +1,39 @@
+
 package services;
 
 import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.EnrolmentRepository;
 import domain.Brotherhood;
-import domain.DropOut;
 import domain.Enrolment;
+import domain.Member;
 
+@Service
+@Transactional
 public class EnrolmentService {
 
 	// Managed repository -----------------------------------------------------
+	@Autowired
+	private EnrolmentRepository	enrolmentRepository;
 
-	private EnrolmentRepository enrolmentRepository;
+	@Autowired
+	private EnrolmentRepository	enrolmentRepository;
 
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	private BrotherhoodService brotherhoodService;
+	private BrotherhoodService	brotherhoodService;
 
-	@Autowired
-	private DropOutService dropOutService;
 
 	// Simple CRUD Methods
 
-	public Enrolment create() {
+	public Enrolment create(final Member member) {
 
 		Brotherhood principal;
 		Enrolment result;
@@ -39,7 +45,8 @@ public class EnrolmentService {
 		moment = new Date(System.currentTimeMillis() - 1000);
 
 		result.setBrotherhood(principal);
-		result.setMoment(moment);
+		result.setMember(member);
+		result.setEnrolmentMoment(moment);
 
 		return result;
 	}
@@ -65,7 +72,7 @@ public class EnrolmentService {
 	public void delete(final Enrolment enrolment) {
 
 		Brotherhood principal;
-		DropOut dO;
+		Date moment;
 
 		Assert.notNull(enrolment);
 
@@ -74,8 +81,11 @@ public class EnrolmentService {
 
 		Assert.isTrue(enrolment.getBrotherhood().getId() == principal.getId());
 
-		dO = this.dropOutService.create(enrolment.getMember());
-		dO = this.dropOutService.save(dO);
+		moment = new Date(System.currentTimeMillis() - 1000);
+
+		enrolment.setDropOutMoment(moment);
+
+		this.enrolmentRepository.save(enrolment);
 	}
 
 	public Enrolment findOne(final int enrolmentId) {
@@ -112,12 +122,10 @@ public class EnrolmentService {
 		return result;
 	}
 
-	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(
-			final int brotherhoodId, final int memberId) {
+	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(final int brotherhoodId, final int memberId) {
 		Collection<Enrolment> result;
 
-		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(
-				brotherhoodId, memberId);
+		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(brotherhoodId, memberId);
 		Assert.notNull(result);
 		return result;
 	}

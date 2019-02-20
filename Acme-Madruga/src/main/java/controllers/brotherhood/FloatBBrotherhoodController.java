@@ -53,7 +53,7 @@ public class FloatBBrotherhoodController extends AbstractController {
 			oops.printStackTrace();
 			result = new ModelAndView("floatB/list");
 			result.addObject("message", "floatB.retrieve.error");
-			result.addObject("prolicks", new ArrayList<FloatB>());
+			result.addObject("floatBs", new ArrayList<FloatB>());
 		}
 
 		return result;

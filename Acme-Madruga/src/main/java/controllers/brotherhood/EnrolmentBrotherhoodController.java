@@ -1,7 +1,6 @@
 
 package controllers.brotherhood;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -19,14 +18,13 @@ import services.EnrolmentService;
 import services.MemberService;
 import services.PositionService;
 import controllers.AbstractController;
-import domain.Brotherhood;
 import domain.Enrolment;
 import domain.Member;
 import domain.Position;
 
 @Controller
 @RequestMapping("/enrolment/brotherhood")
-public class EnrolmentBrotherhood extends AbstractController {
+public class EnrolmentBrotherhoodController extends AbstractController {
 
 	// Servicios
 
@@ -43,11 +41,14 @@ public class EnrolmentBrotherhood extends AbstractController {
 	// Create
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create() {
+	public ModelAndView create(@RequestParam final int memberId) {
 		ModelAndView result;
 		Enrolment enrolment;
+		Member member;
 
-		enrolment = this.enrolmentService.create();
+		member = this.memberService.findOne(memberId);
+
+		enrolment = this.enrolmentService.create(member);
 
 		result = this.createEditModelAndView(enrolment);
 
@@ -112,25 +113,12 @@ public class EnrolmentBrotherhood extends AbstractController {
 
 	protected ModelAndView createEditModelAndView(final Enrolment enrolment, final String messageCode) {
 		ModelAndView result;
-		final Collection<Member> members;
-		final Collection<Member> myMembers = new ArrayList<Member>();
 		final Collection<Position> positions;
-		Brotherhood brotherhood;
-		final Collection<Enrolment> enrolments;
 
 		positions = this.positionService.findAll();
-		members = this.memberService.findAll();
-		brotherhood = enrolment.getBrotherhood();
-		enrolments = this.enrolmentService.findByBrotherhoodId(brotherhood.getId());
-
-		for (final Enrolment e : enrolments)
-			myMembers.add(e.getMember());
-
-		members.removeAll(myMembers);
 
 		result = new ModelAndView("enrolment/edit");
 		result.addObject("enrolment", enrolment);
-		result.addObject("members", members);
 		result.addObject("positions", positions);
 		result.addObject("message", messageCode);
 

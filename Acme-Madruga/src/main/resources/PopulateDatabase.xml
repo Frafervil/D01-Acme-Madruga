@@ -210,19 +210,11 @@
 		<property name="countryCode" value="+34" />
 	</bean>
 
-	<!-- DropOuts -->
-
-	<bean id="dropOut1" class="domain.DropOut">
-		<property name="moment" value="01/12/2017 17:34" />
-
-		<property name="brotherhood" ref="brotherhood1" />
-		<property name="member" ref="member1" />
-	</bean>
-
 	<!-- Enrolments -->
 
 	<bean id="enrolment1" class="domain.Enrolment">
-		<property name="moment" value="01/11/2017 15:31" />
+		<property name="enrolmentMoment" value="01/11/2017 15:31" />
+		<property name="dropOutMoment" value="01/12/2017 17:34" />
 
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="member" ref="member1" />
@@ -231,7 +223,7 @@
 	</bean>
 
 	<bean id="enrolment2" class="domain.Enrolment">
-		<property name="moment" value="04/12/2017 15:31" />
+		<property name="enrolmentMoment" value="04/12/2017 15:31" />
 
 		<property name="brotherhood" ref="brotherhood1" />
 		<property name="member" ref="member2" />
@@ -240,7 +232,7 @@
 	</bean>
 
 	<bean id="enrolment3" class="domain.Enrolment">
-		<property name="moment" value="01/11/2017 15:31" />
+		<property name="enrolmentMoment" value="01/11/2017 15:31" />
 
 		<property name="brotherhood" ref="brotherhood2" />
 		<property name="member" ref="member1" />

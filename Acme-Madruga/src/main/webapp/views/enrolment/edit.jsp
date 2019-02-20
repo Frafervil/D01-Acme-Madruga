@@ -21,10 +21,10 @@
 <form:form action="enrolment/brotherhood/edit.do" modelAttribute="enrolment">
 		<form:hidden path="id"/>
 		<form:hidden path="version"/>
+		<form:hidden path="enrolmentMoment"/>
+		<form:hidden path="dropOutMoment"/>
 		<form:hidden path="brotherhood"/>
-		
-		<acme:select code="enrolment.member" path="member"
-		items="${members}" itemLabel="userAccount.username" id="member"/>
+		<form:hidden path="member"/>
 		
 		<jstl:if test="${cookie['language'].getValue()=='en'}">
 		<acme:select code="enrolment.position" path="position"
@@ -41,6 +41,6 @@
 			<acme:submit name="delete" code="enrolment.delete"/>
 		</jstl:if>
 		
-		<acme:cancel url="enrolment/brotherhood/list.do" code="enrolment.cancel"/>
+		<acme:cancel url="member/brotherhood/list.do" code="enrolment.cancel"/>
 		
 </form:form>

@@ -61,5 +61,16 @@
 	value="<spring:message code="member.edit" />"
 	onclick="javascript: relativeRedir('member/edit.do');" />
 
+	<security:authorize access="hasRole('BROTHERHOOD')">
+	<jstl:choose>
+		<jstl:when test="${enrolment == null}">
+		<a href="enrolment/brotherhood/create.do?memberId=${member.id}"><spring:message code="member.enrol"/></a><br/>
+		</jstl:when>
+		<jstl:otherwise>
+		<a href="enrolment/brotherhood/edit.do?enrolmentId=${enrolment.id}"><spring:message code="enrolment.edit"/></a><br/>
+		</jstl:otherwise>
+	</jstl:choose>
+	</security:authorize>
+
 </body>
 </html>
