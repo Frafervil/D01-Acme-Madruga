@@ -7,8 +7,7 @@
 <%@taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
-
-
+	
 	<security:authorize access="hasRole('MEMBER')">
 	
 	<form action="request/member/list.do" method="get">
@@ -47,15 +46,13 @@
 
 
 	<security:authorize access="hasRole('MEMBER')">
-		
+			
 		<display:column>
-			
-				<jstl:if test="${row.status == 'PENDING'}">
-					<a href="request/member/delete.do?requestId=${row.id}" >
-						<spring:message code="request.delete" />
-					</a>					
-				</jstl:if>
-			
+		
+				<a href="request/member/display.do?requestId=${row.id}" >
+						<spring:message code="request.display" />
+				</a>					
+				
 		</display:column>
 		
 		
@@ -75,7 +72,7 @@
 
 	<spring:message code="request.procession.title"
 	var="titleHeader" />
-	<display:column property="procession.Title" title="${titleHeader}"
+	<display:column property="procession.title" title="${titleHeader}"
 		sortable="true"/>
 
 

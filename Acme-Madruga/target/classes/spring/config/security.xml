@@ -59,6 +59,9 @@
 		<security:intercept-url pattern="/floatB/brotherhood/list.do" access="hasRole('BROTHERHOOD')" />
 		
 		<security:intercept-url pattern="/request/member/list.do" access="hasRole('MEMBER')" />			
+		<security:intercept-url pattern="/request/member/display.do" access="hasRole('MEMBER')" />			
+		<security:intercept-url pattern="/request/member/delete.do" access="hasRole('MEMBER')" />			
+
 
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />
 

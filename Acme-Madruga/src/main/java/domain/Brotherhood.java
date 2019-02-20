@@ -1,4 +1,3 @@
-
 package domain;
 
 import java.util.Collection;
@@ -8,7 +7,6 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -20,10 +18,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Access(AccessType.PROPERTY)
 public class Brotherhood extends Actor {
 
-	private String				title;
-	private Date				establishmentDate;
-	private Collection<String>	pictures;
-
+	private String title;
+	private Date establishmentDate;
+	private Collection<String> pictures;
 
 	@NotBlank
 	public String getTitle() {
@@ -53,21 +50,5 @@ public class Brotherhood extends Actor {
 
 	public void setPictures(final Collection<String> pictures) {
 		this.pictures = pictures;
-	}
-
-
-	// Relationships----------------------------------------------
-
-	private Collection<Procession>	processions;
-
-
-	@NotNull
-	@OneToMany
-	public Collection<Procession> getProcessions() {
-		return this.processions;
-	}
-
-	public void setProcessions(final Collection<Procession> processions) {
-		this.processions = processions;
 	}
 }

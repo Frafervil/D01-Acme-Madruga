@@ -62,6 +62,9 @@
 		<security:intercept-url pattern="/floatB/list.do" access="permitAll" />
 		
 		<security:intercept-url pattern="/request/member/list.do" access="hasRole('MEMBER')" />			
+		<security:intercept-url pattern="/request/member/display.do" access="hasRole('MEMBER')" />			
+		<security:intercept-url pattern="/request/member/delete.do" access="hasRole('MEMBER')" />			
+
 
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />
 

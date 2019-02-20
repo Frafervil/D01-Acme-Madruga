@@ -1,4 +1,3 @@
-
 package controllers.brotherhood;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import services.FloatBService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.FloatB;
-import domain.Procession;
 
 @Controller
 @RequestMapping("/floatB/brotherhood")
@@ -29,11 +27,10 @@ public class FloatBBrotherhoodController extends AbstractController {
 	// Servicios
 
 	@Autowired
-	private FloatBService		floatBService;
+	private FloatBService floatBService;
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
-
+	private BrotherhoodService brotherhoodService;
 
 	// List
 
@@ -108,7 +105,8 @@ public class FloatBBrotherhoodController extends AbstractController {
 				result = new ModelAndView("redirect:list.do");
 			} catch (final Throwable oops) {
 				oops.printStackTrace();
-				result = this.createEditModelAndView(floatB, "floatB.commit.error");
+				result = this.createEditModelAndView(floatB,
+						"floatB.commit.error");
 			}
 		return result;
 	}
@@ -132,17 +130,12 @@ public class FloatBBrotherhoodController extends AbstractController {
 		return this.createEditModelAndView(floatB, null);
 	}
 
-	protected ModelAndView createEditModelAndView(final FloatB floatB, final String messageCode) {
+	protected ModelAndView createEditModelAndView(final FloatB floatB,
+			final String messageCode) {
 		ModelAndView result;
-		Brotherhood brotherhood;
-		final Collection<Procession> processions;
-
-		brotherhood = floatB.getBrotherhood();
-		processions = brotherhood.getProcessions();
 
 		result = new ModelAndView("floatB/edit");
 		result.addObject("floatB", floatB);
-		result.addObject("processions", processions);
 		result.addObject("message", messageCode);
 
 		return result;

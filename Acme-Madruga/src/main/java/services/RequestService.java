@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import domain.Member;
+import domain.Place;
 import domain.Request;
 
 import repositories.RequestRepository;
@@ -30,6 +31,9 @@ public class RequestService {
 	@Autowired
 	private MemberService memberService;
 
+	@Autowired
+	private PlaceService placeService;
+
 	// Simple CRUD methods
 
 	public Collection<Request> findAll() {
@@ -38,14 +42,6 @@ public class RequestService {
 		result = this.requestRepository.findAll();
 		Assert.notNull(result);
 		return result;
-	}
-
-	public void delete(final Request request) {
-
-		Assert.notNull(request);
-		Assert.isTrue(request.getId() != 0);
-
-		this.requestRepository.delete(request);
 	}
 
 	public Request create() {
@@ -105,4 +101,30 @@ public class RequestService {
 		return result;
 	}
 
+	public Request findOne(final int requestId) {
+		Request result;
+
+		result = this.requestRepository.findOne(requestId);
+		Assert.notNull(result);
+		return result;
+
+	}
+
+	public void delete(final Request request) {
+		Member principal;
+		final Place place;
+
+		Assert.notNull(request);
+		Assert.isTrue(request.getId() != 0);
+
+		principal = this.memberService.findByPrincipal();
+		Assert.notNull(principal); // Checks if the principal is a manager
+
+		place = request.getPlace();
+
+		this.placeService.delete(place);
+
+		this.requestRepository.delete(request);
+
+	}
 }

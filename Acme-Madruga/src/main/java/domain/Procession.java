@@ -5,15 +5,19 @@ import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -25,6 +29,8 @@ public class Procession extends DomainEntity {
 	private Date moment;
 	private String ticker;
 	private boolean isDraft;
+	private int maxRow;
+	private int maxColumn;
 
 	@NotBlank
 	public String getTitle() {
@@ -74,17 +80,50 @@ public class Procession extends DomainEntity {
 		this.isDraft = isDraft;
 	}
 
-	// Relationships----------------------------------------------
+	@NotNull
+	@Range(min = 1)
+	public int getMaxRow() {
+		return maxRow;
+	}
 
-	private Collection<Request> requests;
+	public void setMaxRow(int maxRow) {
+		this.maxRow = maxRow;
+	}
 
 	@NotNull
-	@OneToMany(mappedBy = "procession")
-	public Collection<Request> getRequests() {
-		return this.requests;
+	@Range(min = 1)
+	public int getMaxColumn() {
+		return maxColumn;
 	}
 
-	public void setRequests(final Collection<Request> requests) {
-		this.requests = requests;
+	public void setMaxColumn(int maxColumn) {
+		this.maxColumn = maxColumn;
 	}
+
+	// Relationships----------------------------------------------
+
+	private Brotherhood brotherhood;
+	private Collection<FloatB> floatBs;
+
+	@NotNull
+	@Valid
+	@ManyToOne(optional = false)
+	public Brotherhood getBrotherhood() {
+		return this.brotherhood;
+	}
+
+	public void setBrotherhood(final Brotherhood brotherhood) {
+		this.brotherhood = brotherhood;
+	}
+
+	@NotNull
+	@OneToMany(cascade = CascadeType.ALL)
+	public Collection<FloatB> getFloatBs() {
+		return this.floatBs;
+	}
+
+	public void setFloatBs(final Collection<FloatB> floatBs) {
+		this.floatBs = floatBs;
+	}
+
 }

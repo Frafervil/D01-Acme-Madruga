@@ -48,6 +48,9 @@
 		
 		<bean class="converters.UserAccountToStringConverter"/>
 		<bean class="converters.StringToUserAccount"/>
+		<bean class="converters.RequestToStringConverter" />
+		<bean class="converters.StringToRequestConverter" />		
+
 	</util:list>
 	
 </beans>

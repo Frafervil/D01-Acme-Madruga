@@ -12,6 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
+import domain.Brotherhood;
+import domain.FloatB;
 import domain.Procession;
 
 import utilities.AbstractTest;
@@ -26,6 +28,13 @@ public class ProcessionServiceTest extends AbstractTest {
 
 	@Autowired
 	private ProcessionService processionService;
+	// --------------------------------------------------
+
+	@Autowired
+	private BrotherhoodService brotherhoodService;
+
+	@Autowired
+	private FloatBService floatBService;
 
 	// Tests
 
@@ -34,8 +43,7 @@ public class ProcessionServiceTest extends AbstractTest {
 		Procession result;
 
 		super.authenticate("brotherhood1");
-		result = this.processionService
-				.findOne(this.getEntityId("procession1"));
+		result = this.processionService.findOne(289);
 
 		System.out.println(result);
 		super.unauthenticate();
@@ -45,12 +53,21 @@ public class ProcessionServiceTest extends AbstractTest {
 	public void testCreateAndSave() {
 		Procession procession, saved;
 		Collection<Procession> processions;
+		Brotherhood brotherhood;
+		Collection<FloatB> floatBs;
 
 		super.authenticate("brotherhood1");
+		brotherhood = this.brotherhoodService.findOne(252);
+		floatBs = this.floatBService.findByBrotherhoodId(252);
+
 		procession = this.processionService.create();
 		procession.setTitle("Título 1");
 		procession.setDescription("Descripción 1");
 		procession.setMoment(new Date(1531526400000L));
+		procession.setMaxRow(50);
+		procession.setMaxColumn(50);
+		procession.setBrotherhood(brotherhood);
+		procession.setFloatBs(floatBs);
 
 		saved = this.processionService.save(procession);
 		System.out.println(procession.getTicker());
@@ -58,4 +75,33 @@ public class ProcessionServiceTest extends AbstractTest {
 		Assert.isTrue(processions.contains(saved));
 		super.unauthenticate();
 	}
+
+	@Test
+	public void testFindAll() {
+		Collection<Procession> result;
+
+		super.authenticate("brotherhood1");
+		result = this.processionService.findAll();
+
+		System.out.println(result.size());
+		super.unauthenticate();
+	}
+
+	@Test
+	public void testDelete() {
+		Procession procession;
+		Collection<Procession> processions1;
+		Collection<Procession> processions2;
+
+		super.authenticate("brotherhood1");
+		procession = this.processionService.findOne(this
+				.getEntityId("procession1"));
+		processions1 = this.processionService.findAll();
+		this.processionService.delete(procession);
+
+		processions2 = this.processionService.findAll();
+		Assert.isTrue(processions2.size() != processions1.size());
+		super.unauthenticate();
+	}
+
 }
