@@ -28,9 +28,6 @@
 		<bean class="converters.BrotherhoodToStringConverter" />
 		<bean class="converters.StringToBrotherhoodConverter" />
 
-		<bean class="converters.DropOutToStringConverter" />
-		<bean class="converters.StringToDropOutConverter" />
-
 		<bean class="converters.EnrolmentToStringConverter" />
 		<bean class="converters.StringToEnrolmentConverter" />
 		
