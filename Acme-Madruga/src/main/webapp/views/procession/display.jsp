@@ -34,7 +34,7 @@
 	<a href="floatB/brotherhood/list.do">
 	</a><br/>
 	
-	<!-- Links de editar y borrar -->
+	<!-- Links de editar, listar y borrar -->
 	<jstl:if test="${procession.brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
 	<security:authorize access="hasRole('BROTHERHOOD')">
 			<a href="procession/brotherhood/edit.do?processionId=${procession.id}"><spring:message code="procession.edit"/></a><br/>
