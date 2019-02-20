@@ -9,10 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
 import services.EnrolmentService;
+import services.MemberService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.Enrolment;
@@ -27,6 +29,9 @@ public class MemberBrotherhoodController extends AbstractController {
 
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
+
+	@Autowired
+	private MemberService		memberService;
 
 	@Autowired
 	private EnrolmentService	enrolmentService;
@@ -62,6 +67,39 @@ public class MemberBrotherhoodController extends AbstractController {
 			result.addObject("members", new ArrayList<FloatB>());
 		}
 
+		return result;
+	}
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int memberId) {
+		// Inicializa resultado
+		ModelAndView result;
+		Member member;
+		Collection<Enrolment> enrolments;
+		Brotherhood principal;
+		Enrolment enrolment = null;
+
+		// Busca en el repositorio
+		member = this.memberService.findOne(memberId);
+		Assert.notNull(member);
+
+		principal = this.brotherhoodService.findByPrincipal();
+
+		enrolments = this.enrolmentService.findByBrotherhoodIdAndMemberId(principal.getId(), memberId);
+
+		for (final Enrolment e : enrolments)
+			if (e.getDropOutMoment() == null) {
+				enrolment = e;
+				break;
+			}
+
+		// Crea y añade objetos a la vista
+		result = new ModelAndView("member/display");
+		result.addObject("requestURI", "member/display.do");
+		result.addObject("enrolment", enrolment);
+		result.addObject("member", member);
+
+		// Envía la vista
 		return result;
 	}
 
