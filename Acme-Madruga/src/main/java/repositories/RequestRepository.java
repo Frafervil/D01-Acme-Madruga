@@ -15,4 +15,7 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
 	@Query("select r from Request r where r.member.id = ?1")
 	Collection<Request> findByMember(int memberId);
 
+	@Query("select r from Request r where r.procession.id = ?1")
+	Collection<Request> findAllByProcession(int processionId);
+
 }

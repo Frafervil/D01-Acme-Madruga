@@ -162,3 +162,30 @@ span.pagelinks {
 .grandtotal-row {
 	border-top: 2px solid black;
 }
+
+.greenCell {
+	background-color: #00cc33;
+}
+
+.redCell {
+	background-color:  #ff4d4d;
+}
+
+.cyanCell {
+	background-color: #00cccc;
+}
+
+.greyCell {
+	background-color: grey;
+}
+
+.yellowCell {
+	background-color: #ffff4d;
+}
+
+.whiteCell {
+	background-color: white;
+}
+.orangeCell {
+	background-color: #ffa500;
+}
