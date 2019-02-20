@@ -1,4 +1,3 @@
-
 package controllers.member;
 
 import java.util.ArrayList;
@@ -94,7 +93,6 @@ public class RequestMemberController extends AbstractController {
 		final ModelAndView result;
 		Request request;
 		Member member;
-		Boolean permission = false;
 
 		request = this.requestService.findOne(requestId);
 		member = this.memberService.findByPrincipal();
@@ -104,21 +102,22 @@ public class RequestMemberController extends AbstractController {
 		result = new ModelAndView("request/display");
 		result.addObject("request", request);
 		result.addObject("member", member);
-		result.addObject("permission", permission);
 
 		return result;
 	}
 
 	// Delete ------------------ERRORES
 	@RequestMapping(value = "/display", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final Request request, final BindingResult binding) {
+	public ModelAndView delete(final Request request,
+			final BindingResult binding) {
 		ModelAndView result;
 		try {
 			this.requestService.delete(request);
 			result = new ModelAndView("redirect:list.do");
 		} catch (final Throwable oops) {
 
-			result = this.createEditModelAndView(request, "request.commit.error");
+			result = this.createEditModelAndView(request,
+					"request.commit.error");
 			result.addObject("permission", true);
 
 		}
@@ -126,7 +125,7 @@ public class RequestMemberController extends AbstractController {
 		return result;
 	}
 
-	//Creation
+	// Creation
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create(@RequestParam final int processionId) {
@@ -183,7 +182,8 @@ public class RequestMemberController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final Request request, final String message) {
+	protected ModelAndView createEditModelAndView(final Request request,
+			final String message) {
 		ModelAndView result;
 
 		result = new ModelAndView("request/edit");
