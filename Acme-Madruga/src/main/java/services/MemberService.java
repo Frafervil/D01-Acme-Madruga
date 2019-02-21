@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.Collection;
@@ -13,6 +14,7 @@ import security.LoginService;
 import security.UserAccount;
 import domain.Administrator;
 import domain.Brotherhood;
+import domain.Enrolment;
 import domain.Member;
 
 @Service
@@ -54,9 +56,7 @@ public class MemberService {
 		if (member.getId() == 0) {
 
 			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-			member.getUserAccount().setPassword(
-					passwordEncoder.encodePassword(member.getUserAccount()
-							.getPassword(), null));
+			member.getUserAccount().setPassword(passwordEncoder.encodePassword(member.getUserAccount().getPassword(), null));
 		} else {
 			Member principal;
 			principal = this.findByPrincipal();
@@ -111,12 +111,10 @@ public class MemberService {
 	}
 
 	// Business Method
-	public Collection<Member> findAllMembersOfOneBrotherhood(
-			final int brotherhoodId) {
+	public Collection<Member> findAllMembersOfOneBrotherhood(final int brotherhoodId) {
 		Collection<Member> result;
 
-		result = this.memberRepository
-				.findAllMembersOfOneBrotherhood(brotherhoodId);
+		result = this.memberRepository.findAllMembersOfOneBrotherhood(brotherhoodId);
 		Assert.notNull(result);
 		return result;
 	}
@@ -126,6 +124,8 @@ public class MemberService {
 	public Double averageMemberPerBrotherhood() {
 		Administrator principal;
 		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int total = 0;
 		final Double result;
 
 		principal = this.administratorService.findByPrincipal();
@@ -134,50 +134,75 @@ public class MemberService {
 		brotherhoods = this.brotherhoodService.findAll();
 		Assert.notNull(brotherhoods);
 		for (final Brotherhood b : brotherhoods) {
-
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			total = total + enrolments.size();
 		}
-
+		result = (double) (total / (brotherhoods.size()));
 		return result;
 	}
 	public Double minMemberPerBrotherhood() {
 		Administrator principal;
-		Double result;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int i = 1;
+		Double result = 0.0;
 
 		principal = this.administratorService.findByPrincipal();
 		Assert.notNull(principal);
 
-		result = this.memberRepository.minMembersPerBrotherhood();
-		if (result == null)
-			result = 0.0;
-
+		brotherhoods = this.brotherhoodService.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			if (i == 1)
+				result = (double) enrolments.size();
+			if (enrolments.size() < result)
+				result = (double) enrolments.size();
+			i++;
+		}
 		return result;
 	}
 
 	public Double maxMemberPerBrotherhood() {
 		Administrator principal;
-		Double result;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int i = 1;
+		Double result = 0.0;
 
 		principal = this.administratorService.findByPrincipal();
 		Assert.notNull(principal);
 
-		result = this.memberRepository.maxMembersPerBrotherhood();
-		if (result == null)
-			result = 0.0;
-
+		brotherhoods = this.brotherhoodService.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			if (i == 1)
+				result = (double) enrolments.size();
+			if (result < enrolments.size())
+				result = (double) enrolments.size();
+			i++;
+		}
 		return result;
 	}
 
 	public Double stddevMemberPerBrotherhood() {
 		Administrator principal;
-		Double result;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int total = 0;
+		final Double result;
 
 		principal = this.administratorService.findByPrincipal();
 		Assert.notNull(principal);
 
-		result = this.memberRepository.stddevMembersPerBrotherhood();
-		if (result == null)
-			result = 0.0;
-
+		brotherhoods = this.brotherhoodService.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			total = total + enrolments.size();
+		}
+		result = (double) (total / (brotherhoods.size()));
 		return result;
 	}
 
