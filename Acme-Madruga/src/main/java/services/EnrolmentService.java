@@ -19,8 +19,6 @@ import domain.Member;
 public class EnrolmentService {
 
 	// Managed repository -----------------------------------------------------
-	@Autowired
-	private EnrolmentRepository	enrolmentRepository;
 
 	@Autowired
 	private EnrolmentRepository	enrolmentRepository;

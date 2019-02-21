@@ -56,7 +56,7 @@ public class MemberBrotherhoodController extends AbstractController {
 				if (e.getDropOutMoment() == null)
 					members.add(e.getMember());
 
-			result = new ModelAndView("member/list");
+			result = new ModelAndView("member/brotherhood/list");
 			result.addObject("members", members);
 			result.addObject("requestURI", "member/brotherhood/list.do");
 

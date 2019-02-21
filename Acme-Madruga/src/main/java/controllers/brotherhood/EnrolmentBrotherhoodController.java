@@ -84,7 +84,7 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 		} else
 			try {
 				enrolment = this.enrolmentService.save(enrolment);
-				result = new ModelAndView("redirect:list.do");
+				result = new ModelAndView("redirect:/member/brotherhood/list.do");
 			} catch (final Throwable oops) {
 				oops.printStackTrace();
 				result = this.createEditModelAndView(enrolment, "enrolment.commit.error");
@@ -98,7 +98,7 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 		try {
 			Assert.isTrue(enrolment.getId() != 0);
 			this.enrolmentService.delete(enrolment);
-			result = new ModelAndView("redirect:../brotherhood/list.do");
+			result = new ModelAndView("member/brotherhood/list");
 		} catch (final Exception oops) {
 			oops.printStackTrace();
 			result = this.createEditModelAndView(enrolment, "enrolment.commit.error");

@@ -61,6 +61,9 @@
 	value="<spring:message code="member.edit" />"
 	onclick="javascript: relativeRedir('member/edit.do');" />
 
+	<br>
+	<br>
+
 	<security:authorize access="hasRole('BROTHERHOOD')">
 	<jstl:choose>
 		<jstl:when test="${enrolment == null}">
