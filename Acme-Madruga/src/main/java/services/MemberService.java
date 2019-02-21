@@ -12,6 +12,8 @@ import org.springframework.util.Assert;
 import repositories.MemberRepository;
 import security.LoginService;
 import security.UserAccount;
+import domain.Administrator;
+import domain.Brotherhood;
 import domain.Member;
 
 @Service
@@ -20,10 +22,19 @@ public class MemberService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private MemberRepository	memberRepository;
-
+	private MemberRepository		memberRepository;
 
 	// Supporting services ----------------------------------------------------
+
+	@Autowired
+	private AdministratorService	administratorService;
+
+	@Autowired
+	private BrotherhoodService		brotherhoodService;
+
+	@Autowired
+	private EnrolmentService		enrolmentService;
+
 
 	// Additional functions
 
@@ -104,6 +115,66 @@ public class MemberService {
 
 		result = this.memberRepository.findAllMembersOfOneBrotherhood(brotherhoodId);
 		Assert.notNull(result);
+		return result;
+	}
+
+	// Dashboard
+
+	public Double averageMemberPerBrotherhood() {
+		Administrator principal;
+		Collection<Brotherhood> brotherhoods;
+		final Double result;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		brotherhoods = this.brotherhoodService.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+
+		}
+
+		return result;
+	}
+	public Double minMemberPerBrotherhood() {
+		Administrator principal;
+		Double result;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		result = this.memberRepository.minMembersPerBrotherhood();
+		if (result == null)
+			result = 0.0;
+
+		return result;
+	}
+
+	public Double maxMemberPerBrotherhood() {
+		Administrator principal;
+		Double result;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		result = this.memberRepository.maxMembersPerBrotherhood();
+		if (result == null)
+			result = 0.0;
+
+		return result;
+	}
+
+	public Double stddevMemberPerBrotherhood() {
+		Administrator principal;
+		Double result;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		result = this.memberRepository.stddevMembersPerBrotherhood();
+		if (result == null)
+			result = 0.0;
+
 		return result;
 	}
 
