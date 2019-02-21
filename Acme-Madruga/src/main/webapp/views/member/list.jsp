@@ -25,7 +25,7 @@ class="displaytag" keepStatus="true">
 
 	<!-- Display -->
 	<display:column>
-		<a href="member/display.do?memberId=${row.id}"><spring:message code="member.display"/></a>
+		<a href="member/brotherhood/display.do?memberId=${row.id}"><spring:message code="member.display"/></a>
 	</display:column>
 	
 	<!-- Name -->
@@ -37,15 +37,7 @@ class="displaytag" keepStatus="true">
 	<display:column  property="surname" title="${surnameHeader}" />
 	
 	<!-- UserAccount -->
-	<spring:message code="member.userAccount" var="userAccountHeader" />
-	<display:column  property="userAccount" title="${userAccountHeader}" />
+	<spring:message code="member.username" var="userAccountHeader" />
+	<display:column  property="userAccount.username" title="${userAccountHeader}" />
 	
 </display:table>
-
-<!-- Enrolments -->
-<security:authorize access="hasRole('BROTHERHOOD')">
-	<div>
-		<a href="enrolment/brotherhood/create.do"><spring:message
-				code="enrolment.create" /></a>
-	</div>
-</security:authorize> 

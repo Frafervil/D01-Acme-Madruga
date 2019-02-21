@@ -28,11 +28,11 @@
 		
 		<jstl:if test="${cookie['language'].getValue()=='en'}">
 		<acme:select code="enrolment.position" path="position"
-		items="${positions}" itemLabel="languageCategories[0].name" id="position"/>
+		items="${positions}" itemLabel="languagePositions[0].name" id="position"/>
 		<br /></jstl:if>
 		<jstl:if test="${cookie['language'].getValue()=='es'}">
 		<acme:select code="enrolment.position" path="position"
-		items="${positions}" itemLabel="languageCategories[1].name" id="position"/>
+		items="${positions}" itemLabel="languagePositions[1].name" id="position"/>
 		<br /></jstl:if>
 		
 		<acme:submit name="save" code="enrolment.save"/>

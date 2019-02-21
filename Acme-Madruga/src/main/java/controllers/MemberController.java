@@ -2,6 +2,8 @@
 package controllers;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.validation.Valid;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.CustomisationService;
 import services.MemberService;
+import domain.FloatB;
 import domain.Member;
 
 @Controller
@@ -28,6 +31,30 @@ public class MemberController extends AbstractController {
 	@Autowired
 	private CustomisationService	customisationService;
 
+
+	// List
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list() {
+		ModelAndView result;
+		Collection<Member> members;
+
+		try {
+			members = this.memberService.findAll();
+
+			result = new ModelAndView("member/list");
+			result.addObject("members", members);
+			result.addObject("requestURI", "member/list.do");
+
+		} catch (final Throwable oops) {
+			oops.printStackTrace();
+			result = new ModelAndView("member/list");
+			result.addObject("message", "member.retrieve.error");
+			result.addObject("members", new ArrayList<FloatB>());
+		}
+
+		return result;
+	}
 
 	// Create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
