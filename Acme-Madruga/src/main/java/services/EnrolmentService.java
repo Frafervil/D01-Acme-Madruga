@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.Collection;
@@ -19,12 +20,13 @@ public class EnrolmentService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private EnrolmentRepository enrolmentRepository;
+	private EnrolmentRepository	enrolmentRepository;
 
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	private BrotherhoodService brotherhoodService;
+	private BrotherhoodService	brotherhoodService;
+
 
 	// Simple CRUD Methods
 
@@ -117,12 +119,18 @@ public class EnrolmentService {
 		return result;
 	}
 
-	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(
-			final int brotherhoodId, final int memberId) {
+	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(final int brotherhoodId, final int memberId) {
 		Collection<Enrolment> result;
 
-		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(
-				brotherhoodId, memberId);
+		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(brotherhoodId, memberId);
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Collection<Enrolment> findAllActiveEnrolmentsByBrotherhoodId(final int brotherhoodId) {
+		Collection<Enrolment> result;
+
+		result = this.enrolmentRepository.findAllActiveEnrolmentsByBrotherhoodId(brotherhoodId);
 		Assert.notNull(result);
 		return result;
 	}

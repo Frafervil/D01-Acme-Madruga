@@ -3,6 +3,8 @@ package services;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,5 +138,18 @@ public class ProcessionService {
 		result = this.processionRepository.findAllProcessionsFinal();
 		Assert.notNull(result);
 		return result;
+	}
+
+	public Collection<Procession> startingSoonProcessions() {
+		final Collection<Procession> result;
+		final Calendar c = new GregorianCalendar();
+		c.add(Calendar.DATE, 30);
+		final Date dateMax = c.getTime();
+
+		result = this.processionRepository.findSoonProcessions(dateMax);
+		Assert.notNull(result);
+
+		return result;
+
 	}
 }

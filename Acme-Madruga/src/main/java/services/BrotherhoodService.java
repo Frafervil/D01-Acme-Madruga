@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.Collection;
@@ -12,7 +13,9 @@ import org.springframework.util.Assert;
 import repositories.BrotherhoodRepository;
 import security.LoginService;
 import security.UserAccount;
+import domain.Administrator;
 import domain.Brotherhood;
+import domain.Enrolment;
 
 @Service
 @Transactional
@@ -20,9 +23,15 @@ public class BrotherhoodService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private BrotherhoodRepository brotherhoodRepository;
+	private BrotherhoodRepository	brotherhoodRepository;
 
 	// Supporting services ----------------------------------------------------
+	@Autowired
+	private AdministratorService	administratorService;
+
+	@Autowired
+	private EnrolmentService		enrolmentService;
+
 
 	// Simple CRUD Methods
 
@@ -45,9 +54,7 @@ public class BrotherhoodService {
 		if (brotherhood.getId() == 0) {
 
 			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-			brotherhood.getUserAccount().setPassword(
-					passwordEncoder.encodePassword(brotherhood.getUserAccount()
-							.getPassword(), null));
+			brotherhood.getUserAccount().setPassword(passwordEncoder.encodePassword(brotherhood.getUserAccount().getPassword(), null));
 
 		} else {
 			Brotherhood principal;
@@ -97,6 +104,51 @@ public class BrotherhoodService {
 		Assert.notNull(userAccountId);
 		Brotherhood result;
 		result = this.brotherhoodRepository.findByUserAccountId(userAccountId);
+		return result;
+	}
+
+	public Brotherhood largestBrotherhood() {
+		Brotherhood result = null;
+		Administrator principal;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int i = 1;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		brotherhoods = this.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			if (i == 1)
+				result = b;
+			if (this.enrolmentService.findByBrotherhoodId(result.getId()).size() < enrolments.size())
+				result = b;
+			i++;
+		}
+		return result;
+	}
+	public Brotherhood smallestBrotherhood() {
+		Brotherhood result = null;
+		Administrator principal;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int i = 1;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		brotherhoods = this.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			if (i == 1)
+				result = b;
+			if (this.enrolmentService.findByBrotherhoodId(result.getId()).size() > enrolments.size())
+				result = b;
+			i++;
+		}
 		return result;
 	}
 }
