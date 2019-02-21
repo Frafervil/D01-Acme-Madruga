@@ -21,6 +21,8 @@
 <form:form action="enrolment/brotherhood/edit.do" modelAttribute="enrolment">
 		<form:hidden path="id"/>
 		<form:hidden path="version"/>
+		<form:hidden path="enrolmentMoment"/>
+		<form:hidden path="dropOutMoment"/>
 		<form:hidden path="brotherhood"/>
 		
 		<acme:select code="enrolment.member" path="member"

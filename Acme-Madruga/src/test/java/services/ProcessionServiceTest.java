@@ -28,33 +28,46 @@ public class ProcessionServiceTest extends AbstractTest {
 
 	@Autowired
 	private ProcessionService processionService;
+	// --------------------------------------------------
+
+	@Autowired
+	private BrotherhoodService brotherhoodService;
+
+	@Autowired
+	private FloatBService floatBService;
 
 	// Tests
 
-	// @Test
-	// public void testFindOne() {
-	// Procession result;
-	//
-	// super.authenticate("brotherhood1");
-	// result = this.processionService.findOne(289);
-	//
-	// System.out.println(result);
-	// super.unauthenticate();
-	// }
+	@Test
+	public void testFindOne() {
+		Procession result;
+
+		super.authenticate("brotherhood1");
+		result = this.processionService.findOne(289);
+
+		System.out.println(result);
+		super.unauthenticate();
+	}
 
 	@Test
 	public void testCreateAndSave() {
 		Procession procession, saved;
 		Collection<Procession> processions;
+		Brotherhood brotherhood;
+		Collection<FloatB> floatBs;
 
 		super.authenticate("brotherhood1");
+		brotherhood = this.brotherhoodService.findOne(252);
+		floatBs = this.floatBService.findByBrotherhoodId(252);
+
 		procession = this.processionService.create();
 		procession.setTitle("Título 1");
 		procession.setDescription("Descripción 1");
 		procession.setMoment(new Date(1531526400000L));
 		procession.setMaxRow(50);
 		procession.setMaxColumn(50);
-		procession.setBrotherhood(new Brotherhood());
+		procession.setBrotherhood(brotherhood);
+		procession.setFloatBs(floatBs);
 
 		saved = this.processionService.save(procession);
 		System.out.println(procession.getTicker());
@@ -63,16 +76,16 @@ public class ProcessionServiceTest extends AbstractTest {
 		super.unauthenticate();
 	}
 
-	// @Test
-	// public void testFindAll() {
-	// Collection<Procession> result;
-	//
-	// super.authenticate("brotherhood1");
-	// result = this.processionService.findAll();
-	//
-	// System.out.println(result.size());
-	// super.unauthenticate();
-	// }
+	@Test
+	public void testFindAll() {
+		Collection<Procession> result;
+
+		super.authenticate("brotherhood1");
+		result = this.processionService.findAll();
+
+		System.out.println(result.size());
+		super.unauthenticate();
+	}
 
 	@Test
 	public void testDelete() {

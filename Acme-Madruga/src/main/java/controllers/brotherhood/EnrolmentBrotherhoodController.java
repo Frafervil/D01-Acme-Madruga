@@ -26,7 +26,7 @@ import domain.Position;
 
 @Controller
 @RequestMapping("/enrolment/brotherhood")
-public class EnrolmentBrotherhood extends AbstractController {
+public class EnrolmentBrotherhoodController extends AbstractController {
 
 	// Servicios
 
@@ -43,11 +43,14 @@ public class EnrolmentBrotherhood extends AbstractController {
 	// Create
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create() {
+	public ModelAndView create(@RequestParam final int memberId) {
 		ModelAndView result;
 		Enrolment enrolment;
+		Member member;
 
-		enrolment = this.enrolmentService.create();
+		member = this.memberService.findOne(memberId);
+
+		enrolment = this.enrolmentService.create(member);
 
 		result = this.createEditModelAndView(enrolment);
 
@@ -124,7 +127,8 @@ public class EnrolmentBrotherhood extends AbstractController {
 		enrolments = this.enrolmentService.findByBrotherhoodId(brotherhood.getId());
 
 		for (final Enrolment e : enrolments)
-			myMembers.add(e.getMember());
+			if (e.getDropOutMoment() == null)
+				myMembers.add(e.getMember());
 
 		members.removeAll(myMembers);
 

@@ -35,7 +35,8 @@
 			<li><a class="fNiv"><spring:message	code="master.page.brotherhood" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="floatB/brotherhood/list.do"><spring:message code="master.page.brotherhood.floatBs" /></a></li>					
+					<li><a href="floatB/brotherhood/list.do"><spring:message code="master.page.brotherhood.floatBs" /></a></li>
+					<li><a href="member/brotherhood/list.do"><spring:message code="master.page.brotherhood.members" /></a></li>					
 				</ul>
 			</li>
 		</security:authorize>

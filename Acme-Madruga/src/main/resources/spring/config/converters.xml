@@ -28,9 +28,6 @@
 		<bean class="converters.BrotherhoodToStringConverter" />
 		<bean class="converters.StringToBrotherhoodConverter" />
 
-		<bean class="converters.DropOutToStringConverter" />
-		<bean class="converters.StringToDropOutConverter" />
-
 		<bean class="converters.EnrolmentToStringConverter" />
 		<bean class="converters.StringToEnrolmentConverter" />
 		
@@ -44,7 +41,10 @@
 		<bean class="converters.StringToRequestConverter" />
 		
 		<bean class="converters.MemberToStringConverter" />
-		<bean class="converters.StringToMemberConverter" />		
+		<bean class="converters.StringToMemberConverter" />	
+		
+		<bean class="converters.UserAccountToStringConverter"/>
+		<bean class="converters.StringToUserAccount"/>
 
 	</util:list>
 	

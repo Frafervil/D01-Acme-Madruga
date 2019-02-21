@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.Collection;
@@ -55,7 +54,9 @@ public class MemberService {
 		if (member.getId() == 0) {
 
 			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-			member.getUserAccount().setPassword(passwordEncoder.encodePassword(member.getUserAccount().getPassword(), null));
+			member.getUserAccount().setPassword(
+					passwordEncoder.encodePassword(member.getUserAccount()
+							.getPassword(), null));
 		} else {
 			Member principal;
 			principal = this.findByPrincipal();
@@ -110,10 +111,12 @@ public class MemberService {
 	}
 
 	// Business Method
-	public Collection<Member> findAllMembersOfOneBrotherhood(final int brotherhoodId) {
+	public Collection<Member> findAllMembersOfOneBrotherhood(
+			final int brotherhoodId) {
 		Collection<Member> result;
 
-		result = this.memberRepository.findAllMembersOfOneBrotherhood(brotherhoodId);
+		result = this.memberRepository
+				.findAllMembersOfOneBrotherhood(brotherhoodId);
 		Assert.notNull(result);
 		return result;
 	}

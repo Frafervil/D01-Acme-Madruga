@@ -11,8 +11,8 @@ import org.springframework.util.Assert;
 
 import repositories.EnrolmentRepository;
 import domain.Brotherhood;
-import domain.DropOut;
 import domain.Enrolment;
+import domain.Member;
 
 @Service
 @Transactional
@@ -25,15 +25,12 @@ public class EnrolmentService {
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
-
-	@Autowired
-	private DropOutService		dropOutService;
+	private BrotherhoodService brotherhoodService;
 
 
 	// Simple CRUD Methods
 
-	public Enrolment create() {
+	public Enrolment create(final Member member) {
 
 		Brotherhood principal;
 		Enrolment result;
@@ -45,7 +42,8 @@ public class EnrolmentService {
 		moment = new Date(System.currentTimeMillis() - 1000);
 
 		result.setBrotherhood(principal);
-		result.setMoment(moment);
+		result.setMember(member);
+		result.setEnrolmentMoment(moment);
 
 		return result;
 	}
@@ -71,7 +69,7 @@ public class EnrolmentService {
 	public void delete(final Enrolment enrolment) {
 
 		Brotherhood principal;
-		DropOut dO;
+		Date moment;
 
 		Assert.notNull(enrolment);
 
@@ -80,8 +78,11 @@ public class EnrolmentService {
 
 		Assert.isTrue(enrolment.getBrotherhood().getId() == principal.getId());
 
-		dO = this.dropOutService.create(enrolment.getMember());
-		dO = this.dropOutService.save(dO);
+		moment = new Date(System.currentTimeMillis() - 1000);
+
+		enrolment.setDropOutMoment(moment);
+
+		this.enrolmentRepository.save(enrolment);
 	}
 
 	public Enrolment findOne(final int enrolmentId) {
@@ -118,7 +119,8 @@ public class EnrolmentService {
 		return result;
 	}
 
-	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(final int brotherhoodId, final int memberId) {
+	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(
+			final int brotherhoodId, final int memberId) {
 		Collection<Enrolment> result;
 
 		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(brotherhoodId, memberId);
