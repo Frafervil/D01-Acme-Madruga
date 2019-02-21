@@ -25,7 +25,7 @@
 <!-- Members -->
 <h3> <spring:message code="brotherhood.members" /> </h3>
 <jstl:choose>
-<jstl:when test="${not empty brotherhood.enrolments}">
+<jstl:when test="${not empty members}">
 <display:table pagesize="5" class="displaytag" name="members" requestURI="brotherhood/display.do" id="members">
 		<spring:message code="brotherhood.members.name" var="name" />
 		<display:column property="name" title="${name}" sortable="true"/>
@@ -43,7 +43,7 @@
 <!-- Processions -->
 <h3> <spring:message code="brotherhood.processions" /> </h3>
 <jstl:choose>
-<jstl:when test="${not empty brotherhood.processions}">
+<jstl:when test="${not empty processions}">
 <display:table pagesize="5" class="displaytag" name="processions" requestURI="brotherhood/display.do" id="processions">
 		<spring:message code="brotherhood.processions.title" var="title" />
 		<display:column property="title" title="${title}" sortable="true"/>
@@ -74,7 +74,3 @@
 <spring:message code="brotherhood.floats.empty" /> 
 </jstl:otherwise>
 </jstl:choose>
-
-<input type="button" name="save" class="ui button"
-	value="<spring:message code="brotherhood.edit" />"
-	onclick="javascript: relativeRedir('brotherhood/edit.do');" />

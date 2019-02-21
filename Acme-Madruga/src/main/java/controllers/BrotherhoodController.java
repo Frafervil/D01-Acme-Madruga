@@ -88,6 +88,29 @@ public class BrotherhoodController extends AbstractController {
 
 	}
 
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView showAnonymous(final int brotherhoodId) {
+		final ModelAndView result;
+		Brotherhood brotherhood;
+		Collection<Member> members;
+		final Collection<Procession> processions;
+		final Collection<FloatB> floats;
+
+		brotherhood = this.brotherhoodService.findOne(brotherhoodId);
+		members = this.memberService.findAllMembersOfOneBrotherhood(brotherhoodId);
+		processions = this.processionService.findAllProcessionsOfOneBrotherhood(brotherhoodId);
+		floats = this.floatBService.findByBrotherhoodId(brotherhoodId);
+
+		result = new ModelAndView("brotherhood/display");
+		result.addObject("brotherhood", brotherhood);
+		result.addObject("members", members);
+		result.addObject("processions", processions);
+		result.addObject("floats", floats);
+
+		return result;
+
+	}
+
 	//Create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
