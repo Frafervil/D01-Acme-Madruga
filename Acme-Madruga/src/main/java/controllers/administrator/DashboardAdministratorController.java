@@ -1,4 +1,3 @@
-
 package controllers.administrator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +16,15 @@ import domain.Brotherhood;
 @RequestMapping("/dashboard/administrator")
 public class DashboardAdministratorController extends AbstractController {
 
-	//Services
+	// Services
 
 	@Autowired
-	private AdministratorService	administratorService;
+	private MemberService memberService;
 
 	@Autowired
-	private MemberService			memberService;
+	private BrotherhoodService brotherhoodService;
 
-	@Autowired
-	private BrotherhoodService		brotherhoodService;
-
-
-	//Display
+	// Display
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView display() {
@@ -39,29 +34,31 @@ public class DashboardAdministratorController extends AbstractController {
 		final Brotherhood largestBrotherhood;
 		final Brotherhood smallestBroterhood;
 
-		//Stadistics
+		// Stadistics
 
-		//avg
-		avgMemberPerBrotherhood = this.memberService.averageMemberPerBrotherhood();
+		// avg
+		avgMemberPerBrotherhood = this.memberService
+				.averageMemberPerBrotherhood();
 
-		//min
+		// min
 		minMemberPerBrotherhood = this.memberService.minMemberPerBrotherhood();
 
-		//max
+		// max
 		maxMemberPerBrotherhood = this.memberService.maxMemberPerBrotherhood();
 
-		//standard Deviation
-		stddevMemberPerBrotherhood = this.memberService.stddevMemberPerBrotherhood();
+		// standard Deviation
+		stddevMemberPerBrotherhood = this.memberService
+				.stddevMemberPerBrotherhood();
 
-		//largest Brotherhood
+		// largest Brotherhood
 		largestBrotherhood = this.brotherhoodService.largestBrotherhood();
 
-		//smallest Brotherhood
+		// smallest Brotherhood
 		smallestBroterhood = this.brotherhoodService.smallestBrotherhood();
 
-		//Ratios
+		// Ratios
 
-		//result
+		// result
 
 		result = new ModelAndView("administrator/dashboard");
 

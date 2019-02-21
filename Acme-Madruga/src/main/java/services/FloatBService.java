@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import org.springframework.util.Assert;
 import repositories.FloatBRepository;
 import domain.Brotherhood;
 import domain.FloatB;
+import domain.Procession;
 
 @Service
 @Transactional
@@ -19,13 +19,12 @@ public class FloatBService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private FloatBRepository	floatBRepository;
+	private FloatBRepository floatBRepository;
 
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
-
+	private BrotherhoodService brotherhoodService;
 
 	// Additional functions
 
@@ -107,5 +106,4 @@ public class FloatBService {
 		Assert.notNull(result);
 		return result;
 	}
-
 }

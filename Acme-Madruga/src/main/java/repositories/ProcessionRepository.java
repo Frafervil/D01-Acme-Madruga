@@ -17,4 +17,5 @@ public interface ProcessionRepository extends JpaRepository<Procession, Integer>
 
 	@Query("select p from Procession p where p.isDraft = 0")
 	Collection<Procession> findAllProcessionsFinal();
+	
 }
