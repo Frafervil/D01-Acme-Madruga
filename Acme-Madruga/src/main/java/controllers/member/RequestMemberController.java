@@ -31,14 +31,13 @@ public class RequestMemberController extends AbstractController {
 	// Services
 
 	@Autowired
-	private RequestService		requestService;
+	private RequestService requestService;
 
 	@Autowired
-	private MemberService		memberService;
+	private MemberService memberService;
 
 	@Autowired
-	private ProcessionService	processionService;
-
+	private ProcessionService processionService;
 
 	// Listing
 
@@ -93,15 +92,19 @@ public class RequestMemberController extends AbstractController {
 		final ModelAndView result;
 		Request request;
 		Member member;
+		boolean permission = false;
 
 		request = this.requestService.findOne(requestId);
 		member = this.memberService.findByPrincipal();
-		if (this.requestService.findAllByMember(member.getId()).contains(request))
+
+		if (this.requestService.findAllByMember(member.getId()).contains(
+				request))
 			permission = true;
 
 		result = new ModelAndView("request/display");
 		result.addObject("request", request);
 		result.addObject("member", member);
+		result.addObject("permission", permission);
 
 		return result;
 	}
@@ -155,7 +158,8 @@ public class RequestMemberController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Request request, final BindingResult binding) {
+	public ModelAndView save(@Valid final Request request,
+			final BindingResult binding) {
 		ModelAndView result;
 
 		if (binding.hasErrors()) {
@@ -166,7 +170,8 @@ public class RequestMemberController extends AbstractController {
 				this.requestService.save(request);
 				result = new ModelAndView("redirect:list.do");
 			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(request, "request.commit.error");
+				result = this.createEditModelAndView(request,
+						"request.commit.error");
 			}
 
 		return result;
