@@ -1,15 +1,12 @@
 package domain;
 
-import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -103,7 +100,6 @@ public class Procession extends DomainEntity {
 	// Relationships----------------------------------------------
 
 	private Brotherhood brotherhood;
-	private Collection<FloatB> floatBs;
 
 	@NotNull
 	@Valid
@@ -115,15 +111,4 @@ public class Procession extends DomainEntity {
 	public void setBrotherhood(final Brotherhood brotherhood) {
 		this.brotherhood = brotherhood;
 	}
-
-	@NotNull
-	@OneToMany(cascade = CascadeType.ALL)
-	public Collection<FloatB> getFloatBs() {
-		return this.floatBs;
-	}
-
-	public void setFloatBs(final Collection<FloatB> floatBs) {
-		this.floatBs = floatBs;
-	}
-
 }

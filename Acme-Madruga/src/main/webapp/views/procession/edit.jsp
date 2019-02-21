@@ -1,5 +1,5 @@
 <%--
- * action-1.jsp
+ * edit.jsp
  *
  * Copyright (C) 2019 Universidad de Sevilla
  * 
@@ -18,6 +18,12 @@
 
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
+<jstl:choose>
+<jstl:when test="${procession.isDraft == false}">
+<h3><spring:message code="procession.nopermission" /></h3>
+</jstl:when>
+<jstl:otherwise>
+
 <form:form action="procession/brotherhood/edit.do" modelAttribute="procession">
 		<form:hidden path="id"/>
 		<form:hidden path="version"/>
@@ -26,6 +32,8 @@
 		<acme:textbox code="procession.title" path="title"/>
 		
 		<acme:textarea code="procession.description" path="description"/>
+		
+		<acme:textbox code="procession.moment" path="moment" placeholder="dd/MM/yyyy HH:mm" />
 		
 	<!-- CONTINUAR POR AQUÍ -->	
 	
@@ -41,3 +49,6 @@
 		<acme:cancel url="floatB/brotherhood/list.do" code="floatB.cancel"/>
 		
 </form:form>
+
+</jstl:otherwise>
+</jstl:choose>

@@ -13,7 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
 import domain.Brotherhood;
-import domain.FloatB;
 import domain.Procession;
 
 import utilities.AbstractTest;
@@ -33,9 +32,6 @@ public class ProcessionServiceTest extends AbstractTest {
 	@Autowired
 	private BrotherhoodService brotherhoodService;
 
-	@Autowired
-	private FloatBService floatBService;
-
 	// Tests
 
 	@Test
@@ -54,11 +50,9 @@ public class ProcessionServiceTest extends AbstractTest {
 		Procession procession, saved;
 		Collection<Procession> processions;
 		Brotherhood brotherhood;
-		Collection<FloatB> floatBs;
 
 		super.authenticate("brotherhood1");
 		brotherhood = this.brotherhoodService.findOne(252);
-		floatBs = this.floatBService.findByBrotherhoodId(252);
 
 		procession = this.processionService.create();
 		procession.setTitle("Título 1");
@@ -67,7 +61,6 @@ public class ProcessionServiceTest extends AbstractTest {
 		procession.setMaxRow(50);
 		procession.setMaxColumn(50);
 		procession.setBrotherhood(brotherhood);
-		procession.setFloatBs(floatBs);
 
 		saved = this.processionService.save(procession);
 		System.out.println(procession.getTicker());

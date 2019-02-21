@@ -51,6 +51,7 @@ public class FloatB extends DomainEntity {
 	// Relationships----------------------------------------------
 
 	private Brotherhood brotherhood;
+	private Procession procession;
 
 	@Valid
 	@ManyToOne(optional = false)
@@ -62,4 +63,15 @@ public class FloatB extends DomainEntity {
 	public void setBrotherhood(final Brotherhood brotherhood) {
 		this.brotherhood = brotherhood;
 	}
+
+	@Valid
+	@ManyToOne(optional = true)
+	public Procession getProcession() {
+		return this.procession;
+	}
+
+	public void setProcession(final Procession procession) {
+		this.procession = procession;
+	}
+
 }

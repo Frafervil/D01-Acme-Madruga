@@ -1,7 +1,6 @@
 
 package controllers.brotherhood;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -19,7 +18,6 @@ import services.EnrolmentService;
 import services.MemberService;
 import services.PositionService;
 import controllers.AbstractController;
-import domain.Brotherhood;
 import domain.Enrolment;
 import domain.Member;
 import domain.Position;
@@ -115,26 +113,12 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 
 	protected ModelAndView createEditModelAndView(final Enrolment enrolment, final String messageCode) {
 		ModelAndView result;
-		final Collection<Member> members;
-		final Collection<Member> myMembers = new ArrayList<Member>();
 		final Collection<Position> positions;
-		Brotherhood brotherhood;
-		final Collection<Enrolment> enrolments;
 
 		positions = this.positionService.findAll();
-		members = this.memberService.findAll();
-		brotherhood = enrolment.getBrotherhood();
-		enrolments = this.enrolmentService.findByBrotherhoodId(brotherhood.getId());
-
-		for (final Enrolment e : enrolments)
-			if (e.getDropOutMoment() == null)
-				myMembers.add(e.getMember());
-
-		members.removeAll(myMembers);
 
 		result = new ModelAndView("enrolment/edit");
 		result.addObject("enrolment", enrolment);
-		result.addObject("members", members);
 		result.addObject("positions", positions);
 		result.addObject("message", messageCode);
 
