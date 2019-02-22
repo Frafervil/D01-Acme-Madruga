@@ -18,9 +18,6 @@
 
 	<form:hidden path="id"/>
 	<form:hidden path="version"/>
-	<form:hidden path="requests"/>
-	<form:hidden path="enrolments"/>
-	<form:hidden path="dropOuts"/>
 	
 	<form:label path="name">
 		<spring:message code="member.name" />:
