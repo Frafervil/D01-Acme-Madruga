@@ -17,49 +17,37 @@
 <%@taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
 <table class="ui celled table">
 	<thead>
 		<tr>
-			<img src="${actor.photo}" class="ui mini rounded image">
-			<div class="content">
-				<spring:message code="administrator.profile.title" />
-				${actor.name}
-			</div>
-
+			<acme:image src="https://cdn1.iconfinder.com/data/icons/instagram-ui-glyph/48/Sed-09-128.png"/>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td><spring:message code="administrator.name" />
-			<td data-label="name">${actor.name}</td>
+			<acme:displayText code="administrator.name" dataLabel="name" path="${actor.name}"/>
 		</tr>
 		<tr>
-			<td><spring:message code="administrator.middleName" />
-			<td data-label="MiddleName">${actor.middleName}</td>
+			<acme:displayText dataLabel="MiddleName" code="administrator.middleName" path="${actor.middleName}"/>
 		</tr>
 		<tr>
-			<td><spring:message code="administrator.surname" />
-			<td data-label="surname">${actor.surname}</td>
+			<acme:displayText dataLabel="surname" code="administrator.surname" path="${actor.surname}"/>
 		</tr>
 		<tr>
-			<td><spring:message code="administrator.email" />
-			<td data-label="email">${actor.email}</td>
+			<acme:displayText dataLabel="email" code="administrator.email" path="${actor.email}"/>
 		</tr>
 		<tr>
-			<td><spring:message code="administrator.phone" />
-			<td data-label="phone">${actor.phone}</td>
+			<acme:displayText dataLabel="phone" code="administrator.phone" path="${actor.phone}"/>
 		</tr>
 		<tr>
-			<td><spring:message code="administrator.address" />
-			<td data-label="address">${actor.address}</td>
+			<acme:displayText dataLabel="address" code="administrator.address" path="${actor.address}"/>
 		</tr>
 	</tbody>
 </table>
 
-<input type="button" name="save" class="ui button"
-	value="<spring:message code="administrator.edit" />"
-	onclick="javascript: relativeRedir('administrator/edit.do');" />
+<acme:button url="administrator/edit.do" code="administrator.edit"/>
 
 </body>
 </html>
