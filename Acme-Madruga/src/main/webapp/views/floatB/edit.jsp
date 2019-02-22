@@ -1,7 +1,7 @@
 <%--
  * action-1.jsp
  *
- * Copyright (C) 2017 Universidad de Sevilla
+ * Copyright (C) 2019 Universidad de Sevilla
  * 
  * The use of this project is hereby constrained to the conditions of the 
  * TDG Licence, a copy of which you may download from 
@@ -21,16 +21,17 @@
 <form:form action="floatB/brotherhood/edit.do" modelAttribute="floatB">
 		<form:hidden path="id"/>
 		<form:hidden path="version"/>
+		<form:hidden path="brotherhood"/>
 		
 		<acme:textbox code="floatB.title" path="title"/>
 		
 		<acme:textarea code="floatB.description" path="description"/>
 		
 		<spring:message code = "floatB.pictures.placeholder" var="picturePlaceholder"/>
-		<acme:textarea code="floatB.pictures" path="pictures" placeholder="${picturePlaceholder }"/>
+		<acme:textarea code="floatB.pictures" path="pictures"/>
 		
 		<acme:select code="floatB.procession" path="procession"
-		items="${processions}" itemLabel="name" id="procession"/>
+		items="${processions}" itemLabel="title" id="procession"/>
 		
 		<acme:submit name="save" code="floatB.save"/>
 		
@@ -38,6 +39,6 @@
 			<acme:submit name="delete" code="floatB.delete"/>
 		</jstl:if>
 		
-		<acme:cancel url="floatB/list.do" code="floatB.cancel"/>
+		<acme:cancel url="floatB/brotherhood/list.do" code="floatB.cancel"/>
 		
 </form:form>

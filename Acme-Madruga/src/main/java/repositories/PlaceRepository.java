@@ -4,9 +4,9 @@ package repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import domain.DropOut;
+import domain.Place;
 
 @Repository
-public interface DropOutRepository extends JpaRepository<DropOut, Integer> {
+public interface PlaceRepository extends JpaRepository<Place, Integer> {
 
 }

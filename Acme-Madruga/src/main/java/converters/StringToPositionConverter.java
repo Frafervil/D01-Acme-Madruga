@@ -7,20 +7,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import repositories.DropOutRepository;
-import domain.DropOut;
+import repositories.PositionRepository;
+import domain.Position;
 
 @Component
 @Transactional
-public class StringToDropOutConverter implements Converter<String, DropOut> {
+public class StringToPositionConverter implements Converter<String, Position> {
 
 	@Autowired
-	DropOutRepository	dropOutRepository;
+	PositionRepository	positionRepository;
 
 
 	@Override
-	public DropOut convert(final String text) {
-		DropOut result;
+	public Position convert(final String text) {
+		Position result;
 		int id;
 
 		try {
@@ -28,7 +28,7 @@ public class StringToDropOutConverter implements Converter<String, DropOut> {
 				result = null;
 			else {
 				id = Integer.valueOf(text);
-				result = this.dropOutRepository.findOne(id);
+				result = this.positionRepository.findOne(id);
 			}
 		} catch (final Throwable oops) {
 			throw new IllegalArgumentException(oops);

@@ -1,7 +1,6 @@
 
 package services;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -14,10 +13,9 @@ import org.springframework.util.Assert;
 import repositories.BrotherhoodRepository;
 import security.LoginService;
 import security.UserAccount;
+import domain.Administrator;
 import domain.Brotherhood;
-import domain.DropOut;
 import domain.Enrolment;
-import domain.Procession;
 
 @Service
 @Transactional
@@ -27,37 +25,37 @@ public class BrotherhoodService {
 	@Autowired
 	private BrotherhoodRepository	brotherhoodRepository;
 
-
 	// Supporting services ----------------------------------------------------
+	@Autowired
+	private AdministratorService	administratorService;
 
-	// Additional functions
+	@Autowired
+	private EnrolmentService		enrolmentService;
+
 
 	// Simple CRUD Methods
 
 	public Brotherhood create() {
 		Brotherhood result;
+		Date moment;
 
 		result = new Brotherhood();
 
-		result.setEnrolments(new ArrayList<Enrolment>());
-		result.setDropOuts(new ArrayList<DropOut>());
-		result.setProcessions(new ArrayList<Procession>());
-
+		moment = new Date(System.currentTimeMillis() - 1);
+		Assert.notNull(moment);
+		result.setEstablishmentDate(moment);
 		return result;
 	}
 
 	public Brotherhood save(final Brotherhood brotherhood) {
 		Brotherhood saved;
 		Assert.notNull(brotherhood);
-		Date moment;
 
 		if (brotherhood.getId() == 0) {
 
 			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
 			brotherhood.getUserAccount().setPassword(passwordEncoder.encodePassword(brotherhood.getUserAccount().getPassword(), null));
 
-			moment = new Date(System.currentTimeMillis() - 1);
-			brotherhood.setEstablishmentDate(moment);
 		} else {
 			Brotherhood principal;
 			principal = this.findByPrincipal();
@@ -109,4 +107,48 @@ public class BrotherhoodService {
 		return result;
 	}
 
+	public Brotherhood largestBrotherhood() {
+		Brotherhood result = null;
+		Administrator principal;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int i = 1;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		brotherhoods = this.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			if (i == 1)
+				result = b;
+			if (this.enrolmentService.findByBrotherhoodId(result.getId()).size() < enrolments.size())
+				result = b;
+			i++;
+		}
+		return result;
+	}
+	public Brotherhood smallestBrotherhood() {
+		Brotherhood result = null;
+		Administrator principal;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int i = 1;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		brotherhoods = this.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			if (i == 1)
+				result = b;
+			if (this.enrolmentService.findByBrotherhoodId(result.getId()).size() > enrolments.size())
+				result = b;
+			i++;
+		}
+		return result;
+	}
 }

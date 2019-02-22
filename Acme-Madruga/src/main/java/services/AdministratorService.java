@@ -67,4 +67,13 @@ public class AdministratorService {
 
 	}
 
+	public Administrator findOne(final int adminId) {
+		Administrator result;
+
+		result = this.administratorRepository.findOne(adminId);
+		Assert.notNull(result);
+		return result;
+
+	}
+
 }

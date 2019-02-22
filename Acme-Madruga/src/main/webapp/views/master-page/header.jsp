@@ -36,25 +36,25 @@
 								code="master.page.administrator.viewProfile" /></a>
 				</ul></li>
 		</security:authorize>
-
-		<security:authorize access="hasRole('MEMBER')">
-			<li><a class="fNiv"><spring:message
-						code="master.page.member" /></a>
-				<ul>
-					<li class="arrow"></li>
-					<li><a href="member/display.do"><spring:message
-								code="master.page.member.display" /></a>
-				</ul></li>
-		</security:authorize>
-
+		
 		<security:authorize access="hasRole('BROTHERHOOD')">
-			<li><a class="fNiv"><spring:message
-						code="master.page.brotherhood" /></a>
+			<li><a class="fNiv"><spring:message	code="master.page.brotherhood" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="brotherhood/display.do"><spring:message
-								code="master.page.brotherhood.display" /></a>
-				</ul></li>
+					<li><a href="floatB/brotherhood/list.do"><spring:message code="master.page.brotherhood.floatBs" /></a></li>
+					<li><a href="member/brotherhood/list.do"><spring:message code="master.page.brotherhood.members" /></a></li>	
+					<li><a href="member/list.do"><spring:message code="master.page.members" /></a></li>				
+				</ul>
+			</li>
+		</security:authorize>
+		
+		<security:authorize access="hasRole('MEMBER')">
+			<li><a class="fNiv"><spring:message	code="master.page.member" /></a>
+				<ul>
+					<li class="arrow"></li>
+					<li><a href="request/member/list.do"><spring:message code="master.page.member.request" /></a></li>
+				</ul>
+			</li>
 		</security:authorize>
 
 
@@ -98,15 +98,15 @@
 			</a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="profile/action-1.do"><spring:message
-								code="master.page.profile.action.1" /></a></li>
-					<li><a href="profile/action-2.do"><spring:message
-								code="master.page.profile.action.2" /></a></li>
-					<li><a href="profile/action-3.do"><spring:message
-								code="master.page.profile.action.3" /></a></li>
-					<li><a href="j_spring_security_logout"><spring:message
-								code="master.page.logout" /> </a></li>
-				</ul></li>
+					<security:authorize access="hasRole('BROTHERHOOD')">
+					<li><a href="brotherhood/display.do"><spring:message code="master.page.brotherhood.display" /></a></li>
+					</security:authorize>
+					<security:authorize access="hasRole('MEMBER')">
+					<li><a href="member/display.do"><spring:message code="master.page.member.display" /></a></li>
+					</security:authorize>
+					<li><a href="j_spring_security_logout"><spring:message code="master.page.logout" /> </a></li>
+				</ul>
+			</li>
 		</security:authorize>
 	</ul>
 </div>

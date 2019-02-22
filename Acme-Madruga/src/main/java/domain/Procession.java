@@ -1,19 +1,20 @@
 package domain;
 
-import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -25,6 +26,8 @@ public class Procession extends DomainEntity {
 	private Date moment;
 	private String ticker;
 	private boolean isDraft;
+	private int maxRow;
+	private int maxColumn;
 
 	@NotBlank
 	public String getTitle() {
@@ -74,17 +77,38 @@ public class Procession extends DomainEntity {
 		this.isDraft = isDraft;
 	}
 
-	// Relationships----------------------------------------------
-
-	private Collection<Request> requests;
-
 	@NotNull
-	@OneToMany(mappedBy = "procession")
-	public Collection<Request> getRequests() {
-		return this.requests;
+	@Range(min = 1)
+	public int getMaxRow() {
+		return maxRow;
 	}
 
-	public void setRequests(final Collection<Request> requests) {
-		this.requests = requests;
+	public void setMaxRow(int maxRow) {
+		this.maxRow = maxRow;
+	}
+
+	@NotNull
+	@Range(min = 1)
+	public int getMaxColumn() {
+		return maxColumn;
+	}
+
+	public void setMaxColumn(int maxColumn) {
+		this.maxColumn = maxColumn;
+	}
+
+	// Relationships----------------------------------------------
+
+	private Brotherhood brotherhood;
+
+	@NotNull
+	@Valid
+	@ManyToOne(optional = false)
+	public Brotherhood getBrotherhood() {
+		return this.brotherhood;
+	}
+
+	public void setBrotherhood(final Brotherhood brotherhood) {
+		this.brotherhood = brotherhood;
 	}
 }

@@ -7,7 +7,6 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -51,41 +50,5 @@ public class Brotherhood extends Actor {
 
 	public void setPictures(final Collection<String> pictures) {
 		this.pictures = pictures;
-	}
-
-	// Relationships----------------------------------------------
-
-	private Collection<Procession> processions;
-	private Collection<Enrolment> enrolments;
-	private Collection<DropOut> dropOuts;
-
-	@NotNull
-	@OneToMany
-	public Collection<Procession> getProcessions() {
-		return this.processions;
-	}
-
-	public void setProcessions(final Collection<Procession> processions) {
-		this.processions = processions;
-	}
-
-	@NotNull
-	@OneToMany(mappedBy = "brotherhood")
-	public Collection<Enrolment> getEnrolments() {
-		return this.enrolments;
-	}
-
-	public void setEnrolments(final Collection<Enrolment> enrolments) {
-		this.enrolments = enrolments;
-	}
-
-	@NotNull
-	@OneToMany(mappedBy = "brotherhood")
-	public Collection<DropOut> getDropOuts() {
-		return this.dropOuts;
-	}
-
-	public void setDropOuts(final Collection<DropOut> dropOuts) {
-		this.dropOuts = dropOuts;
 	}
 }

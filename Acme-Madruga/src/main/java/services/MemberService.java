@@ -1,7 +1,6 @@
 
 package services;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MemberRepository;
-import security.Authority;
 import security.LoginService;
 import security.UserAccount;
-import domain.DropOut;
+import domain.Administrator;
+import domain.Brotherhood;
 import domain.Enrolment;
 import domain.Member;
-import domain.Request;
 
 @Service
 @Transactional
@@ -25,10 +23,19 @@ public class MemberService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private MemberRepository	memberRepository;
-
+	private MemberRepository		memberRepository;
 
 	// Supporting services ----------------------------------------------------
+
+	@Autowired
+	private AdministratorService	administratorService;
+
+	@Autowired
+	private BrotherhoodService		brotherhoodService;
+
+	@Autowired
+	private EnrolmentService		enrolmentService;
+
 
 	// Additional functions
 
@@ -39,11 +46,27 @@ public class MemberService {
 
 		result = new Member();
 
-		result.setEnrolments(new ArrayList<Enrolment>());
-		result.setDropOuts(new ArrayList<DropOut>());
-		result.setRequests(new ArrayList<Request>());
-
 		return result;
+	}
+
+	public Member save(final Member member) {
+		Member saved;
+		Assert.notNull(member);
+
+		if (member.getId() == 0) {
+
+			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+			member.getUserAccount().setPassword(passwordEncoder.encodePassword(member.getUserAccount().getPassword(), null));
+		} else {
+			Member principal;
+			principal = this.findByPrincipal();
+			Assert.notNull(principal);
+
+		}
+
+		saved = this.memberRepository.save(member);
+
+		return saved;
 	}
 
 	public Member findOne(final int memberId) {
@@ -75,58 +98,12 @@ public class MemberService {
 		return result;
 
 	}
+
 	public Member findByUserAccount(final UserAccount userAccount) {
 		Assert.notNull(userAccount);
 		Member result;
 		result = this.memberRepository.findByUserAccountId(userAccount.getId());
 		return result;
-	}
-
-	public Member save(final Member member) {
-		final Member result, saved;
-		final UserAccount logedUserAccount;
-		Authority authority;
-
-		Md5PasswordEncoder encoder;
-		encoder = new Md5PasswordEncoder();
-		authority = new Authority();
-		authority.setAuthority("MEMBER");
-		Assert.notNull(member, "member.not.null");
-
-		if (this.exists(member.getId())) {
-			logedUserAccount = LoginService.getPrincipal();
-			Assert.notNull(logedUserAccount, "member.notLogged");
-			Assert.isTrue(logedUserAccount.equals(member.getUserAccount()));
-			saved = this.memberRepository.findOne(member.getId());
-			Assert.notNull(saved, "member.not.null");
-			Assert.isTrue(saved.getUserAccount().getUsername().equals(member.getUserAccount().getUsername()), "member.notEqual.username");
-			Assert.isTrue(member.getUserAccount().getPassword().equals(saved.getUserAccount().getPassword()), "member.notEqual.password");
-		} else
-			member.getUserAccount().setPassword(encoder.encodePassword(member.getUserAccount().getPassword(), null));
-		result = this.memberRepository.save(member);
-
-		return result;
-
-	}
-
-	public Member save2(final Member member) {
-		Member saved;
-		Assert.notNull(member);
-
-		if (member.getId() == 0) {
-
-			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-			member.getUserAccount().setPassword(passwordEncoder.encodePassword(member.getUserAccount().getPassword(), null));
-		} else {
-			Member principal;
-			principal = this.findByPrincipal();
-			Assert.notNull(principal);
-
-		}
-
-		saved = this.memberRepository.save(member);
-
-		return saved;
 	}
 
 	public boolean exists(final Integer arg0) {
@@ -139,6 +116,93 @@ public class MemberService {
 
 		result = this.memberRepository.findAllMembersOfOneBrotherhood(brotherhoodId);
 		Assert.notNull(result);
+		return result;
+	}
+
+	// Dashboard
+
+	public Double averageMemberPerBrotherhood() {
+		Administrator principal;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int total = 0;
+		final Double result;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		brotherhoods = this.brotherhoodService.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			total = total + enrolments.size();
+		}
+		result = (double) (total / (brotherhoods.size()));
+		return result;
+	}
+	public Double minMemberPerBrotherhood() {
+		Administrator principal;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int i = 1;
+		Double result = 0.0;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		brotherhoods = this.brotherhoodService.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			if (i == 1)
+				result = (double) enrolments.size();
+			if (enrolments.size() < result)
+				result = (double) enrolments.size();
+			i++;
+		}
+		return result;
+	}
+
+	public Double maxMemberPerBrotherhood() {
+		Administrator principal;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int i = 1;
+		Double result = 0.0;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		brotherhoods = this.brotherhoodService.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			if (i == 1)
+				result = (double) enrolments.size();
+			if (result < enrolments.size())
+				result = (double) enrolments.size();
+			i++;
+		}
+		return result;
+	}
+
+	public Double stddevMemberPerBrotherhood() {
+		Administrator principal;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int total = 0;
+		final Double result;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		brotherhoods = this.brotherhoodService.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			total = total + enrolments.size();
+		}
+		result = (double) (total / (brotherhoods.size()));
 		return result;
 	}
 

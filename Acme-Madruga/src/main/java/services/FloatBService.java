@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.ArrayList;
@@ -19,13 +18,12 @@ public class FloatBService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private FloatBRepository	floatBRepository;
+	private FloatBRepository floatBRepository;
 
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
-
+	private BrotherhoodService brotherhoodService;
 
 	// Additional functions
 
@@ -98,7 +96,7 @@ public class FloatBService {
 		return result;
 	}
 
-	// Business Method
+	// Other business methods
 
 	public Collection<FloatB> findByBrotherhoodId(final int brotherhoodId) {
 		Collection<FloatB> result;
@@ -107,5 +105,4 @@ public class FloatBService {
 		Assert.notNull(result);
 		return result;
 	}
-
 }
