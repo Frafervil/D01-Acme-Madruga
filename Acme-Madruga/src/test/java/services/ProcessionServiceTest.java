@@ -39,7 +39,7 @@ public class ProcessionServiceTest extends AbstractTest {
 		Procession result;
 
 		super.authenticate("brotherhood1");
-		result = this.processionService.findOne(289);
+		result = this.processionService.findOne(286);
 
 		System.out.println(result);
 		super.unauthenticate();

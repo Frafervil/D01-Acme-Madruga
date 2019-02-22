@@ -11,7 +11,6 @@ import org.springframework.util.Assert;
 import repositories.FloatBRepository;
 import domain.Brotherhood;
 import domain.FloatB;
-import domain.Procession;
 
 @Service
 @Transactional
