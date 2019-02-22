@@ -30,10 +30,35 @@
 		<jstl:out value="${procession.moment }"/><br/>	
 	
 		<b><spring:message code="procession.ticker" /></b>:
-		<jstl:out value="${procession.ticker }"/><br/>	
-	
-		<!-- FloatBs -->
+		<jstl:out value="${procession.ticker }"/><br/>
 		
+		<b><spring:message code="procession.isDraft" /></b>:
+		<jstl:out value="${procession.isDraft }"/><br/>	
+		
+		<b><spring:message code="procession.maxRow" /></b>:
+		<jstl:out value="${procession.maxRow }"/><br/>
+		
+		<b><spring:message code="procession.maxColumn" /></b>:
+		<jstl:out value="${procession.maxColumn }"/><br/>
+		
+		<!-- Floats -->
+<h3> <spring:message code="brotherhood.floatbs" /> </h3>
+<jstl:choose>
+	<jstl:when test="${not empty floatbs}">
+		<display:table pagesize="5" class="displaytag" name="floatbs" requestURI="brotherhood/display.do" id="floatbs">
+
+			<spring:message code="brotherhood.floatb.title" var="title" />
+			<display:column property="title" title="${title}" sortable="true"/>
+	
+			<spring:message code="brotherhood.floatb.description" var="description" />
+			<display:column property="description" title="${description}" sortable="true"/>
+			
+		</display:table>
+	</jstl:when>
+	<jstl:otherwise>
+		<spring:message code="brotherhood.floatbs.empty" /> 
+	</jstl:otherwise>
+</jstl:choose>
 	
 		<!-- Links de editar, listar y borrar -->
 		<a href="procession/brotherhood/edit.do?processionId=${procession.id}"><spring:message code="procession.edit"/></a><br/>

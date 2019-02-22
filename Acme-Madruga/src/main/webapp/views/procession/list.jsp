@@ -20,28 +20,28 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
-<display:table name="floatBs" id="row" pagesize="5" requestURI="${requestURI}" 
+<display:table name="processions" id="row" pagesize="5" requestURI="${requestURI}" 
 class="displaytag" keepStatus="true">
 
 	<!-- Display -->
 	<display:column>
-		<a href="floatB/display.do?floatBId=${row.id}"><spring:message code="floatB.display"/></a>
+		<a href="procession/display.do?processionId=${row.id}"><spring:message code="procession.display"/></a>
 	</display:column>
 	
 	<!-- Title -->
-	<spring:message code="floatB.title" var="titleHeader" />
+	<spring:message code="procession.title" var="titleHeader" />
 	<display:column  property="title" title="${titleHeader}" />
 	
 	<!-- Description -->
-	<spring:message code="floatB.description" var="descriptionHeader" />
+	<spring:message code="procession.description" var="descriptionHeader" />
 	<display:column  property="description" title="${descriptionHeader}" />
 	
 </display:table>
 
-<!-- Create floatB -->
+<!-- Create procession -->
 <security:authorize access="hasRole('BROTHERHOOD')">
 	<div>
-		<a href="floatB/brotherhood/create.do"><spring:message
-				code="floatB.create" /></a>
+		<a href="procession/brotherhood/create.do"><spring:message
+				code="procession.create" /></a>
 	</div>
 </security:authorize> 

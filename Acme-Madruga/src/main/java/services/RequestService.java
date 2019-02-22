@@ -66,6 +66,7 @@ public class RequestService {
 		result.setProcession(procession);
 
 		place = this.placeService.create(processionId);
+		Assert.notNull(place);
 		this.placeService.save(place);
 		result.setPlace(place);
 

@@ -35,18 +35,30 @@
 		
 		<acme:textbox code="procession.moment" path="moment" placeholder="dd/MM/yyyy HH:mm" />
 		
-	<!-- CONTINUAR POR AQUÍ -->	
+		<form:label path="isDraft">
+			<spring:message code="procession.isDraft" />:
+		</form:label>
+		<form:radiobutton path="isDraft" value="true" checked="checked" /><spring:message code="procession.isDraft.true" />
+		<form:radiobutton path="isDraft" value="false"/><spring:message code="procession.isDraft.false" />
+		<br>
+		<br>
+		
+		<acme:textbox code="procession.maxRow" path="maxRow"/>
+		
+		<acme:textbox code="procession.maxColumn" path="maxColumn"/>	
 	
-		<acme:select code="floatB.procession" path="procession"
-		items="${processions}" itemLabel="title" id="procession"/>
+	<!-- Floatbs -->
+	
+		<acme:select code="procession.floatbs" path="floatbs"
+		items="${floatbs}" itemLabel="title" id="floatbs"/>
 		
-		<acme:submit name="save" code="floatB.save"/>
+		<acme:submit name="save" code="procession.save"/>
 		
-		<jstl:if test="${floatB.id != 0 }">
-			<acme:submit name="delete" code="floatB.delete"/>
+		<jstl:if test="${procession.id != 0 }">
+			<acme:submit name="delete" code="procession.delete"/>
 		</jstl:if>
 		
-		<acme:cancel url="floatB/brotherhood/list.do" code="floatB.cancel"/>
+		<acme:cancel url="procession/brotherhood/list.do" code="procession.cancel"/>
 		
 </form:form>
 
