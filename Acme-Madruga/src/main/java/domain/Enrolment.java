@@ -11,6 +11,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,6 +24,7 @@ public class Enrolment extends DomainEntity {
 
 
 	@NotNull
+	@Past
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	public Date getEnrolmentMoment() {
@@ -33,6 +35,7 @@ public class Enrolment extends DomainEntity {
 		this.enrolmentMoment = enrolmentMoment;
 	}
 
+	@Past
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	public Date getDropOutMoment() {
@@ -53,7 +56,7 @@ public class Enrolment extends DomainEntity {
 
 	@NotNull
 	@Valid
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = true)
 	public Position getPosition() {
 		return this.position;
 	}
