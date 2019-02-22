@@ -11,6 +11,48 @@
 
 <h3> <jstl:out value="${brotherhood.title}"> </jstl:out> </h3>
 <br />
+
+<table class="ui celled table">
+	<thead>
+		<tr>
+			<img src="${brotherhood.photo}" class="ui mini rounded image">
+			<div class="content">
+				<spring:message code="brotherhood.profile.title" />
+				${brotherhood.name}
+			</div>
+
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><spring:message code="brotherhood.name" />
+			<td data-label="name">${brotherhood.name}</td>
+		</tr>
+		<tr>
+			<td><spring:message code="brotherhood.middlename" />
+			<td data-label="MiddleName">${brotherhood.middleName}</td>
+		</tr>
+		<tr>
+			<td><spring:message code="brotherhood.surname" />
+			<td data-label="surname">${brotherhood.surname}</td>
+		</tr>
+		<tr>
+			<td><spring:message code="brotherhood.email" />
+			<td data-label="email">${brotherhood.email}</td>
+		</tr>
+		<tr>
+			<td><spring:message code="brotherhood.phone" />
+			<td data-label="phone">${brotherhood.phone}</td>
+		</tr>
+		<tr>
+			<td><spring:message code="brotherhood.address" />
+			<td data-label="address">${brotherhood.address}</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<br />
 <strong> <spring:message code="brotherhood.establishmentDate" /> : </strong> 
 <jstl:out value="${brotherhood.establishmentDate}"> </jstl:out>
 <br />
@@ -22,6 +64,9 @@
 <br />
 </jstl:forEach>
 </ul>
+
+
+
 <!-- Members -->
 <h3> <spring:message code="brotherhood.members" /> </h3>
 <jstl:choose>
