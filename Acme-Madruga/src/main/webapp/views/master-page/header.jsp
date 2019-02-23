@@ -76,6 +76,7 @@
 					<li><a href="request/member/list.do"><spring:message code="master.page.member.request" /></a></li>
 				</ul>
 			</li>
+		</security:authorize>
 
 
 		<security:authorize access="isAnonymous()">

@@ -119,6 +119,14 @@ public class MemberService {
 		return result;
 	}
 
+	public Collection<Member> findAllActiveMembersOfOneBrotherhood(final int brotherhoodId) {
+		Collection<Member> result;
+
+		result = this.memberRepository.findAllActiveMembersOfOneBrotherhood(brotherhoodId);
+		Assert.notNull(result);
+		return result;
+	}
+
 	// Dashboard
 
 	public Double averageMemberPerBrotherhood() {
