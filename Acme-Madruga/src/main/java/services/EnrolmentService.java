@@ -142,7 +142,6 @@ public class EnrolmentService {
 		Enrolment result;
 
 		result = this.enrolmentRepository.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, memberId);
-		Assert.notNull(result);
 		return result;
 	}
 
@@ -157,7 +156,5 @@ public class EnrolmentService {
 		enrolment = this.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
 
 		enrolment.setDropOutMoment(new Date(System.currentTimeMillis() - 1000));
-
-		this.enrolmentRepository.save(enrolment);
 	}
 }
