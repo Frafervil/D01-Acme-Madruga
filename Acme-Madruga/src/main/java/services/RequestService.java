@@ -168,4 +168,22 @@ public class RequestService {
 		return result;
 	}
 
+	public Double ratioAprovedRequest() {
+		final Double result;
+		result = this.requestRepository.ratioAprovedRequest();
+		Assert.notNull(result);
+		return result;
+	}
+	public Double ratioRejectedRequest() {
+		final Double result;
+		result = this.requestRepository.ratioRejectedRequest();
+		Assert.notNull(result);
+		return result;
+	}
+	public Double ratioPendingRequest() {
+		final Double result;
+		result = this.requestRepository.ratioPendingRequest();
+		Assert.notNull(result);
+		return result;
+	}
 }

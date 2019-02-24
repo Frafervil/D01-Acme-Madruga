@@ -2,6 +2,8 @@
 package services;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import org.springframework.util.Assert;
 
 import repositories.PositionRepository;
 import domain.Administrator;
+import domain.Enrolment;
 import domain.Position;
 
 @Service
@@ -24,6 +27,9 @@ public class PositionService {
 
 	@Autowired
 	private AdministratorService	administratorService;
+
+	@Autowired
+	private EnrolmentService		enrolmentService;
 
 
 	// Simple CRUD methods
@@ -83,5 +89,25 @@ public class PositionService {
 		Assert.notNull(principal);
 
 		this.positionRepository.delete(position);
+	}
+
+	public Map<String, Integer> positionStats() {
+		Map<String, Integer> result;
+		Collection<Enrolment> enrolments;
+		enrolments = this.enrolmentService.findAllActiveEnrolments();
+		result = new HashMap<String, Integer>();
+		int oldValue;
+		String lpos;
+
+		for (final Enrolment e : enrolments) {
+			lpos = e.getPosition().getLanguagePositions().iterator().next().getName().toString();
+			if (result.containsKey(lpos)) {
+				oldValue = result.get(lpos);
+				result.put(lpos, oldValue + 1);
+			} else
+				result.put(lpos, 1);
+		}
+		return result;
+
 	}
 }

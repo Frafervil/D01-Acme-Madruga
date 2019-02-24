@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import domain.Administrator;
 import domain.Brotherhood;
 import domain.Enrolment;
 import domain.Member;
+import domain.Request;
 
 @Service
 @Transactional
@@ -35,6 +37,9 @@ public class MemberService {
 
 	@Autowired
 	private EnrolmentService		enrolmentService;
+
+	@Autowired
+	private RequestService			requestService;
 
 
 	// Additional functions
@@ -203,6 +208,30 @@ public class MemberService {
 			total = total + enrolments.size();
 		}
 		result = (double) (total / (brotherhoods.size()));
+		return result;
+	}
+
+	public Collection<Member> mostAprovedMembers() {
+		final Collection<Member> members;
+		final Collection<Member> result = new ArrayList<Member>();
+		Collection<Request> requests;
+		int i = 0;
+		double p = 0.0;
+
+		members = this.findAll();
+		for (final Member m : members) {
+			requests = this.requestService.findAllByMember(m.getId());
+			i = 0;
+			p = 0.0;
+			for (final Request r : requests) {
+				i++;
+				if (r.getStatus().toString() == "APROVED")
+					p = p + 1;
+			}
+			if (p / i > 0.1)
+				result.add(m);
+		}
+
 		return result;
 	}
 

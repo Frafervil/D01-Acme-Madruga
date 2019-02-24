@@ -134,4 +134,12 @@ public class EnrolmentService {
 		Assert.notNull(result);
 		return result;
 	}
+
+	public Collection<Enrolment> findAllActiveEnrolments() {
+		Collection<Enrolment> result;
+
+		result = this.enrolmentRepository.findAllActiveEnrolments();
+		Assert.notNull(result);
+		return result;
+	}
 }
