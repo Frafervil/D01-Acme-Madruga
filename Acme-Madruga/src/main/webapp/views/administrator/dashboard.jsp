@@ -100,12 +100,15 @@
 </security:authorize>
 <script>
 window.onload = function() {
-var positionStats = "<jstl:out value='${positionStats}' />";
+var position = "<jstl:out value='${position}' />";
+var count = "<jstl:out value='${count}' />";
+
 var data = [];
 var columnas =[];
-for(var key in positionStats){
-	columnas.push(key); 
-	data.push(positionStats[key]); 
+console.log(data);
+for(var i in position){
+	columnas.push(position[i]); 
+	data.push(count[i]);  
 	
 }
 var title = "Title";

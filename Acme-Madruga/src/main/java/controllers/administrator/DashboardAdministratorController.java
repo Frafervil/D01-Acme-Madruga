@@ -1,8 +1,10 @@
 
 package controllers.administrator;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -97,7 +99,13 @@ public class DashboardAdministratorController extends AbstractController {
 		//Histogram
 
 		positionStats = this.positionService.positionStats();
+		final ArrayList<String> position = new ArrayList<>();
+		final ArrayList<Integer> count = new ArrayList<>();
 
+		for (final Entry<String, Integer> entry : positionStats.entrySet()) {
+			position.add(entry.getKey());
+			count.add(entry.getValue());
+		}
 		//
 		result = new ModelAndView("administrator/dashboard");
 		result.addObject("avgMemberPerBrotherhood", avgMemberPerBrotherhood);
@@ -116,7 +124,8 @@ public class DashboardAdministratorController extends AbstractController {
 
 		result.addObject("membersRequestAproved", membersRequestAproved);
 
-		result.addObject("positionStats", positionStats);
+		result.addObject("position", position);
+		result.addObject("count", count);
 
 		return result;
 
