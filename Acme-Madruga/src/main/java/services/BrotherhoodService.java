@@ -107,6 +107,13 @@ public class BrotherhoodService {
 		return result;
 	}
 
+	public Collection<Brotherhood> findAllBrotherhoodsOfOneMember(final int memberId) {
+		Assert.notNull(memberId);
+		Collection<Brotherhood> result;
+		result = this.brotherhoodRepository.findAllBrotherhoodsOfOneMember(memberId);
+		return result;
+	}
+
 	public Brotherhood largestBrotherhood() {
 		Brotherhood result = null;
 		Administrator principal;

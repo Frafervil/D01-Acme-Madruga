@@ -18,7 +18,6 @@ import services.MemberService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.Enrolment;
-import domain.FloatB;
 import domain.Member;
 
 @Controller
@@ -45,10 +44,10 @@ public class MemberBrotherhoodController extends AbstractController {
 		Collection<Member> members;
 
 		try {
-			final Brotherhood hood = this.brotherhoodService.findByPrincipal();
-			Assert.notNull(hood);
+			final Brotherhood principal = this.brotherhoodService.findByPrincipal();
+			Assert.notNull(principal);
 
-			members = this.memberService.findAllActiveMembersOfOneBrotherhood(hood.getId());
+			members = this.memberService.findAllActiveMembersOfOneBrotherhood(principal.getId());
 
 			result = new ModelAndView("member/brotherhood/list");
 			result.addObject("members", members);
@@ -56,9 +55,9 @@ public class MemberBrotherhoodController extends AbstractController {
 
 		} catch (final Throwable oops) {
 			oops.printStackTrace();
-			result = new ModelAndView("member/list");
+			result = new ModelAndView("member/brotherhood/list");
 			result.addObject("message", "member.retrieve.error");
-			result.addObject("members", new ArrayList<FloatB>());
+			result.addObject("members", new ArrayList<Member>());
 		}
 
 		return result;
