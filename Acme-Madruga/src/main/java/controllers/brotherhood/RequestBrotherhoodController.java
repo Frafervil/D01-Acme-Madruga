@@ -1,5 +1,5 @@
 
-package controllers.member;
+package controllers.brotherhood;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,18 +17,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import services.MemberService;
-import services.PlaceService;
+import services.BrotherhoodService;
 import services.ProcessionService;
 import services.RequestService;
 import controllers.AbstractController;
-import domain.Member;
+import domain.Brotherhood;
 import domain.Procession;
 import domain.Request;
 
 @Controller
-@RequestMapping("/request/member")
-public class RequestMemberController extends AbstractController {
+@RequestMapping("/request/brotherhood")
+public class RequestBrotherhoodController extends AbstractController {
 
 	// Services
 
@@ -36,13 +35,10 @@ public class RequestMemberController extends AbstractController {
 	private RequestService		requestService;
 
 	@Autowired
-	private MemberService		memberService;
-
-	@Autowired
 	private ProcessionService	processionService;
 
 	@Autowired
-	private PlaceService		placeService;
+	private BrotherhoodService	brotherhoodService;
 
 
 	// Listing
@@ -52,14 +48,17 @@ public class RequestMemberController extends AbstractController {
 		final ModelAndView result;
 		final Collection<Request> requests;
 		Collection<Procession> processions;
+		Brotherhood brotherhood;
 
-		requests = this.requestService.findByPrincipal();
+		brotherhood = this.brotherhoodService.findByPrincipal();
+
+		requests = this.requestService.findAllByBrotherhood(brotherhood.getId());
 		processions = this.processionService.findAllFinal();
 
 		result = new ModelAndView("request/list");
 		result.addObject("requests", requests);
 		result.addObject("processions", processions);
-		result.addObject("requestURI", "request/member/list.do");
+		result.addObject("requestURI", "request/brotherhood/list.do");
 
 		return result;
 
@@ -85,7 +84,7 @@ public class RequestMemberController extends AbstractController {
 
 		result = new ModelAndView("request/list");
 		result.addObject("requests", requests);
-		result.addObject("requestURI", "request/member/list.do");
+		result.addObject("requestURI", "request/brotherhood/list.do");
 
 		return result;
 
@@ -97,113 +96,119 @@ public class RequestMemberController extends AbstractController {
 	public ModelAndView show(@RequestParam final int requestId) {
 		final ModelAndView result;
 		Request request;
-		Member member;
-		boolean permission = false;
 
 		request = this.requestService.findOne(requestId);
-		member = this.memberService.findByPrincipal();
-
-		if (this.requestService.findAllByMember(member.getId()).contains(request))
-			permission = true;
 
 		result = new ModelAndView("request/display");
 		result.addObject("request", request);
-		result.addObject("member", member);
-		result.addObject("permission", permission);
 
 		return result;
 	}
 
-	// Delete
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView delete(@RequestParam final int requestId) {
+	// REJECT
+
+	@RequestMapping(value = "/reject", method = RequestMethod.GET)
+	public ModelAndView reject(@RequestParam final int requestId) {
 		ModelAndView result;
 		Request request;
-		Member member;
-		request = this.requestService.findOne(requestId);
-		member = this.memberService.findByPrincipal();
-		if (request.getMember().getId() == member.getId())
-			try {
-				this.requestService.delete(request);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
+		Brotherhood principal;
 
-				result = this.createEditModelAndView(request, "request.commit.error");
-				result.addObject("permission", true);
-
-			}
-		else
-			result = this.createEditModelAndView(request, "request.commit.error");
-
-		return result;
-	}
-
-	// Creation
-
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
-	public ModelAndView create(@RequestParam final int processionId) {
-		ModelAndView result;
-		final Request request;
-
-		request = this.requestService.create(processionId);
-
-		result = this.createEditModelAndView(request);
-
-		return result;
-
-	}
-
-	// Edition
-
-	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int requestId) {
-		ModelAndView result;
-		Request request;
+		principal = this.brotherhoodService.findByPrincipal();
 
 		request = this.requestService.findOne(requestId);
 		Assert.notNull(request);
-		result = this.createEditModelAndView(request);
+
+		if (request.getProcession().getBrotherhood().getId() == principal.getId() && request.getStatus().equals("PENDING"))
+			result = this.createEditModelAndView(request, false);
+		else
+			result = new ModelAndView("redirect:list.do");
 
 		return result;
-	}
 
-	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Request request, final BindingResult binding) {
+	}
+	@RequestMapping(value = "/reject", method = RequestMethod.POST, params = "save")
+	public ModelAndView reject(@Valid final Request request, final BindingResult binding) {
 		ModelAndView result;
 
 		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(request);
+			result = this.createEditModelAndView(request, false);
 			System.out.println(binding.getAllErrors());
-		} else {
-			this.placeService.save(request.getPlace());
+		} else
+			try {
+				this.requestService.reject(request);
+				result = new ModelAndView("redirect:list.do");
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(request, "request.commit.error", false);
+			}
 
-			this.requestService.save(request);
-			result = new ModelAndView("redirect:list.do");
-			//			try {
-
-			//			} catch (final Throwable oops) {
-			//				result = this.createEditModelAndView(request, "request.commit.error");
-			//			}
-		}
 		return result;
 	}
+
+	// APPROVE
+
+	@RequestMapping(value = "/approve", method = RequestMethod.GET)
+	public ModelAndView approve(@RequestParam final int requestId) {
+		ModelAndView result;
+		Request request;
+		Brotherhood principal;
+
+		principal = this.brotherhoodService.findByPrincipal();
+
+		request = this.requestService.findOne(requestId);
+		Assert.notNull(request);
+
+		if (request.getProcession().getBrotherhood().getId() == principal.getId() && request.getStatus().equals("PENDING"))
+			result = this.createEditModelAndView(request, true);
+		else
+			result = new ModelAndView("redirect:list.do");
+
+		return result;
+
+	}
+	@RequestMapping(value = "/approve", method = RequestMethod.POST, params = "save")
+	public ModelAndView approve(@Valid final Request request, final BindingResult binding) {
+		ModelAndView result;
+
+		if (binding.hasErrors()) {
+			result = this.createEditModelAndView(request, true);
+			System.out.println(binding.getAllErrors());
+		} else
+			try {
+				this.requestService.approve(request);
+				result = new ModelAndView("redirect:list.do");
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(request, "request.commit.error", true);
+			}
+
+		return result;
+	}
+
 	// Ancillary methods ------------------------------------------------------
 
-	protected ModelAndView createEditModelAndView(final Request request) {
+	protected ModelAndView createEditModelAndView(final Request request, final Boolean approve) {
 		ModelAndView result;
 
-		result = this.createEditModelAndView(request, null);
+		result = this.createEditModelAndView(request, null, approve);
 
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final Request request, final String message) {
+	protected ModelAndView createEditModelAndView(final Request request, final String message, final Boolean approve) {
 		ModelAndView result;
+		boolean permission = false;
+		Brotherhood principal;
+
+		principal = this.brotherhoodService.findByPrincipal();
+
+		if (request.getProcession().getBrotherhood().getId() == principal.getId())
+			permission = true;
 
 		result = new ModelAndView("request/edit");
 		result.addObject("request", request);
+		result.addObject("permission", permission);
 		result.addObject("message", message);
-
+		result.addObject("approve", approve);
 		return result;
 	}
+
 }

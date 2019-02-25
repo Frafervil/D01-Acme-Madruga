@@ -20,11 +20,25 @@
 	<spring:message code="request.status.choose" var="choose"/>
 	<input type="submit" value="${choose}">
 	</form>
+
+	</security:authorize>
+	
+	<security:authorize access="hasRole('BROTHERHOOD')">
+	
+	<form action="request/brotherhood/list.do" method="get">
+	
+	<input type="radio" name="requestStatus" value="0" checked> <spring:message code="request.status.all" />
+	<input type="radio" name="requestStatus" value="1"> <spring:message code="request.status.aproved" />
+	<input type="radio" name="requestStatus" value="2">  <spring:message code="request.status.pending" />
+	<input type="radio" name="requestStatus" value="3">  <spring:message code="request.status.rejected" />
+	<br />
+	<spring:message code="request.status.choose" var="choose"/>
+	<input type="submit" value="${choose}">
+	</form>
 	
 	
 	
 	</security:authorize>
-
 
 
 <!-- Listing grid -->
@@ -35,33 +49,27 @@
 	
 
 	<!-- Action links -->
-	
-	<security:authorize access="hasRole('BROTHERHOOD')">
-
-	<!-- AQUI EL BROTHERHOOD PODRÁ ACEPTAR LAS REQUESTS -->
-
-		
-	</security:authorize>
 
 
 
-	<security:authorize access="hasRole('MEMBER')">
-			
-		<display:column>
+		<spring:message code="request.display" var="displayHeader" />
+		<display:column title="${displayHeader}">
+			<security:authorize access="hasRole('MEMBER')">
 		
 				<a href="request/member/display.do?requestId=${row.id}" >
 						<spring:message code="request.display" />
 				</a>					
-				
+			</security:authorize>
+			<security:authorize access="hasRole('BROTHERHOOD')">
+		
+				<a href="request/brotherhood/display.do?requestId=${row.id}" >
+						<spring:message code="request.display" />
+				</a>					
+			</security:authorize>	
 		</display:column>
 		
 		
-		
-		
-		
-		
-		
-	</security:authorize>
+				
 
 
 
