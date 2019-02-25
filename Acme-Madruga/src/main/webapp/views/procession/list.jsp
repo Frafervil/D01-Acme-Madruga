@@ -20,6 +20,8 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
+<security:authorize access="hasRole('BROTHERHOOD')">
+
 <display:table name="processions" id="row" pagesize="5" requestURI="${requestURI}" 
 class="displaytag" keepStatus="true">
 
@@ -37,6 +39,8 @@ class="displaytag" keepStatus="true">
 	<display:column  property="description" title="${descriptionHeader}" />
 	
 </display:table>
+
+</security:authorize>
 
 <!-- Create procession -->
 <security:authorize access="hasRole('BROTHERHOOD')">

@@ -17,9 +17,10 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@ taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
+<!--  
 <jstl:if test="${(procession.isDraft == true && procession.brotherhood.userAccount.username == pageContext.request.userPrincipal.name) || procession.isDraft == false}">
 	<security:authorize access="hasRole('BROTHERHOOD')">
-
+-->
 		<b><spring:message code="procession.title" /></b>:
 		<jstl:out value="${procession.title}"/><br/>
 	
@@ -32,8 +33,19 @@
 		<b><spring:message code="procession.ticker" /></b>:
 		<jstl:out value="${procession.ticker }"/><br/>
 		
+		<jstl:if test="${procession.isDraft == true}">
+		
 		<b><spring:message code="procession.isDraft" /></b>:
-		<jstl:out value="${procession.isDraft }"/><br/>	
+		<spring:message code="procession.isDraft.true" /><br/>	
+		
+		</jstl:if>
+		
+		<jstl:if test="${procession.isDraft == false}">
+		
+		<b><spring:message code="procession.isDraft" /></b>:
+		<spring:message code="procession.isDraft.false" /><br/>		
+		
+		</jstl:if>
 		
 		<b><spring:message code="procession.maxRow" /></b>:
 		<jstl:out value="${procession.maxRow }"/><br/>
@@ -66,5 +78,5 @@
 	
 		<a href="procession/brotherhood/list.do"><spring:message code="procession.list"/></a>
 		<br/>
-	</security:authorize>
-</jstl:if>
+	<!-- </security:authorize>
+</jstl:if> -->

@@ -1,5 +1,6 @@
 package controllers.brotherhood;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import security.LoginService;
 import services.BrotherhoodService;
 import services.ProcessionService;
 
@@ -33,10 +35,18 @@ public class ProcessionBrotherhoodController extends AbstractController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView result;
-		Collection<Procession> processions;
+		Collection<Procession> processions = new ArrayList<Procession>();
+		Collection<Procession> allProcessions;
+		String userNameOfPrincipal = LoginService.getPrincipal().getUsername();
 
-		processions = processionService.findAll();
+		allProcessions = processionService.findAll();
 
+		for(Procession p : allProcessions){
+			if((p.getIsDraft() == true && (userNameOfPrincipal.equals(p.getBrotherhood().getUserAccount().getUsername()))) || p.getIsDraft() == false){
+				processions.add(p);
+			}
+		}
+		
 		result = new ModelAndView("procession/list");
 		result.addObject("processions", processions);
 		result.addObject("requestURI", "procession/brotherhood/list.do");
@@ -110,15 +120,9 @@ public class ProcessionBrotherhoodController extends AbstractController {
 	protected ModelAndView createEditModelAndView(Procession procession,
 			String messageCode) {
 		ModelAndView result;
-		Brotherhood brotherhood;
 		Collection<Brotherhood> brotherhoods;
 
 		brotherhoods = brotherhoodService.findAll();
-		if (procession.getBrotherhood() == null) {
-			brotherhood = null;
-		} else {
-			brotherhood = procession.getBrotherhood();
-		}
 
 		result = new ModelAndView("procession/edit");
 		result.addObject("procession", procession);
