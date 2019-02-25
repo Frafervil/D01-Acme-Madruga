@@ -15,6 +15,11 @@
        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
        
 <tiles-definitions>
+
+	<definition name="administrator/viewProfile" extends="master.page">	
+		<put-attribute name="title" value="My profile" />
+		<put-attribute name="body" value="/views/administrator/viewProfile.jsp" />
+	</definition>
 	
 	<definition name="administrator/dashboard" extends="master.page">	
 		<put-attribute name="title" value="Dashboard" />
@@ -24,6 +29,11 @@
 	<definition name="administrator/edit" extends="master.page">	
 		<put-attribute name="title" value="Modify profile" />
 		<put-attribute name="body" value="/views/administrator/edit.jsp" />
+	</definition>
+	
+	<definition name="administrator/administrator/register" extends="master.page">
+		<put-attribute name="title" value="New administration registration" />
+		<put-attribute name="body" value="/views/administrator/register.jsp" />
 	</definition>
 	
 </tiles-definitions>

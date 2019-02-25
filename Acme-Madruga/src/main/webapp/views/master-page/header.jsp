@@ -28,10 +28,13 @@
 						code="master.page.administrator" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="dashboard/administrator/display.do"><spring:message code="master.page.administrator.dashboard" /></a></li>
-					<li><a href="customisation/administrator/display.do"><spring:message code="master.page.administrator.customisation" /></a></li>	
-				</ul>
-			</li>
+					<li><a href="administrator/administrator/register.do"><spring:message
+								code="master.page.administrator.register" /></a></li>
+					<li><a href="administrator/action-2.do"><spring:message
+								code="master.page.administrator.action.2" /></a></li>
+					<li><a href="administrator/viewProfile.do"><spring:message
+								code="master.page.administrator.viewProfile" /></a>
+				</ul></li>
 		</security:authorize>
 
 		<security:authorize access="hasRole('MEMBER')">
