@@ -1,6 +1,5 @@
 package controllers.brotherhood;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -14,12 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import security.LoginService;
 import services.BrotherhoodService;
+import services.FloatBService;
 import services.ProcessionService;
 
 import controllers.AbstractController;
 import domain.Brotherhood;
+import domain.FloatB;
 import domain.Procession;
 
 @Controller
@@ -32,21 +32,15 @@ public class ProcessionBrotherhoodController extends AbstractController {
 	@Autowired
 	private BrotherhoodService brotherhoodService;
 
+	@Autowired
+	private FloatBService floatBService;
+
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView result;
-		Collection<Procession> processions = new ArrayList<Procession>();
-		Collection<Procession> allProcessions;
-		String userNameOfPrincipal = LoginService.getPrincipal().getUsername();
+		Collection<Procession> processions = processionService
+				.findVisibleProcessions();
 
-		allProcessions = processionService.findAll();
-
-		for(Procession p : allProcessions){
-			if((p.getIsDraft() == true && (userNameOfPrincipal.equals(p.getBrotherhood().getUserAccount().getUsername()))) || p.getIsDraft() == false){
-				processions.add(p);
-			}
-		}
-		
 		result = new ModelAndView("procession/list");
 		result.addObject("processions", processions);
 		result.addObject("requestURI", "procession/brotherhood/list.do");
@@ -121,12 +115,15 @@ public class ProcessionBrotherhoodController extends AbstractController {
 			String messageCode) {
 		ModelAndView result;
 		Collection<Brotherhood> brotherhoods;
+		Collection<FloatB> floatbs;
 
 		brotherhoods = brotherhoodService.findAll();
+		floatbs = floatBService.findAll();
 
 		result = new ModelAndView("procession/edit");
 		result.addObject("procession", procession);
 		result.addObject("brotherhoods", brotherhoods);
+		result.addObject("floatbs", floatbs);
 
 		result.addObject("message", messageCode);
 

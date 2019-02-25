@@ -49,7 +49,7 @@
 	
 	<!-- Floatbs -->
 	
-		<acme:select code="procession.floatbs" path="floatbs"
+		<acme:select code="procession.floatbs" 
 		items="${floatbs}" itemLabel="title" id="floatbs"/>
 		
 		<acme:submit name="save" code="procession.save"/>
