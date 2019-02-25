@@ -33,6 +33,7 @@
 		<value>/views/enrolment/messages</value>
 		<value>/views/procession/messages</value>
 		<value>/views/administrator/messages</value>
+		<value>/views/customisation/messages</value>
 		
 	</util:list>
 
