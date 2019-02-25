@@ -54,21 +54,21 @@
 		<jstl:out value="${procession.maxColumn }"/><br/>
 		
 		<!-- Floats -->
-<h3> <spring:message code="brotherhood.floatbs" /> </h3>
+<h3> <spring:message code="procession.floatbs" /> </h3>
 <jstl:choose>
 	<jstl:when test="${not empty floatbs}">
-		<display:table pagesize="5" class="displaytag" name="floatbs" requestURI="brotherhood/display.do" id="floatbs">
+		<display:table pagesize="5" class="displaytag" name="floatbs" requestURI="procession/display.do" id="floatbs">
 
-			<spring:message code="brotherhood.floatb.title" var="title" />
+			<spring:message code="procession.floatb.title" var="title" />
 			<display:column property="title" title="${title}" sortable="true"/>
 	
-			<spring:message code="brotherhood.floatb.description" var="description" />
+			<spring:message code="procession.floatb.description" var="description" />
 			<display:column property="description" title="${description}" sortable="true"/>
 			
 		</display:table>
 	</jstl:when>
 	<jstl:otherwise>
-		<spring:message code="brotherhood.floatbs.empty" /> 
+		<spring:message code="procession.floatbs.empty" /> 
 	</jstl:otherwise>
 </jstl:choose>
 	
