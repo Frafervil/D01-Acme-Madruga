@@ -17,13 +17,12 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@ taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
-	<spring:message code="request.delete" var="requestDelete"/>
 
 	<b><spring:message code="request.procession.title" /></b>:
 	<jstl:out value="${request.procession.title}"/><br/>
 	<br>	
 	<b><spring:message code="request.procession.member" /></b>:
-	<jstl:out value="${member.name}"/><br/>
+	<jstl:out value="${request.member.name}"/><br/>
 	<br>
 	<b><spring:message code="request.procession.status" /></b>:
 	<jstl:out value="${request.status}"/><br/>
@@ -41,10 +40,20 @@
 		
 	</jstl:if>
 	
+	<security:authorize access="hasRole('MEMBER')">
+	
 	<jstl:if test="${request.status == 'PENDING'}">
-		<input type="submit" name="delete" value="${requestDelete}" onclick="return confirm('${requestDelete}')" />&nbsp;					
+		<a href="request/member/delete.do?requestId=${request.id}" ><spring:message code="request.delete" /></a><br/>			
+
+	</jstl:if>
+	</security:authorize>
+	<security:authorize access="hasRole('BROTHERHOOD')">
+	
+	<jstl:if test="${request.status == 'PENDING'}">
+	<br/>
+		<a href="request/brotherhood/reject.do?requestId=${request.id}" ><spring:message code="request.reject" /></a><br/>			
+		<a href="request/brotherhood/approve.do?requestId=${request.id}" ><spring:message code="request.approve" /></a>								
 		
 	</jstl:if>
-	
-	
+	</security:authorize>	
 	

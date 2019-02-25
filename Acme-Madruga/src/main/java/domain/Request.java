@@ -43,9 +43,8 @@ public class Request extends DomainEntity {
 
 	// Relationships----------------------------------------------
 
-	@NotNull
 	@Valid
-	@OneToOne(optional = false)
+	@OneToOne(optional = true)
 	public Place getPlace() {
 		return this.place;
 	}
