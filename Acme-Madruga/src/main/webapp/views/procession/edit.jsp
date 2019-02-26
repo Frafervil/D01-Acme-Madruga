@@ -47,9 +47,9 @@
 		<acme:textbox code="procession.maxColumn" path="maxColumn"/>	
 	
 	<!-- Floatbs -->
-	
+	<!--
 		<acme:checkbox code="procession.floatBs" path="${floatBs}"/>
-		
+	-->	
 		<acme:submit name="save" code="procession.save"/>
 		
 		<jstl:if test="${procession.id != 0 }">
