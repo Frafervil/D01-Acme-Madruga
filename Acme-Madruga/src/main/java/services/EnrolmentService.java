@@ -27,6 +27,9 @@ public class EnrolmentService {
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
+	@Autowired
+	private MemberService		memberService;
+
 
 	// Simple CRUD Methods
 
@@ -133,5 +136,33 @@ public class EnrolmentService {
 		result = this.enrolmentRepository.findAllActiveEnrolmentsByBrotherhoodId(brotherhoodId);
 		Assert.notNull(result);
 		return result;
+	}
+
+	public Collection<Enrolment> findAllActiveEnrolments() {
+		Collection<Enrolment> result;
+
+		result = this.enrolmentRepository.findAllActiveEnrolments();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Enrolment findActiveEnrolmentByBrotherhoodIdAndMemberId(final int brotherhoodId, final int memberId) {
+		Enrolment result;
+
+		result = this.enrolmentRepository.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, memberId);
+		return result;
+	}
+
+	public void dropOut(final int brotherhoodId) {
+
+		Member principal;
+		Enrolment enrolment;
+
+		principal = this.memberService.findByPrincipal();
+		Assert.notNull(principal);
+
+		enrolment = this.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
+
+		enrolment.setDropOutMoment(new Date(System.currentTimeMillis() - 1000));
 	}
 }

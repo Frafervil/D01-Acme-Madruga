@@ -18,7 +18,6 @@ import services.MemberService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.Enrolment;
-import domain.FloatB;
 import domain.Member;
 
 @Controller
@@ -43,18 +42,12 @@ public class MemberBrotherhoodController extends AbstractController {
 	public ModelAndView list(@RequestParam final int brotherhoodId) {
 		ModelAndView result;
 		Collection<Member> members;
-		Collection<Enrolment> enrolments;
 
 		try {
 			final Brotherhood hood = this.brotherhoodService.findOne(brotherhoodId);
 			Assert.notNull(hood);
 
-			members = new ArrayList<Member>();
-			enrolments = this.enrolmentService.findByBrotherhoodId(brotherhoodId);
-
-			for (final Enrolment e : enrolments)
-				if (e.getDropOutMoment() == null)
-					members.add(e.getMember());
+			members = this.memberService.findAllActiveMembersOfOneBrotherhood(principal.getId());
 
 			result = new ModelAndView("member/brotherhood/list");
 			result.addObject("members", members);
@@ -62,9 +55,9 @@ public class MemberBrotherhoodController extends AbstractController {
 
 		} catch (final Throwable oops) {
 			oops.printStackTrace();
-			result = new ModelAndView("member/list");
+			result = new ModelAndView("member/brotherhood/list");
 			result.addObject("message", "member.retrieve.error");
-			result.addObject("members", new ArrayList<FloatB>());
+			result.addObject("members", new ArrayList<Member>());
 		}
 
 		return result;
@@ -75,9 +68,8 @@ public class MemberBrotherhoodController extends AbstractController {
 		// Inicializa resultado
 		ModelAndView result;
 		Member member;
-		Collection<Enrolment> enrolments;
 		Brotherhood principal;
-		Enrolment enrolment = null;
+		Enrolment enrolment;
 
 		// Busca en el repositorio
 		member = this.memberService.findOne(memberId);
@@ -85,21 +77,15 @@ public class MemberBrotherhoodController extends AbstractController {
 
 		principal = this.brotherhoodService.findByPrincipal();
 
-		enrolments = this.enrolmentService.findByBrotherhoodIdAndMemberId(principal.getId(), memberId);
+		enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(principal.getId(), memberId);
 
-		for (final Enrolment e : enrolments)
-			if (e.getDropOutMoment() == null) {
-				enrolment = e;
-				break;
-			}
-
-		// Crea y añade objetos a la vista
+		// Crea y aï¿½ade objetos a la vista
 		result = new ModelAndView("member/display");
 		result.addObject("requestURI", "member/display.do");
 		result.addObject("enrolment", enrolment);
 		result.addObject("member", member);
 
-		// Envía la vista
+		// Envï¿½a la vista
 		return result;
 	}
 

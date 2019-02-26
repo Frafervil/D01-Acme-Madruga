@@ -4,6 +4,7 @@ package services;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -12,6 +13,7 @@ import repositories.ActorRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
+import security.UserAccountRepository;
 import domain.Actor;
 import domain.Administrator;
 
@@ -22,6 +24,9 @@ public class ActorService {
 	// Managed repository ------------------------------------------
 	@Autowired
 	private ActorRepository			actorRepository;
+
+	@Autowired
+	private UserAccountRepository	userAccountRepository;
 
 	// Supporting services -----------------------------------------
 	@Autowired
@@ -92,6 +97,11 @@ public class ActorService {
 
 	// Other business methods --------------------------------------
 
+	public Actor findByUserAccount(final UserAccount userAccount) {
+		final Actor result = this.actorRepository.findByUserAccountId(userAccount.getId());
+		return result;
+	}
+
 	public Actor findByPrincipal() {
 		Actor result;
 		UserAccount userAccount;
@@ -111,5 +121,44 @@ public class ActorService {
 
 	public void save(final Actor principal) {
 		this.actorRepository.save(principal);
+	}
+
+	public Actor findByUsername(final String username) {
+		Actor result;
+
+		try {
+			result = this.findByUserAccount(this.userAccountRepository.findByUsername(username));
+		} catch (final NullPointerException e) {
+			result = null;
+		}
+		return result;
+	}
+
+	public UserAccount createUserAccount(final String authorityName) {
+
+		final UserAccount result = new UserAccount();
+
+		//Creamos el objetoAutoridad
+		final Authority authority = new Authority();
+		authority.setAuthority(authorityName);
+
+		//Sacamos la colección de autoridades y añadimos la que necesitamos
+		final Collection<Authority> authorities = result.getAuthorities();
+		authorities.add(authority);
+
+		//¿Hace falta?
+		result.setAuthorities(authorities);
+
+		return result;
+	}
+
+	public String hashPassword(final String password) {
+		String result;
+
+		Md5PasswordEncoder encoder;
+		encoder = new Md5PasswordEncoder();
+		result = encoder.encodePassword(password, null);
+
+		return result;
 	}
 }

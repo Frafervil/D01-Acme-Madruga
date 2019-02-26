@@ -1,4 +1,3 @@
-
 package services;
 
 import java.util.Calendar;
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.ProcessionRepository;
+import security.LoginService;
 import domain.Brotherhood;
 import domain.Procession;
 import domain.Request;
@@ -23,16 +23,15 @@ public class ProcessionService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private ProcessionRepository	processionRepository;
+	private ProcessionRepository processionRepository;
 
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	private BrotherhoodService		brotherhoodService;
+	private BrotherhoodService brotherhoodService;
 
 	@Autowired
-	private RequestService			requestService;
-
+	private RequestService requestService;
 
 	// Additional functions
 	private String generateTicker() {
@@ -51,7 +50,8 @@ public class ProcessionService {
 		final char d = (char) (r.nextInt(26) + 'a');
 		final char f = (char) (r.nextInt(26) + 'a');
 		final char g = (char) (r.nextInt(26) + 'a');
-		String code = String.valueOf(a) + String.valueOf(b) + String.valueOf(c) + String.valueOf(d) + String.valueOf(f) + String.valueOf(g);
+		String code = String.valueOf(a) + String.valueOf(b) + String.valueOf(c)
+				+ String.valueOf(d) + String.valueOf(f) + String.valueOf(g);
 		code = code.toUpperCase();
 		result = year + month + date + "-" + code;
 		return result;
@@ -124,10 +124,12 @@ public class ProcessionService {
 	}
 
 	// Business Methods
-	public Collection<Procession> findAllProcessionsOfOneBrotherhood(final int brotherhoodId) {
+	public Collection<Procession> findAllProcessionsOfOneBrotherhood(
+			final int brotherhoodId) {
 		Collection<Procession> result;
 
-		result = this.processionRepository.findAllProcessionsOfOneBrotherhood(brotherhoodId);
+		result = this.processionRepository
+				.findAllProcessionsOfOneBrotherhood(brotherhoodId);
 		Assert.notNull(result);
 		return result;
 	}
@@ -152,4 +154,22 @@ public class ProcessionService {
 		return result;
 
 	}
+
+	public Collection<Procession> findVisibleProcessions() {
+		Collection<Procession> result = this.findAllFinal();
+		Collection<Procession> allProcessions;
+		String userNameOfPrincipal = LoginService.getPrincipal().getUsername();
+
+		allProcessions = this.findAll();
+
+		for (Procession p : allProcessions) {
+			if (p.getIsDraft() == true
+					&& (userNameOfPrincipal.equals(p.getBrotherhood()
+							.getUserAccount().getUsername()))) {
+				result.add(p);
+			}
+		}
+		return result;
+	}
+
 }

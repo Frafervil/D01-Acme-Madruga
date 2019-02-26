@@ -1,6 +1,8 @@
 
 package repositories;
 
+import java.util.Collection;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,4 +15,6 @@ public interface BrotherhoodRepository extends JpaRepository<Brotherhood, Intege
 	@Query("select a from Brotherhood a where a.userAccount.id = ?1")
 	Brotherhood findByUserAccountId(int userAccountId);
 
+	@Query("select e.brotherhood from Enrolment e where e.member.id = ?1")
+	Collection<Brotherhood> findAllBrotherhoodsOfOneMember(int memberId);
 }

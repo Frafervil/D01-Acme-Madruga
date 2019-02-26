@@ -2,6 +2,8 @@
 package services;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import org.springframework.util.Assert;
 
 import repositories.PositionRepository;
 import domain.Administrator;
+import domain.Enrolment;
 import domain.Position;
 
 @Service
@@ -25,10 +28,13 @@ public class PositionService {
 	@Autowired
 	private AdministratorService	administratorService;
 
+	@Autowired
+	private EnrolmentService		enrolmentService;
+
 
 	// Simple CRUD methods
 
-	public Position create(final Position parent) {
+	public Position create() {
 		Position result;
 		Administrator principal;
 
@@ -74,14 +80,40 @@ public class PositionService {
 
 	public void delete(final Position position) {
 		Administrator principal;
-
+		Collection<Position> positions;
 		Assert.notNull(position);
 		Assert.isTrue(position.getId() != 0);
+
+		positions = this.positionRepository.findUsedPosition(position.getId());
 
 		principal = this.administratorService.findByPrincipal();
 
 		Assert.notNull(principal);
 
-		this.positionRepository.delete(position);
+		if (positions == null)
+			this.positionRepository.delete(position);
+		else
+			Assert.notNull(positions);
+
+	}
+
+	public Map<String, Integer> positionStats() {
+		Map<String, Integer> result;
+		Collection<Enrolment> enrolments;
+		enrolments = this.enrolmentService.findAllActiveEnrolments();
+		result = new HashMap<String, Integer>();
+		int oldValue;
+		String lpos;
+
+		for (final Enrolment e : enrolments) {
+			lpos = e.getPosition().getLanguagePositions().iterator().next().getName().toString();
+			if (result.containsKey(lpos)) {
+				oldValue = result.get(lpos);
+				result.put(lpos, oldValue + 1);
+			} else
+				result.put(lpos, 1);
+		}
+		return result;
+
 	}
 }

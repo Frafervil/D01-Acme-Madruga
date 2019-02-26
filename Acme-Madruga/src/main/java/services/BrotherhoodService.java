@@ -134,6 +134,13 @@ public class BrotherhoodService {
 		return result;
 	}
 
+	public Collection<Brotherhood> findAllBrotherhoodsOfOneMember(final int memberId) {
+		Assert.notNull(memberId);
+		Collection<Brotherhood> result;
+		result = this.brotherhoodRepository.findAllBrotherhoodsOfOneMember(memberId);
+		return result;
+	}
+
 	public Brotherhood reconstruct(final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
 		Brotherhood result;
 
@@ -153,7 +160,7 @@ public class BrotherhoodService {
 		//		result.getUserAccount().setUsername(brotherhoodForm.getUsername());
 		//		result.getUserAccount().setPassword(brotherhoodForm.getPassword());
 
-		// NO SE PONEN LAS COSAS DEL USERACCOUNT PORQUE ESO SE TIENE QUE RECONSTRUIR EN EN USERACCOUNTSERVICE (CREAR RECONSTRUCT AHÍ)
+		// NO SE PONEN LAS COSAS DEL USERACCOUNT PORQUE ESO SE TIENE QUE RECONSTRUIR EN EN USERACCOUNTSERVICE (CREAR RECONSTRUCT AHï¿½)
 
 		this.validator.validate(result, binding);
 		this.brotherhoodRepository.flush();

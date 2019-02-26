@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.Collection;
@@ -45,13 +46,13 @@ public class PlaceService {
 		columMax = procession.getMaxColumn();
 
 		requestOfProccesion = this.requestService.findAllByProcession(processionId);
-
-		outerloop: for (r = 1; r <= rowMax; r++)
-			for (c = 1; c <= columMax; c++)
-				for (final Request rq : requestOfProccesion)
-					if ((rq.getPlace().getcolumnP() != c) || (rq.getPlace().getrowP() != r))
-						break outerloop;
-
+		if (requestOfProccesion != null)
+			outerloop: for (r = 1; r <= rowMax; r++)
+				for (c = 1; c <= columMax; c++)
+					for (final Request rq : requestOfProccesion)
+						if (rq.getPlace() != null)
+							if ((rq.getPlace().getcolumnP() != c) && (rq.getPlace().getrowP() != r))
+								break outerloop;
 		result.setcolumnP(c);
 		result.setrowP(r);
 		return result;

@@ -14,6 +14,7 @@ import security.Authority;
 import security.LoginService;
 import security.UserAccount;
 import domain.Administrator;
+import forms.AdministratorForm;
 
 @Service
 @Transactional
@@ -24,6 +25,7 @@ public class AdministratorService {
 	@Autowired
 	private AdministratorRepository	administratorRepository;
 
+	// Supporting services-------------------------------------------
 	@Autowired
 	private ActorService			actorService;
 
@@ -44,6 +46,20 @@ public class AdministratorService {
 
 	public boolean exists(final Integer arg0) {
 		return this.administratorRepository.exists(arg0);
+	}
+
+	public Administrator create() {
+		Administrator principal;
+		Administrator result;
+		UserAccount userAccount;
+
+		principal = this.findByPrincipal();
+		Assert.notNull(principal);
+
+		result = new Administrator();
+		userAccount = this.actorService.createUserAccount(Authority.ADMIN);
+		result.setUserAccount(userAccount);
+		return result;
 	}
 
 	public Administrator save(final Administrator administrator) {
@@ -84,21 +100,27 @@ public class AdministratorService {
 
 	}
 
-	public Administrator reconstruct(final Administrator administrator, final BindingResult binding) {
-		Administrator result;
+	public Administrator reconstruct(final AdministratorForm adminForm, final BindingResult binding) {
+		Assert.notNull(adminForm);
+		final Administrator result = this.create();
+		UserAccount userAccount;
 
-		if (administrator.getId() == 0)
-			result = administrator;
-		else
-			result = (Administrator) this.actorService.findOne(administrator.getId());
-		result.setAddress(administrator.getAddress());
-		result.setEmail(administrator.getEmail());
-		result.setMiddleName(administrator.getMiddleName());
-		result.setName(administrator.getName());
-		result.setPhone(administrator.getPhone());
-		result.setPhoto(administrator.getPhoto());
-		result.setSurname(administrator.getSurname());
-		this.validator.validate(result, binding);
+		result.setName(adminForm.getName());
+		result.setMiddleName(adminForm.getMiddleName());
+		result.setSurname(adminForm.getSurname());
+		result.setPhoto(adminForm.getPhoto());
+		result.setEmail(adminForm.getEmail());
+		result.setPhone(adminForm.getPhone());
+		result.setAddress(adminForm.getAddress());
+
+		if (adminForm.getIdAdministrator() == 0) {
+			userAccount = result.getUserAccount();
+			userAccount.setPassword(this.actorService.hashPassword(adminForm.getPassword()));
+			userAccount.setUsername(adminForm.getUsername());
+		}
+
+		//Comprobamos los errores
+		this.validator.validate(adminForm, binding);
 		return result;
 	}
 }

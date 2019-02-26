@@ -46,8 +46,15 @@
 		<bean class="converters.MemberToStringConverter" />
 		<bean class="converters.StringToMemberConverter" />	
 		
+		<bean class="converters.PlaceToStringConverter" />
+		<bean class="converters.StringToPlaceConverter" />	
+		
 		<bean class="converters.UserAccountToStringConverter"/>
 		<bean class="converters.StringToUserAccount"/>
+		
+		<bean class="converters.LanguagePositionToStringConverter" />
+		<bean class="converters.StringToLanguagePositionConverter" />	
+		
 
 	</util:list>
 	

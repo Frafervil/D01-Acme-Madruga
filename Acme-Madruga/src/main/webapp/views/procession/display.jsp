@@ -17,9 +17,10 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@ taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
+<!--  
 <jstl:if test="${(procession.isDraft == true && procession.brotherhood.userAccount.username == pageContext.request.userPrincipal.name) || procession.isDraft == false}">
 	<security:authorize access="hasRole('BROTHERHOOD')">
-
+-->
 		<b><spring:message code="procession.title" /></b>:
 		<jstl:out value="${procession.title}"/><br/>
 	
@@ -32,8 +33,19 @@
 		<b><spring:message code="procession.ticker" /></b>:
 		<jstl:out value="${procession.ticker }"/><br/>
 		
+		<jstl:if test="${procession.isDraft == true}">
+		
 		<b><spring:message code="procession.isDraft" /></b>:
-		<jstl:out value="${procession.isDraft }"/><br/>	
+		<spring:message code="procession.isDraft.true" /><br/>	
+		
+		</jstl:if>
+		
+		<jstl:if test="${procession.isDraft == false}">
+		
+		<b><spring:message code="procession.isDraft" /></b>:
+		<spring:message code="procession.isDraft.false" /><br/>		
+		
+		</jstl:if>
 		
 		<b><spring:message code="procession.maxRow" /></b>:
 		<jstl:out value="${procession.maxRow }"/><br/>
@@ -42,21 +54,21 @@
 		<jstl:out value="${procession.maxColumn }"/><br/>
 		
 		<!-- Floats -->
-<h3> <spring:message code="brotherhood.floatbs" /> </h3>
+<h3> <spring:message code="procession.floatbs" /> </h3>
 <jstl:choose>
 	<jstl:when test="${not empty floatbs}">
-		<display:table pagesize="5" class="displaytag" name="floatbs" requestURI="brotherhood/display.do" id="floatbs">
+		<display:table pagesize="5" class="displaytag" name="floatbs" requestURI="procession/display.do" id="floatbs">
 
-			<spring:message code="brotherhood.floatb.title" var="title" />
+			<spring:message code="procession.floatb.title" var="title" />
 			<display:column property="title" title="${title}" sortable="true"/>
 	
-			<spring:message code="brotherhood.floatb.description" var="description" />
+			<spring:message code="procession.floatb.description" var="description" />
 			<display:column property="description" title="${description}" sortable="true"/>
 			
 		</display:table>
 	</jstl:when>
 	<jstl:otherwise>
-		<spring:message code="brotherhood.floatbs.empty" /> 
+		<spring:message code="procession.floatbs.empty" /> 
 	</jstl:otherwise>
 </jstl:choose>
 	
@@ -66,5 +78,5 @@
 	
 		<a href="procession/brotherhood/list.do"><spring:message code="procession.list"/></a>
 		<br/>
-	</security:authorize>
-</jstl:if>
+	<!-- </security:authorize>
+</jstl:if> -->

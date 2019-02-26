@@ -1,3 +1,4 @@
+
 package controllers.member;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.MemberService;
+import services.PlaceService;
 import services.ProcessionService;
 import services.RequestService;
 import controllers.AbstractController;
@@ -31,13 +33,17 @@ public class RequestMemberController extends AbstractController {
 	// Services
 
 	@Autowired
-	private RequestService requestService;
+	private RequestService		requestService;
 
 	@Autowired
-	private MemberService memberService;
+	private MemberService		memberService;
 
 	@Autowired
-	private ProcessionService processionService;
+	private ProcessionService	processionService;
+
+	@Autowired
+	private PlaceService		placeService;
+
 
 	// Listing
 
@@ -97,8 +103,7 @@ public class RequestMemberController extends AbstractController {
 		request = this.requestService.findOne(requestId);
 		member = this.memberService.findByPrincipal();
 
-		if (this.requestService.findAllByMember(member.getId()).contains(
-				request))
+		if (this.requestService.findAllByMember(member.getId()).contains(request))
 			permission = true;
 
 		result = new ModelAndView("request/display");
@@ -109,21 +114,26 @@ public class RequestMemberController extends AbstractController {
 		return result;
 	}
 
-	// Delete ------------------ERRORES
-	@RequestMapping(value = "/display", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final Request request,
-			final BindingResult binding) {
+	// Delete
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public ModelAndView delete(@RequestParam final int requestId) {
 		ModelAndView result;
-		try {
-			this.requestService.delete(request);
-			result = new ModelAndView("redirect:list.do");
-		} catch (final Throwable oops) {
+		Request request;
+		Member member;
+		request = this.requestService.findOne(requestId);
+		member = this.memberService.findByPrincipal();
+		if (request.getMember().getId() == member.getId())
+			try {
+				this.requestService.delete(request);
+				result = new ModelAndView("redirect:list.do");
+			} catch (final Throwable oops) {
 
-			result = this.createEditModelAndView(request,
-					"request.commit.error");
-			result.addObject("permission", true);
+				result = this.createEditModelAndView(request, "request.commit.error");
+				result.addObject("permission", true);
 
-		}
+			}
+		else
+			result = this.createEditModelAndView(request, "request.commit.error");
 
 		return result;
 	}
@@ -158,25 +168,25 @@ public class RequestMemberController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Request request,
-			final BindingResult binding) {
+	public ModelAndView save(@Valid final Request request, final BindingResult binding) {
 		ModelAndView result;
 
 		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(request);
 			System.out.println(binding.getAllErrors());
-		} else
-			try {
-				this.requestService.save(request);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(request,
-						"request.commit.error");
-			}
+		} else {
+			this.placeService.save(request.getPlace());
 
+			this.requestService.save(request);
+			result = new ModelAndView("redirect:list.do");
+			//			try {
+
+			//			} catch (final Throwable oops) {
+			//				result = this.createEditModelAndView(request, "request.commit.error");
+			//			}
+		}
 		return result;
 	}
-
 	// Ancillary methods ------------------------------------------------------
 
 	protected ModelAndView createEditModelAndView(final Request request) {
@@ -187,8 +197,7 @@ public class RequestMemberController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final Request request,
-			final String message) {
+	protected ModelAndView createEditModelAndView(final Request request, final String message) {
 		ModelAndView result;
 
 		result = new ModelAndView("request/edit");

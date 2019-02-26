@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.RequestRepository;
+import domain.Brotherhood;
 import domain.Member;
 import domain.Place;
 import domain.Procession;
@@ -37,6 +38,9 @@ public class RequestService {
 
 	@Autowired
 	private ProcessionService	processionService;
+
+	@Autowired
+	private BrotherhoodService	brotherhoodService;
 
 
 	// Simple CRUD methods
@@ -67,7 +71,6 @@ public class RequestService {
 
 		place = this.placeService.create(processionId);
 		Assert.notNull(place);
-		this.placeService.save(place);
 		result.setPlace(place);
 
 		result.setStatus("PENDING");
@@ -114,7 +117,6 @@ public class RequestService {
 	}
 	public void save(final Request request) {
 		Request result;
-		this.placeService.save(request.getPlace());
 		result = this.requestRepository.save(request);
 		Assert.notNull(result);
 	}
@@ -168,4 +170,79 @@ public class RequestService {
 		return result;
 	}
 
+	public Double ratioAprovedRequest() {
+		final Double result;
+		result = this.requestRepository.ratioAprovedRequest();
+		Assert.notNull(result);
+		return result;
+	}
+	public Double ratioRejectedRequest() {
+		final Double result;
+		result = this.requestRepository.ratioRejectedRequest();
+		Assert.notNull(result);
+		return result;
+	}
+	public Double ratioPendingRequest() {
+		final Double result;
+		result = this.requestRepository.ratioPendingRequest();
+		Assert.notNull(result);
+		return result;
+	}
+
+	public Collection<Request> findAllByBrotherhood(final int brotherhoodId) {
+		final Collection<Request> result;
+		Collection<Request> requests;
+		final Collection<Procession> processions;
+
+		result = new ArrayList<Request>();
+		processions = this.processionService.findAllProcessionsOfOneBrotherhood(brotherhoodId);
+
+		for (final Procession p : processions) {
+			requests = this.findAllByProcession(p.getId());
+			result.addAll(requests);
+		}
+
+		return result;
+
+	}
+
+	// Brotherhood must be able to change the status of a request they manage from "PENDING" to "REJECTED"
+	public void reject(final Request r) {
+		Brotherhood principal;
+
+		Assert.notNull(r);
+		Assert.isTrue(r.getId() != 0);
+
+		final String reason = r.getRejectionReason();
+
+		principal = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(principal);
+
+		Assert.isTrue(this.findByPrincipal().contains(r));
+		Assert.isTrue(r.getStatus().equals("PENDING"));
+
+		Assert.isTrue(!reason.isEmpty());
+		r.setStatus("REJECTED");
+
+		this.placeService.delete(r.getPlace());
+		this.requestRepository.save(r);
+	}
+
+	// Brotherhood must be able to change the status of a request they manage from "PENDING" to "APPROVED"
+	public void approve(final Request r) {
+		Brotherhood principal;
+
+		Assert.notNull(r);
+		Assert.isTrue(r.getId() != 0);
+
+		principal = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(principal);
+
+		Assert.isTrue(this.findByPrincipal().contains(r));
+		Assert.isTrue(r.getStatus().equals("PENDING"));
+
+		r.setStatus("APPROVED");
+
+		this.requestRepository.save(r);
+	}
 }
