@@ -1,8 +1,6 @@
 
 package forms;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -10,7 +8,6 @@ import org.hibernate.validator.constraints.URL;
 
 import security.Authority;
 
-@Access(AccessType.PROPERTY)
 public class AdministratorForm {
 
 	//--- AdministratorAtributes ---------------------------------------------
@@ -52,7 +49,7 @@ public class AdministratorForm {
 	}
 
 	public void setMiddleName(final String middleName) {
-		this.middleName = this.name;
+		this.middleName = middleName;
 	}
 
 	@NotBlank

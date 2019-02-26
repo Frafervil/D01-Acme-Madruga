@@ -121,6 +121,11 @@ public class AdministratorService {
 
 		//Comprobamos los errores
 		this.validator.validate(adminForm, binding);
+		this.flush();
 		return result;
+	}
+
+	public void flush() {
+		this.administratorRepository.flush();
 	}
 }
