@@ -14,7 +14,13 @@
 	
 	<form:hidden path="version" />
 	
-	
+	<form:label path="systemName">
+		<spring:message code="customisation.systemName" />:
+	</form:label>
+	<form:input path="systemName" />
+	<form:errors cssClass="error" path="systemName" />
+	<br />
+	<br />
 
 
 	<form:label path="welcomeBanner">
@@ -25,14 +31,21 @@
 	<br />
 	<br />
 
-	<form:label path="welcomeMessage">
-		<spring:message code="customisation.welcomeMessage" />:
+	<form:label path="welcomeMessageEn">
+		<spring:message code="customisation.welcomeMessageEn" />:
 	</form:label>
-	<form:textarea path="welcomeMessage" />
-	<form:errors cssClass="error" path="welcomeMessage" />
+	<form:textarea path="welcomeMessageEn" />
+	<form:errors cssClass="error" path="welcomeMessageEn" />
 	<br />
 	<br />
-
+	
+	<form:label path="welcomeMessageEs">
+		<spring:message code="customisation.welcomeMessageEs" />:
+	</form:label>
+	<form:textarea path="welcomeMessageEs" />
+	<form:errors cssClass="error" path="welcomeMessageEs" />
+	<br />
+	<br />
 	<form:label path="countryCode">
 		<spring:message code="customisation.countryCode" />:
 	</form:label>
@@ -62,11 +75,4 @@
 
 
 </form:form>
-
-<script>
-    $(document).ready(function() {
-        $("#list1").dynamiclist();
-    });
-</script>
-
 

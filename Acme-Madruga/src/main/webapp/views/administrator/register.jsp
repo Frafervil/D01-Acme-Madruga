@@ -48,9 +48,7 @@
 		
 		</fieldset>
 		<br/>
-		<security:authorize access="isAnonymous()">
-			<acme:checkbox code="administrator.terms" path="legalConsentment"/>
-		</security:authorize>
+		<acme:checkbox code="actor.terms" path="legalConsentment"/>
 		
 		<acme:submit name="save" code="administrator.save"/>
 

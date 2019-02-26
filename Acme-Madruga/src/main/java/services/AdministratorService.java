@@ -100,27 +100,25 @@ public class AdministratorService {
 
 	}
 
-	public Administrator reconstruct(final AdministratorForm adminForm, final BindingResult binding) {
-		Assert.notNull(adminForm);
-		final Administrator result = this.create();
-		UserAccount userAccount;
+	public Administrator reconstruct(final Administrator administrator, final BindingResult binding) {
+		Administrator result;
 
-		result.setName(adminForm.getName());
-		result.setMiddleName(adminForm.getMiddleName());
-		result.setSurname(adminForm.getSurname());
-		result.setPhoto(adminForm.getPhoto());
-		result.setEmail(adminForm.getEmail());
-		result.setPhone(adminForm.getPhone());
-		result.setAddress(adminForm.getAddress());
-
-		if (adminForm.getIdAdministrator() == 0) {
-			userAccount = result.getUserAccount();
-			userAccount.setPassword(this.actorService.hashPassword(adminForm.getPassword()));
-			userAccount.setUsername(adminForm.getUsername());
-		}
-
-		//Comprobamos los errores
-		this.validator.validate(adminForm, binding);
+		if (administrator.getId() == 0)
+			result = administrator;
+		else
+			result = (Administrator) this.actorService.findOne(administrator.getId());
+		result.setAddress(administrator.getAddress());
+		result.setEmail(administrator.getEmail());
+		result.setMiddleName(administrator.getMiddleName());
+		result.setName(administrator.getName());
+		result.setPhone(administrator.getPhone());
+		result.setPhoto(administrator.getPhoto());
+		result.setSurname(administrator.getSurname());
+		this.validator.validate(result, binding);
 		return result;
+	}
+
+	public void flush() {
+		this.administratorRepository.flush();
 	}
 }

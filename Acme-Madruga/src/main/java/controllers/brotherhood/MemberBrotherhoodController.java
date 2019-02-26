@@ -42,6 +42,7 @@ public class MemberBrotherhoodController extends AbstractController {
 	public ModelAndView list(@RequestParam final int brotherhoodId) {
 		ModelAndView result;
 		Collection<Member> members;
+		Collection<Enrolment> enrolments;
 
 		try {
 			final Brotherhood hood = this.brotherhoodService.findOne(brotherhoodId);
@@ -51,6 +52,7 @@ public class MemberBrotherhoodController extends AbstractController {
 
 			result = new ModelAndView("member/brotherhood/list");
 			result.addObject("members", members);
+			result.addObject("enrolments", enrolments);
 			result.addObject("requestURI", "member/brotherhood/list.do");
 
 		} catch (final Throwable oops) {

@@ -35,7 +35,6 @@
 		<value>/views/terms/tiles.xml</value>
 		<value>/views/customisation/tiles.xml</value>
 		<value>/views/position/tiles.xml</value>
-		<value>/views/request/tiles.xml</value>
 
 	</util:list>
 

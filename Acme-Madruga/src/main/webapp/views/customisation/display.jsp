@@ -26,11 +26,14 @@
 </tr>
 
 <tr>
-<td> <strong> <spring:message code="customisation.welcomeMessage" /> : </strong> </td>
-<td> <jstl:out value="${customisation.welcomeMessage}" /> </td>
+<td> <strong> <spring:message code="customisation.welcomeMessageEn" /> : </strong> </td>
+<td> <jstl:out value="${customisation.welcomeMessageEn}" /> </td>
 </tr>
 
-
+<tr>
+<td> <strong> <spring:message code="customisation.welcomeMessageEs" /> : </strong> </td>
+<td> <jstl:out value="${customisation.welcomeMessageEs}" /> </td>
+</tr>
 
 
 <tr>

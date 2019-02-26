@@ -1,3 +1,4 @@
+
 package domain;
 
 import javax.persistence.Access;
@@ -12,10 +13,12 @@ import org.hibernate.validator.constraints.URL;
 @Access(AccessType.PROPERTY)
 public class Customisation extends DomainEntity {
 
-	private String systemName;
-	private String welcomeBanner;
-	private String welcomeMessage;
-	private String countryCode;
+	private String	systemName;
+	private String	welcomeBanner;
+	private String	welcomeMessageEn;
+	private String	welcomeMessageEs;
+	private String	countryCode;
+
 
 	@NotBlank
 	public String getSystemName() {
@@ -37,12 +40,21 @@ public class Customisation extends DomainEntity {
 	}
 
 	@NotBlank
-	public String getWelcomeMessage() {
-		return this.welcomeMessage;
+	public String getWelcomeMessageEn() {
+		return this.welcomeMessageEn;
 	}
 
-	public void setWelcomeMessage(final String welcomeMessage) {
-		this.welcomeMessage = welcomeMessage;
+	public void setWelcomeMessageEn(final String welcomeMessageEn) {
+		this.welcomeMessageEn = welcomeMessageEn;
+	}
+
+	@NotBlank
+	public String getWelcomeMessageEs() {
+		return this.welcomeMessageEs;
+	}
+
+	public void setWelcomeMessageEs(final String welcomeMessageEs) {
+		this.welcomeMessageEs = welcomeMessageEs;
 	}
 
 	@Pattern(regexp = "^\\+?\\d{1,3}$")

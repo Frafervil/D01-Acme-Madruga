@@ -54,21 +54,21 @@
 		<jstl:out value="${procession.maxColumn }"/><br/>
 		
 		<!-- Floats -->
-<h3> <spring:message code="procession.floatbs" /> </h3>
+<h3> <spring:message code="procession.floatBs" /> </h3>
 <jstl:choose>
-	<jstl:when test="${not empty floatbs}">
-		<display:table pagesize="5" class="displaytag" name="floatbs" requestURI="procession/display.do" id="floatbs">
+	<jstl:when test="${not empty floatBs}">
+		<display:table pagesize="5" class="displaytag" name="floatBs" requestURI="procession/display.do" id="floatBs">
 
-			<spring:message code="procession.floatb.title" var="title" />
+			<spring:message code="procession.floatB.title" var="title" />
 			<display:column property="title" title="${title}" sortable="true"/>
 	
-			<spring:message code="procession.floatb.description" var="description" />
+			<spring:message code="procession.floatB.description" var="description" />
 			<display:column property="description" title="${description}" sortable="true"/>
 			
 		</display:table>
 	</jstl:when>
 	<jstl:otherwise>
-		<spring:message code="procession.floatbs.empty" /> 
+		<spring:message code="procession.floatBs.empty" /> 
 	</jstl:otherwise>
 </jstl:choose>
 	

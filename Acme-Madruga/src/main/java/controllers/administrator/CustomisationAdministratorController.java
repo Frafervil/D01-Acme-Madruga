@@ -58,9 +58,10 @@ public class CustomisationAdministratorController extends AbstractController {
 	public ModelAndView save(@Valid final Customisation customisation, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors())
+		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(customisation);
-		else
+			System.out.println(binding.getAllErrors());
+		} else
 			try {
 				this.customisationService.save(customisation);
 				result = new ModelAndView("redirect:display.do");

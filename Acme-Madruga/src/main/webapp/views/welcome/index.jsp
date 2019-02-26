@@ -17,5 +17,10 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
 <p><spring:message code="welcome.greeting.prefix" /> ${name}<spring:message code="welcome.greeting.suffix" /></p>
-
+<jstl:if test="${cookie['language'].getValue()=='en'}">
+<p>${welcomeMessageEn}</p>
+</jstl:if>
+<jstl:if test="${cookie['language'].getValue()=='es'}">
+<p>${welcomeMessageEs}</p>
+</jstl:if>
 <p><spring:message code="welcome.greeting.current.time" /> ${moment}</p> 

@@ -1,5 +1,6 @@
 package controllers.brotherhood;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -45,6 +46,27 @@ public class ProcessionBrotherhoodController extends AbstractController {
 		result.addObject("processions", processions);
 		result.addObject("requestURI", "procession/brotherhood/list.do");
 
+		return result;
+	}
+
+	// List
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list(@RequestParam final int brotherhoodId) {
+		ModelAndView result;
+		Collection<Procession> processions;
+		try {
+			processions = new ArrayList<Procession>();
+			processions = this.processionService
+					.findAllProcessionsOfOneBrotherhood(brotherhoodId);
+			result = new ModelAndView("procession/list");
+			result.addObject("processions", processions);
+			result.addObject("requestURI", "procession/brotherhood/list.do");
+		} catch (final Throwable oops) {
+			oops.printStackTrace();
+			result = new ModelAndView("procession/list");
+			result.addObject("message", "procession.retrieve.error");
+			result.addObject("processions", new ArrayList<FloatB>());
+		}
 		return result;
 	}
 
@@ -115,15 +137,15 @@ public class ProcessionBrotherhoodController extends AbstractController {
 			String messageCode) {
 		ModelAndView result;
 		Collection<Brotherhood> brotherhoods;
-		Collection<FloatB> floatbs;
+		Collection<FloatB> floatBs;
 
 		brotherhoods = brotherhoodService.findAll();
-		floatbs = floatBService.findAll();
+		floatBs = floatBService.findAll();
 
 		result = new ModelAndView("procession/edit");
 		result.addObject("procession", procession);
 		result.addObject("brotherhoods", brotherhoods);
-		result.addObject("floatbs", floatbs);
+		result.addObject("floatBs", floatBs);
 
 		result.addObject("message", messageCode);
 
