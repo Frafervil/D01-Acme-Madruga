@@ -84,7 +84,7 @@
 </jstl:when>
 <jstl:otherwise>
 <security:authorize access="hasRole('BROTHERHOOD')">
-<form:form action="request/brotherhood/reject.do" modelAttribute="request">
+<form:form action="request/brotherhood/approve.do" modelAttribute="request">
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />

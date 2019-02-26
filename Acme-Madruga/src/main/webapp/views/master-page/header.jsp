@@ -17,7 +17,7 @@
 <%@taglib prefix="jstl"  uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div>
-	<a href="#"><img src="images/logo.png" alt="Acme Madruga Co., Inc." /></a>
+	<a href="#"><img src="${bannerWelcome }" alt="Acme Madruga Co., Inc." /></a>
 </div>
 
 <div>
