@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.Collection;
@@ -19,12 +20,16 @@ public class EnrolmentService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private EnrolmentRepository enrolmentRepository;
+	private EnrolmentRepository	enrolmentRepository;
 
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	private BrotherhoodService brotherhoodService;
+	private BrotherhoodService	brotherhoodService;
+
+	@Autowired
+	private MemberService		memberService;
+
 
 	// Simple CRUD Methods
 
@@ -117,22 +122,18 @@ public class EnrolmentService {
 		return result;
 	}
 
-	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(
-			final int brotherhoodId, final int memberId) {
+	public Collection<Enrolment> findByBrotherhoodIdAndMemberId(final int brotherhoodId, final int memberId) {
 		Collection<Enrolment> result;
 
-		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(
-				brotherhoodId, memberId);
+		result = this.enrolmentRepository.findByBrotherhoodIdAndMemberId(brotherhoodId, memberId);
 		Assert.notNull(result);
 		return result;
 	}
 
-	public Collection<Enrolment> findAllActiveEnrolmentsByBrotherhoodId(
-			final int brotherhoodId) {
+	public Collection<Enrolment> findAllActiveEnrolmentsByBrotherhoodId(final int brotherhoodId) {
 		Collection<Enrolment> result;
 
-		result = this.enrolmentRepository
-				.findAllActiveEnrolmentsByBrotherhoodId(brotherhoodId);
+		result = this.enrolmentRepository.findAllActiveEnrolmentsByBrotherhoodId(brotherhoodId);
 		Assert.notNull(result);
 		return result;
 	}
@@ -143,5 +144,25 @@ public class EnrolmentService {
 		result = this.enrolmentRepository.findAllActiveEnrolments();
 		Assert.notNull(result);
 		return result;
+	}
+
+	public Enrolment findActiveEnrolmentByBrotherhoodIdAndMemberId(final int brotherhoodId, final int memberId) {
+		Enrolment result;
+
+		result = this.enrolmentRepository.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, memberId);
+		return result;
+	}
+
+	public void dropOut(final int brotherhoodId) {
+
+		Member principal;
+		Enrolment enrolment;
+
+		principal = this.memberService.findByPrincipal();
+		Assert.notNull(principal);
+
+		enrolment = this.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
+
+		enrolment.setDropOutMoment(new Date(System.currentTimeMillis() - 1000));
 	}
 }
