@@ -34,20 +34,20 @@ public class ProcessionController extends AbstractController {
 		// Inicializa resultado
 		ModelAndView result;
 		Procession procession;
-		Collection<FloatB> floatbs;
+		Collection<FloatB> floatBs;
 
 		// Busca en el repositorio
 		procession = this.processionService.findOne(processionId);
 		Assert.notNull(procession);
 
-		floatbs = this.floatBRepository.findByProcessionId(processionId);
-		Assert.notNull(floatbs);
+		floatBs = this.floatBRepository.findByProcessionId(processionId);
+		Assert.notNull(floatBs);
 
 		// Crea y añade objetos a la vista
 		result = new ModelAndView("procession/display");
 		result.addObject("requestURI", "procession/display.do");
 		result.addObject("procession", procession);
-		result.addObject("floatbs", floatbs);
+		result.addObject("floatBs", floatBs);
 
 		// Envía la vista
 		return result;

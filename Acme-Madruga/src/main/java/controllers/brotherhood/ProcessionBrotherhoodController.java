@@ -115,15 +115,15 @@ public class ProcessionBrotherhoodController extends AbstractController {
 			String messageCode) {
 		ModelAndView result;
 		Collection<Brotherhood> brotherhoods;
-		Collection<FloatB> floatbs;
+		Collection<FloatB> floatBs;
 
 		brotherhoods = brotherhoodService.findAll();
-		floatbs = floatBService.findAll();
+		floatBs = floatBService.findAll();
 
 		result = new ModelAndView("procession/edit");
 		result.addObject("procession", procession);
 		result.addObject("brotherhoods", brotherhoods);
-		result.addObject("floatbs", floatbs);
+		result.addObject("floatBs", floatBs);
 
 		result.addObject("message", messageCode);
 

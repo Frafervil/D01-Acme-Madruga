@@ -48,7 +48,7 @@
 	
 	<!-- Floatbs -->
 	
-		<acme:checkbox code="procession.floatbs" path="floatbs"/>
+		<acme:checkbox code="procession.floatBs" path="${floatBs}"/>
 		
 		<acme:submit name="save" code="procession.save"/>
 		
