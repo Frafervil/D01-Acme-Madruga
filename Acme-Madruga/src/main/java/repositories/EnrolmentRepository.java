@@ -27,4 +27,7 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Integer> {
 	@Query("select e from Enrolment e where e.dropOutMoment = null")
 	Collection<Enrolment> findAllActiveEnrolments();
 
+	@Query("select e from Enrolment e where e.dropOutMoment = null and e.brotherhood.id = ?1 and e.member.id = ?2")
+	Enrolment findActiveEnrolmentByBrotherhoodIdAndMemberId(int brotherhoodId, int memberId);
+
 }
