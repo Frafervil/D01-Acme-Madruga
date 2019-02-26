@@ -117,4 +117,8 @@ public class AdministratorService {
 		this.validator.validate(result, binding);
 		return result;
 	}
+
+	public void flush() {
+		this.administratorRepository.flush();
+	}
 }

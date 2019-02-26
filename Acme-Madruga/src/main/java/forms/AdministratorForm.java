@@ -45,7 +45,7 @@ public class AdministratorForm {
 	}
 
 	public void setMiddleName(final String middleName) {
-		this.middleName = this.name;
+		this.middleName = middleName;
 	}
 
 	@NotBlank
