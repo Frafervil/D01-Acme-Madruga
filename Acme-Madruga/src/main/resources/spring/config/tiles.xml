@@ -34,6 +34,7 @@
 		<value>/views/procession/tiles.xml</value>
 		<value>/views/terms/tiles.xml</value>
 		<value>/views/customisation/tiles.xml</value>
+		<value>/views/position/tiles.xml</value>
 
 	</util:list>
 

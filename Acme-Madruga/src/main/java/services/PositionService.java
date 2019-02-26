@@ -34,7 +34,7 @@ public class PositionService {
 
 	// Simple CRUD methods
 
-	public Position create(final Position parent) {
+	public Position create() {
 		Position result;
 		Administrator principal;
 
@@ -80,15 +80,21 @@ public class PositionService {
 
 	public void delete(final Position position) {
 		Administrator principal;
-
+		Collection<Position> positions;
 		Assert.notNull(position);
 		Assert.isTrue(position.getId() != 0);
+
+		positions = this.positionRepository.findUsedPosition(position.getId());
 
 		principal = this.administratorService.findByPrincipal();
 
 		Assert.notNull(principal);
 
-		this.positionRepository.delete(position);
+		if (positions == null)
+			this.positionRepository.delete(position);
+		else
+			Assert.notNull(positions);
+
 	}
 
 	public Map<String, Integer> positionStats() {
