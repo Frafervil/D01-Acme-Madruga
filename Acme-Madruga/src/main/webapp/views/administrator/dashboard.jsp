@@ -57,8 +57,8 @@
 			<td>${ratioPendingRequest }</td>
 		</tr>
 		<tr>
-			<td><spring:message code="administrator.ratioStatusAPROVED" /></td>
-			<td>${ratioAprovedRequest }</td>
+			<td><spring:message code="administrator.ratioStatusAPPROVED" /></td>
+			<td>${ratioapprovedRequest }</td>
 		</tr>
 		<tr>
 			<td><spring:message code="administrator.ratioStatusPENDING" /></td>
@@ -81,10 +81,10 @@
 		</display:column>
 	</display:table>
 	
-	<h3><spring:message code="administrator.membersMostAproved" /></h3>
+	<h3><spring:message code="administrator.membersMostapproved" /></h3>
 	
 	<display:table pagesize="10" class="displaytag" 
-	name="membersRequestAproved" requestURI="dashboard/administrator/display.do" id="member">
+	name="membersRequestapproved" requestURI="dashboard/administrator/display.do" id="member">
 		
 		<spring:message code="administrator.name" var="name" />
 		<display:column property="name" title="${name }" sortable="true"/>

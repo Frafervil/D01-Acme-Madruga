@@ -32,7 +32,7 @@
 		<jstl:out value="${request.rejectionReason}"/><br/>
 	</jstl:if>
 	
-	<jstl:if test="${request.status == 'APROVED'}">
+	<jstl:if test="${request.status == 'APPROVED'}">
 		<b><spring:message code="request.procession.place" /></b>:
 		<br/>
 		<jstl:out value="Row: ${request.place.rowP}"/><br/>

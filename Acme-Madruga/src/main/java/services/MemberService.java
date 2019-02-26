@@ -211,7 +211,7 @@ public class MemberService {
 		return result;
 	}
 
-	public Collection<Member> mostAprovedMembers() {
+	public Collection<Member> mostapprovedMembers() {
 		final Collection<Member> members;
 		final Collection<Member> result = new ArrayList<Member>();
 		Collection<Request> requests;
@@ -225,7 +225,7 @@ public class MemberService {
 			p = 0.0;
 			for (final Request r : requests) {
 				i++;
-				if (r.getStatus().toString() == "APROVED")
+				if (r.getStatus().toString() == "APPROVED")
 					p = p + 1;
 			}
 			if (p / i > 0.1)

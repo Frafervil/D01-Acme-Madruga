@@ -13,7 +13,7 @@
 	<form action="request/member/list.do" method="get">
 	
 	<input type="radio" name="requestStatus" value="0" checked> <spring:message code="request.status.all" />
-	<input type="radio" name="requestStatus" value="1"> <spring:message code="request.status.aproved" />
+	<input type="radio" name="requestStatus" value="1"> <spring:message code="request.status.approved" />
 	<input type="radio" name="requestStatus" value="2">  <spring:message code="request.status.pending" />
 	<input type="radio" name="requestStatus" value="3">  <spring:message code="request.status.rejected" />
 	<br />
@@ -28,7 +28,7 @@
 	<form action="request/brotherhood/list.do" method="get">
 	
 	<input type="radio" name="requestStatus" value="0" checked> <spring:message code="request.status.all" />
-	<input type="radio" name="requestStatus" value="1"> <spring:message code="request.status.aproved" />
+	<input type="radio" name="requestStatus" value="1"> <spring:message code="request.status.approved" />
 	<input type="radio" name="requestStatus" value="2">  <spring:message code="request.status.pending" />
 	<input type="radio" name="requestStatus" value="3">  <spring:message code="request.status.rejected" />
 	<br />
@@ -89,7 +89,7 @@
 
 	
 	<jstl:choose>
-	<jstl:when test="${row.status == 'APROVED'}">
+	<jstl:when test="${row.status == 'APPROVED'}">
 	<jstl:set var="background" value="greenCell" /> 
 	</jstl:when>
 	

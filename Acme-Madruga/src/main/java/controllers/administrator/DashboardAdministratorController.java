@@ -56,9 +56,9 @@ public class DashboardAdministratorController extends AbstractController {
 
 		final Collection<Procession> startingSoonProcession;
 
-		final Double ratioPendingRequest, ratioAprovedRequest, ratioRejectedRequest;
+		final Double ratioPendingRequest, ratioapprovedRequest, ratioRejectedRequest;
 
-		final Collection<Member> membersRequestAproved;
+		final Collection<Member> membersRequestapproved;
 
 		final Map<String, Integer> positionStats;
 
@@ -88,13 +88,13 @@ public class DashboardAdministratorController extends AbstractController {
 		// Ratios
 		ratioPendingRequest = this.requestService.ratioPendingRequest();
 
-		ratioAprovedRequest = this.requestService.ratioAprovedRequest();
+		ratioapprovedRequest = this.requestService.ratioapprovedRequest();
 
 		ratioRejectedRequest = this.requestService.ratioRejectedRequest();
 
-		// Listing of members 10% aproved
+		// Listing of members 10% approved
 
-		membersRequestAproved = this.memberService.mostAprovedMembers();
+		membersRequestapproved = this.memberService.mostapprovedMembers();
 
 		//Histogram
 
@@ -119,10 +119,10 @@ public class DashboardAdministratorController extends AbstractController {
 		result.addObject("startingSoonProcession", startingSoonProcession);
 
 		result.addObject("ratioPendingRequest", ratioPendingRequest);
-		result.addObject("ratioAprovedRequest", ratioAprovedRequest);
+		result.addObject("ratioapprovedRequest", ratioapprovedRequest);
 		result.addObject("ratioRejectedRequest", ratioRejectedRequest);
 
-		result.addObject("membersRequestAproved", membersRequestAproved);
+		result.addObject("membersRequestapproved", membersRequestapproved);
 
 		result.addObject("position", position);
 		result.addObject("count", count);

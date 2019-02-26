@@ -3,6 +3,7 @@ package domain;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -24,7 +25,7 @@ public class Request extends DomainEntity {
 
 
 	@NotBlank
-	@Pattern(regexp = "^PENDING|APROVED|REJECTED$")
+	@Pattern(regexp = "^PENDING|APPROVED|REJECTED$")
 	public String getStatus() {
 		return this.status;
 	}
@@ -44,7 +45,7 @@ public class Request extends DomainEntity {
 	// Relationships----------------------------------------------
 
 	@Valid
-	@OneToOne(optional = true)
+	@OneToOne(optional = true, cascade = CascadeType.ALL)
 	public Place getPlace() {
 		return this.place;
 	}

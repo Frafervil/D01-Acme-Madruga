@@ -90,6 +90,19 @@ public class RequestService {
 		return result;
 
 	}
+
+	public Collection<Request> findByPrincipalBrotherhood(final Procession procession) {
+		Brotherhood principal;
+
+		principal = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(principal);
+
+		Collection<Request> result;
+		result = this.requestRepository.findAllByProcession(procession.getId());
+		Assert.notNull(result);
+		return result;
+
+	}
 	public void delete(final Request request) {
 		Member principal;
 		final Place place;
@@ -143,7 +156,7 @@ public class RequestService {
 			}
 
 		if (!result.containsKey("ACCEPTED"))
-			result.put("APROVED", new ArrayList<Request>());
+			result.put("APPROVED", new ArrayList<Request>());
 		if (!result.containsKey("PENDING"))
 			result.put("PENDING", new ArrayList<Request>());
 		if (!result.containsKey("REJECTED"))
@@ -170,9 +183,9 @@ public class RequestService {
 		return result;
 	}
 
-	public Double ratioAprovedRequest() {
+	public Double ratioapprovedRequest() {
 		final Double result;
-		result = this.requestRepository.ratioAprovedRequest();
+		result = this.requestRepository.ratioapprovedRequest();
 		Assert.notNull(result);
 		return result;
 	}
@@ -218,14 +231,13 @@ public class RequestService {
 		principal = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(principal);
 
-		Assert.isTrue(this.findByPrincipal().contains(r));
+		Assert.isTrue(this.findByPrincipalBrotherhood(r.getProcession()).contains(r));
 		Assert.isTrue(r.getStatus().equals("PENDING"));
 
 		Assert.isTrue(!reason.isEmpty());
 		r.setStatus("REJECTED");
 
 		this.placeService.delete(r.getPlace());
-		this.requestRepository.save(r);
 	}
 
 	// Brotherhood must be able to change the status of a request they manage from "PENDING" to "APPROVED"
@@ -238,11 +250,15 @@ public class RequestService {
 		principal = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(principal);
 
-		Assert.isTrue(this.findByPrincipal().contains(r));
+		Assert.isTrue(this.findByPrincipalBrotherhood(r.getProcession()).contains(r));
 		Assert.isTrue(r.getStatus().equals("PENDING"));
 
 		r.setStatus("APPROVED");
 
 		this.requestRepository.save(r);
+	}
+
+	public void flushRequest() {
+		this.requestRepository.flush();
 	}
 }
