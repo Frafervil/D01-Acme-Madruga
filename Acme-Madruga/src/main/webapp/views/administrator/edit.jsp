@@ -12,7 +12,6 @@
 <form:form action="administrator/edit.do" modelAttribute="actor">
 	<form:hidden path="id" />
 	<form:hidden path="version" />
-	<form:hidden path="userAccount" />
 
 	<div class="ui equal width form">
 		<div class="fields">

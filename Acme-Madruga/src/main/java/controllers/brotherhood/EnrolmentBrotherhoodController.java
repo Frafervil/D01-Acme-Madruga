@@ -84,7 +84,7 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 		} else
 			try {
 				enrolment = this.enrolmentService.save(enrolment);
-				result = new ModelAndView("redirect:/member/brotherhood/list.do");
+				result = new ModelAndView("redirect:/welcome/index.do");
 			} catch (final Throwable oops) {
 				oops.printStackTrace();
 				result = this.createEditModelAndView(enrolment, "enrolment.commit.error");

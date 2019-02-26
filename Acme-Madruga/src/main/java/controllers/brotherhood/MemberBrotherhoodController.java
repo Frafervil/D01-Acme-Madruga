@@ -40,17 +40,17 @@ public class MemberBrotherhoodController extends AbstractController {
 	// List
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
+	public ModelAndView list(@RequestParam final int brotherhoodId) {
 		ModelAndView result;
 		Collection<Member> members;
 		Collection<Enrolment> enrolments;
 
 		try {
-			final Brotherhood hood = this.brotherhoodService.findByPrincipal();
+			final Brotherhood hood = this.brotherhoodService.findOne(brotherhoodId);
 			Assert.notNull(hood);
 
 			members = new ArrayList<Member>();
-			enrolments = this.enrolmentService.findByBrotherhoodId(hood.getId());
+			enrolments = this.enrolmentService.findByBrotherhoodId(brotherhoodId);
 
 			for (final Enrolment e : enrolments)
 				if (e.getDropOutMoment() == null)

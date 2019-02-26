@@ -9,6 +9,8 @@ import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.BrotherhoodRepository;
 import security.LoginService;
@@ -16,6 +18,7 @@ import security.UserAccount;
 import domain.Administrator;
 import domain.Brotherhood;
 import domain.Enrolment;
+import forms.BrotherhoodForm;
 
 @Service
 @Transactional
@@ -31,6 +34,9 @@ public class BrotherhoodService {
 
 	@Autowired
 	private EnrolmentService		enrolmentService;
+
+	@Autowired
+	private Validator				validator;
 
 
 	// Simple CRUD Methods
@@ -100,11 +106,60 @@ public class BrotherhoodService {
 
 	}
 
+	public BrotherhoodForm construct(final Brotherhood brotherhood) {
+		final BrotherhoodForm brotherhoodForm = new BrotherhoodForm();
+		brotherhoodForm.setAddress(brotherhood.getAddress());
+		brotherhoodForm.setEmail(brotherhood.getEmail());
+		brotherhoodForm.setId(brotherhood.getId());
+		brotherhoodForm.setMiddleName(brotherhood.getMiddleName());
+		brotherhoodForm.setName(brotherhood.getName());
+		brotherhoodForm.setPhone(brotherhood.getPhone());
+		brotherhoodForm.setPhoto(brotherhood.getPhoto());
+		//		result.getPictures().removeAll(result.getPictures());
+		//		result.getPictures().addAll(brotherhood.getPictures());
+		brotherhoodForm.setPictures(brotherhood.getPictures());
+		brotherhoodForm.setSurname(brotherhood.getSurname());
+		brotherhoodForm.setTitle(brotherhood.getTitle());
+		brotherhoodForm.setUsername(brotherhood.getUserAccount().getUsername());
+		brotherhoodForm.setPassword(brotherhood.getUserAccount().getPassword());
+
+		return brotherhoodForm;
+
+	}
+
 	public Brotherhood findByUserAccountId(final int userAccountId) {
 		Assert.notNull(userAccountId);
 		Brotherhood result;
 		result = this.brotherhoodRepository.findByUserAccountId(userAccountId);
 		return result;
+	}
+
+	public Brotherhood reconstruct(final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
+		Brotherhood result;
+
+		if (brotherhoodForm.getId() == 0)
+			result = this.create();
+		else
+			result = this.brotherhoodRepository.findOne(brotherhoodForm.getId());
+		result.setAddress(brotherhoodForm.getAddress());
+		result.setEmail(brotherhoodForm.getEmail());
+		result.setMiddleName(brotherhoodForm.getMiddleName());
+		result.setName(brotherhoodForm.getName());
+		result.setPhone(brotherhoodForm.getPhone());
+		result.setPhoto(brotherhoodForm.getPhoto());
+		result.setPictures(brotherhoodForm.getPictures());
+		result.setSurname(brotherhoodForm.getSurname());
+		result.setTitle(brotherhoodForm.getTitle());
+		//		result.getUserAccount().setUsername(brotherhoodForm.getUsername());
+		//		result.getUserAccount().setPassword(brotherhoodForm.getPassword());
+
+		// NO SE PONEN LAS COSAS DEL USERACCOUNT PORQUE ESO SE TIENE QUE RECONSTRUIR EN EN USERACCOUNTSERVICE (CREAR RECONSTRUCT AHÍ)
+
+		this.validator.validate(result, binding);
+		this.brotherhoodRepository.flush();
+
+		return result;
+
 	}
 
 	public Brotherhood largestBrotherhood() {

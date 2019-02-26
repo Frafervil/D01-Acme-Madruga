@@ -1,3 +1,4 @@
+
 package domain;
 
 import javax.persistence.Access;
@@ -17,14 +18,15 @@ import security.UserAccount;
 @Access(AccessType.PROPERTY)
 public class Actor extends DomainEntity {
 
-	private String name;
-	private String middleName;
-	private String surname;
-	private String photo;
-	private String email;
-	private String phone;
-	private String address;
-	private UserAccount userAccount;
+	private String		name;
+	private String		middleName;
+	private String		surname;
+	private String		photo;
+	private String		email;
+	private String		phone;
+	private String		address;
+	private UserAccount	userAccount;
+
 
 	@NotBlank
 	public String getName() {

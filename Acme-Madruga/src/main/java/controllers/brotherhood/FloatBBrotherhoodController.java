@@ -1,3 +1,4 @@
+
 package controllers.brotherhood;
 
 import java.util.ArrayList;
@@ -27,23 +28,24 @@ public class FloatBBrotherhoodController extends AbstractController {
 	// Servicios
 
 	@Autowired
-	private FloatBService floatBService;
+	private FloatBService		floatBService;
 
 	@Autowired
-	private BrotherhoodService brotherhoodService;
+	private BrotherhoodService	brotherhoodService;
+
 
 	// List
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
+	public ModelAndView list(@RequestParam final int brotherhoodId) {
 		ModelAndView result;
 		Collection<FloatB> floats;
 
 		try {
-			final Brotherhood hood = this.brotherhoodService.findByPrincipal();
+			final Brotherhood hood = this.brotherhoodService.findOne(brotherhoodId);
 			Assert.notNull(hood);
 
-			floats = this.floatBService.findByBrotherhoodId(hood.getId());
+			floats = this.floatBService.findByBrotherhoodId(brotherhoodId);
 
 			result = new ModelAndView("floatB/list");
 			result.addObject("floatBs", floats);
@@ -105,8 +107,7 @@ public class FloatBBrotherhoodController extends AbstractController {
 				result = new ModelAndView("redirect:list.do");
 			} catch (final Throwable oops) {
 				oops.printStackTrace();
-				result = this.createEditModelAndView(floatB,
-						"floatB.commit.error");
+				result = this.createEditModelAndView(floatB, "floatB.commit.error");
 			}
 		return result;
 	}
@@ -130,8 +131,7 @@ public class FloatBBrotherhoodController extends AbstractController {
 		return this.createEditModelAndView(floatB, null);
 	}
 
-	protected ModelAndView createEditModelAndView(final FloatB floatB,
-			final String messageCode) {
+	protected ModelAndView createEditModelAndView(final FloatB floatB, final String messageCode) {
 		ModelAndView result;
 
 		result = new ModelAndView("floatB/edit");

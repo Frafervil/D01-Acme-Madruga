@@ -41,6 +41,6 @@
 			<acme:submit name="delete" code="enrolment.delete"/>
 		</jstl:if>
 		
-		<acme:cancel url="member/brotherhood/list.do" code="enrolment.cancel"/>
+		<acme:cancel url="member/list.do" code="enrolment.cancel"/>
 		
 </form:form>

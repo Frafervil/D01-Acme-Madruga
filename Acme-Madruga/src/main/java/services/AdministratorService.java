@@ -6,6 +6,8 @@ import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.AdministratorRepository;
 import security.Authority;
@@ -21,6 +23,12 @@ public class AdministratorService {
 
 	@Autowired
 	private AdministratorRepository	administratorRepository;
+
+	@Autowired
+	private ActorService			actorService;
+
+	@Autowired
+	private Validator				validator;
 
 
 	public Administrator findByPrincipal() {
@@ -76,4 +84,21 @@ public class AdministratorService {
 
 	}
 
+	public Administrator reconstruct(final Administrator administrator, final BindingResult binding) {
+		Administrator result;
+
+		if (administrator.getId() == 0)
+			result = administrator;
+		else
+			result = (Administrator) this.actorService.findOne(administrator.getId());
+		result.setAddress(administrator.getAddress());
+		result.setEmail(administrator.getEmail());
+		result.setMiddleName(administrator.getMiddleName());
+		result.setName(administrator.getName());
+		result.setPhone(administrator.getPhone());
+		result.setPhoto(administrator.getPhoto());
+		result.setSurname(administrator.getSurname());
+		this.validator.validate(result, binding);
+		return result;
+	}
 }
