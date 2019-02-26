@@ -27,7 +27,6 @@
 <form:form action="procession/brotherhood/edit.do" modelAttribute="procession">
 		<form:hidden path="id"/>
 		<form:hidden path="version"/>
-		<form:hidden path="brotherhood"/>
 		
 		<acme:textbox code="procession.title" path="title"/>
 		
@@ -49,8 +48,7 @@
 	
 	<!-- Floatbs -->
 	
-		<acme:select code="procession.floatbs" 
-		items="${floatbs}" itemLabel="title" id="floatbs"/>
+		<acme:checkbox code="procession.floatbs" path="floatbs"/>
 		
 		<acme:submit name="save" code="procession.save"/>
 		

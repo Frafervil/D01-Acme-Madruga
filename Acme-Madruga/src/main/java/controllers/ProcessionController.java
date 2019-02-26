@@ -41,6 +41,7 @@ public class ProcessionController extends AbstractController {
 		Assert.notNull(procession);
 
 		floatbs = this.floatBRepository.findByProcessionId(processionId);
+		Assert.notNull(floatbs);
 
 		// Crea y añade objetos a la vista
 		result = new ModelAndView("procession/display");

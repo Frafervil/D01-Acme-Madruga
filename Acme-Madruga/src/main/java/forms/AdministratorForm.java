@@ -1,8 +1,5 @@
-
 package forms;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -10,12 +7,10 @@ import org.hibernate.validator.constraints.URL;
 
 import security.Authority;
 
-@Access(AccessType.PROPERTY)
 public class AdministratorForm {
 
-	//--- AdministratorAtributes ---------------------------------------------
-	private int	idAdministrator;
-
+	// --- AdministratorAtributes ---------------------------------------------
+	private int idAdministrator;
 
 	public int getIdAdministrator() {
 		return this.idAdministrator;
@@ -25,17 +20,15 @@ public class AdministratorForm {
 		this.idAdministrator = idAdministrator;
 	}
 
+	private String name;
+	private String middleName;
+	private String surname;
+	private String photo;
+	private String email;
+	private String phone;
+	private String address;
 
-	private String	name;
-	private String	middleName;
-	private String	surname;
-	private String	photo;
-	private String	email;
-	private String	phone;
-	private String	address;
-
-
-	//--- Getters y Setters ---------------------------------------
+	// --- Getters y Setters ---------------------------------------
 
 	@NotBlank
 	public String getName() {
@@ -98,17 +91,15 @@ public class AdministratorForm {
 		this.address = address;
 	}
 
+	// --- UserAccountAtributes ---------------------------------------
 
-	//--- UserAccountAtributes ---------------------------------------
+	private String username;
+	private String password;
+	private Boolean legalConsentment;
 
-	private String		username;
-	private String		password;
-	private Boolean		legalConsentment;
+	private Authority authority;
 
-	private Authority	authority;
-
-
-	//--- Getters y Setters ---------------------------------------
+	// --- Getters y Setters ---------------------------------------
 
 	@Size(min = 5, max = 32)
 	public String getUsername() {
@@ -128,11 +119,9 @@ public class AdministratorForm {
 		this.password = password;
 	}
 
+	// --- Others -------------------------------------------------
 
-	//--- Others -------------------------------------------------
-
-	private String	passwordChecker;
-
+	private String passwordChecker;
 
 	public String getPasswordChecker() {
 		return this.passwordChecker;
