@@ -26,7 +26,17 @@
 	<!-- Action links -->
 
 	<display:column>
-	<a href="brotherhood/display.do?brotherhoodId=${row.id }"> <spring:message code="brotherhood.display" /></a>
+	<a href="member/brotherhood/list.do?brotherhoodId=${row.id }"> <spring:message code="brotherhood.members" /></a>
 	</display:column>
+	
+	<display:column>
+	<a href="floatB/brotherhood/list.do?brotherhoodId=${row.id }"> <spring:message code="brotherhood.floats" /></a>
+	</display:column>
+	
+	<display:column>
+	<a href="procession/brotherhood/list.do?brotherhoodId=${row.id }"> <spring:message code="brotherhood.processions" /></a>
+	</display:column>
+	
+	
 
 </display:table>

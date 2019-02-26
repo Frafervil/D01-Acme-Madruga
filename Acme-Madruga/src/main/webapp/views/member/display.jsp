@@ -57,10 +57,14 @@
 	</tbody>
 </table>
 
+<jstl:if test="${member.userAccount.username == pageContext.request.userPrincipal.name}">
+	<security:authorize access="hasRole('MEMBER')">
+
 <input type="button" name="save" class="ui button"
 	value="<spring:message code="member.edit" />"
 	onclick="javascript: relativeRedir('member/edit.do');" />
-
+</security:authorize>
+</jstl:if>
 	<br>
 	<br>
 

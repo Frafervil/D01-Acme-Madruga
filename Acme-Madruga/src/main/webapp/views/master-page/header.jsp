@@ -119,12 +119,16 @@
 						property="principal.username" />)
 			</a>
 				<ul>
-					<li class="arrow"></li>
+					<li class="arrow"> <security:authentication
+						property="principal.id" />)</li>
 					<security:authorize access="hasRole('BROTHERHOOD')">
 					<li><a href="brotherhood/display.do"><spring:message code="master.page.brotherhood.display" /></a></li>
 					</security:authorize>
 					<security:authorize access="hasRole('MEMBER')">
 					<li><a href="member/display.do"><spring:message code="master.page.member.display" /></a></li>
+					</security:authorize>
+					<security:authorize access="hasRole('ADMIN')">
+					<li><a href="administrator/viewProfile.do"><spring:message code="master.page.administrator.viewProfile" /></a></li>
 					</security:authorize>
 					<li><a href="j_spring_security_logout"><spring:message code="master.page.logout" /> </a></li>
 				</ul>

@@ -12,12 +12,12 @@ package controllers;
 
 import java.util.Arrays;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -77,27 +77,29 @@ public class AdministratorController extends AbstractController {
 		Administrator administrator;
 
 		administrator = this.administratorservice.findByPrincipal();
-
+		Assert.notNull(administrator);
 		result = this.createEditModelAndView(administrator);
 
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Administrator administrator, final BindingResult binding) {
+	public ModelAndView save(@ModelAttribute("administrator") Administrator administrator, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(administrator);
-			for (final ObjectError e : binding.getAllErrors())
-				System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
-		} else
-			try {
+		try {
+			administrator = this.administratorservice.reconstruct(administrator, binding);
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(administrator);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+			} else {
 				this.administratorservice.save(administrator);
 				result = new ModelAndView("redirect:/welcome/index.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(administrator, "administrator.commit.error");
 			}
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(administrator, "administrator.commit.error");
+		}
 		return result;
 	}
 

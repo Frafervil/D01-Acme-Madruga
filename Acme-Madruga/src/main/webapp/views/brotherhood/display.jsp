@@ -126,7 +126,7 @@
 </jstl:otherwise>
 </jstl:choose>
 
-<jstl:if test="${procession.brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
+<jstl:if test="${brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
 	<security:authorize access="hasRole('BROTHERHOOD')">
 
 <input type="button" name="save" class="ui button"

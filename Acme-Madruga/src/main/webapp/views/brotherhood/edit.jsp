@@ -10,15 +10,14 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="security"	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
 <jstl:if test="${permission }">
 
-<form:form action="${actionURI}" modelAttribute="brotherhood" id="form" >
+<form:form action="brotherhood/edit.do" modelAttribute="brotherhoodForm">
 
 
 	<form:hidden path="id"/>
-	<form:hidden path="version"/>
-	<form:hidden path="establishmentDate"/>
 	
 	<form:label path="name">
 		<spring:message code="brotherhood.name" />:
@@ -70,6 +69,10 @@
 	<br />
 	<br />
 	
+	<acme:textbox code="brotherhood.photo" path="photo"/>
+	<br />
+	<br />
+	
 	<h3><spring:message code="brotherhood.brotherhood" /></h3>
 	<form:label path="title">
 		<spring:message code="brotherhood.title" />:
@@ -90,26 +93,24 @@
 	<jstl:choose>
 	<jstl:when test="${brotherhood.id == 0}">
 	
-	<form:hidden path="userAccount.authorities[0].authority" value="BROTHERHOOD" />
 	
-	
-	<form:label path="userAccount.username">
+	<form:label path="username">
 		<spring:message code="brotherhood.username" />:
 	</form:label>
 	<spring:message code="brotherhood.username.placeholder" var="usernamePlaceholder"/> 
-	<form:input path="userAccount.username" placeholder="${usernamePlaceholder}" size="25"/>
-	<form:errors cssClass="error" path="userAccount.username" />
+	<form:input path="username" placeholder="${usernamePlaceholder}" size="25"/>
+	<form:errors cssClass="error" path="username" />
 	<br />
 	<br />
 	
 	
 	
-	<form:label path="userAccount.password">
+	<form:label path="password">
 	<spring:message code="brotherhood.password" />:
 	</form:label>
 	<spring:message code="brotherhood.password.placeholder" var="passwordPlaceholder"/> 
-	<form:password path="userAccount.password" placeholder="${passwordPlaceholder}" size="25"/>
-	<form:errors cssClass="error" path="userAccount.password" />
+	<form:password path="password" placeholder="${passwordPlaceholder}" size="25"/>
+	<form:errors cssClass="error" path="password" />
 	<br />
 	<br />
 	
@@ -117,18 +118,11 @@
 		
 	
 	</jstl:when>
-	<jstl:otherwise>
-	
-	
-	<form:hidden path="userAccount"/>
-	
-
-	</jstl:otherwise>
 	</jstl:choose>
 	
 
-	<input type="button" name="save" id="save"
-		value="<spring:message code="brotherhood.save" />" />&nbsp; 
+	<input type="submit" name="save" id="save"
+		value="<spring:message code="brotherhood.save" />" />
 	<input type="button" name="cancel"
 		value="<spring:message code="brotherhood.cancel" />"
 		onclick="javascript: relativeRedir('${redirectURI}');" />

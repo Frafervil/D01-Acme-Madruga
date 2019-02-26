@@ -39,15 +39,16 @@ public class MemberBrotherhoodController extends AbstractController {
 	// List
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
+	public ModelAndView list(@RequestParam final int brotherhoodId) {
 		ModelAndView result;
 		Collection<Member> members;
 
 		try {
-			final Brotherhood principal = this.brotherhoodService.findByPrincipal();
-			Assert.notNull(principal);
+			final Brotherhood hood = this.brotherhoodService.findOne(brotherhoodId);
+			Assert.notNull(hood);
 
-			members = this.memberService.findAllActiveMembersOfOneBrotherhood(principal.getId());
+			members = new ArrayList<Member>();
+			enrolments = this.enrolmentService.findByBrotherhoodId(brotherhoodId);
 
 			result = new ModelAndView("member/brotherhood/list");
 			result.addObject("members", members);
@@ -79,13 +80,13 @@ public class MemberBrotherhoodController extends AbstractController {
 
 		enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(principal.getId(), memberId);
 
-		// Crea y añade objetos a la vista
+		// Crea y aï¿½ade objetos a la vista
 		result = new ModelAndView("member/display");
 		result.addObject("requestURI", "member/display.do");
 		result.addObject("enrolment", enrolment);
 		result.addObject("member", member);
 
-		// Envía la vista
+		// Envï¿½a la vista
 		return result;
 	}
 
