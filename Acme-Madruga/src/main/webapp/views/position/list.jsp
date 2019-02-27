@@ -33,11 +33,11 @@
 	<spring:message code="position.name" var="nameHeader" />
 	<jstl:if test="${cookie['language'].getValue()=='en'}">
 	
-	<display:column property="languagePositions[0].name" title="${nameHeader}" sortable="true" />
+	<display:column property="englishName" title="${nameHeader}" sortable="true" />
 	</jstl:if>
 	<jstl:if test="${cookie['language'].getValue()=='es'}">
 	
-	<display:column property="languagePositions[1].name" title="${nameHeader}" sortable="true" />
+	<display:column property="spanishName" title="${nameHeader}" sortable="true" />
 	</jstl:if>
 
 

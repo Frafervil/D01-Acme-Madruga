@@ -1,28 +1,34 @@
-package domain;
 
-import java.util.Collection;
+package domain;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Access(AccessType.PROPERTY)
 public class Position extends DomainEntity {
 
-	private Collection<LanguagePosition> languagePositions;
+	private String	spanishName;
+	private String	englishName;
 
-	// Relationships----------------------------------------------
-	@NotNull
-	@OneToMany
-	public Collection<LanguagePosition> getLanguagePositions() {
-		return this.languagePositions;
+
+	@NotBlank
+	public String getSpanishName() {
+		return this.spanishName;
+	}
+	public void setSpanishName(final String spanishName) {
+		this.spanishName = spanishName;
 	}
 
-	public void setLanguagePositions(
-			final Collection<LanguagePosition> languagePositions) {
-		this.languagePositions = languagePositions;
+	@NotBlank
+	public String getEnglishName() {
+		return this.englishName;
 	}
+	public void setEnglishName(final String englishName) {
+		this.englishName = englishName;
+	}
+
 }
