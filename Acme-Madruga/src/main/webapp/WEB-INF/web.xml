@@ -7,7 +7,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
 
-	<security-constraint>
+<!--	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Acme-Madruga</web-resource-name>
 			<url-pattern>/*</url-pattern>
@@ -16,6 +16,7 @@
 			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
 		</user-data-constraint>
 	</security-constraint>
+	-->
 
 	<display-name>Acme-Madruga</display-name>
 	<listener>
@@ -52,7 +53,7 @@
 		<error-code>403</error-code>
 		<location>/views/misc/403.jsp</location>
 	</error-page>
-<!-- <security-constraint>
+ 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>securedapp</web-resource-name>
 			<url-pattern>/*</url-pattern>
@@ -60,5 +61,5 @@
 		<user-data-constraint>
 			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
 		</user-data-constraint>
-	</security-constraint> -->
+	</security-constraint> 
 </web-app>
