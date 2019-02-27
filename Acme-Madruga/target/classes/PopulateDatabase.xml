@@ -204,7 +204,7 @@
 
 	<bean id="customisation" class="domain.Customisation">
 		<property name="systemName" value="Acme Madruga" />
-		<property name="welcomeBanner" value="https://tinyurl.com/acme-madruga-logo" />
+		<property name="welcomeBanner" value="https://tinyurl.com/acme-madruga" />
 		<property name="welcomeMessageEn" value="Welcome to Acme Madrugá, the site to organise your processions." />
 		<property name="welcomeMessageEs" value="¡Bienvenidos a Acme Madrugá! Tu sitio para organizar procesiones." />
 		<property name="countryCode" value="+34" />
@@ -480,7 +480,7 @@
 
 	<bean class="domain.Request" id="request3">
 		<property name="member" ref="member1" />
-		<property name="status" value="APROVED" />
+		<property name="status" value="APPROVED" />
 		<property name="rejectionReason" value="" />
 		<property name="place" ref="place3" />
 		<property name="procession" ref="procession1" />
