@@ -15,17 +15,17 @@
 	<form:hidden path="version" />
 	<br />
 	<br />
+	<spring:message code="position.position" />:
+	<br />
 	<form:label path="englishName">
-		<spring:message code="position.position" />:
 	</form:label>
-	<spring:message code="position.name" />: <form:input path="englishName" />
+	<spring:message code="position.englishName" />: <form:input path="englishName" />
 	<form:errors cssClass="error" path="englishName" />
 	<br />
 	<br />
 	<form:label path="spanishName">
-		<spring:message code="position.position" />:
 	</form:label>
-	<spring:message code="position.name" />: <form:input path="spanishName" />
+	<spring:message code="position.spanishName" />: <form:input path="spanishName" />
 	<form:errors cssClass="error" path="spanishName" />
 	<br />
 	<br />

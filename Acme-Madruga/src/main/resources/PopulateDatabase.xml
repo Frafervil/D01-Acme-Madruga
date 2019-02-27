@@ -99,7 +99,7 @@
 		<property name="middleName" value="Rondan" />
 		<property name="surname" value="Dominguez" />
 		<property name="photo" value="http://mifoto.com" />
-		<property name="email" value="loren@gmail.com" />
+		<property name="email" value="loren@" />
 		<property name="phone" value="+34912123123" />
 		<property name="address" value="C/ A nº1 Sevilla" />
 		<property name="userAccount" ref="userAccount1" />
@@ -361,7 +361,7 @@
 
 	<bean class="domain.Position" id="position7">
 		<property name="englishName" value="Officer"/>
-		<property name="spanishName" value="Voca"/>
+		<property name="spanishName" value="Vocal"/>
 	</bean>
 
 	<!-- Requests -->
