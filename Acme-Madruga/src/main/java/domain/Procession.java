@@ -1,3 +1,4 @@
+
 package domain;
 
 import java.util.Date;
@@ -6,7 +7,9 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -19,15 +22,19 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Access(AccessType.PROPERTY)
+@Table(indexes = {
+	@Index(columnList = "isDraft")
+})
 public class Procession extends DomainEntity {
 
-	private String title;
-	private String description;
-	private Date moment;
-	private String ticker;
-	private boolean isDraft;
-	private int maxRow;
-	private int maxColumn;
+	private String	title;
+	private String	description;
+	private Date	moment;
+	private String	ticker;
+	private boolean	isDraft;
+	private int		maxRow;
+	private int		maxColumn;
+
 
 	@NotBlank
 	public String getTitle() {
@@ -80,26 +87,28 @@ public class Procession extends DomainEntity {
 	@NotNull
 	@Range(min = 1)
 	public int getMaxRow() {
-		return maxRow;
+		return this.maxRow;
 	}
 
-	public void setMaxRow(int maxRow) {
+	public void setMaxRow(final int maxRow) {
 		this.maxRow = maxRow;
 	}
 
 	@NotNull
 	@Range(min = 1)
 	public int getMaxColumn() {
-		return maxColumn;
+		return this.maxColumn;
 	}
 
-	public void setMaxColumn(int maxColumn) {
+	public void setMaxColumn(final int maxColumn) {
 		this.maxColumn = maxColumn;
 	}
 
+
 	// Relationships----------------------------------------------
 
-	private Brotherhood brotherhood;
+	private Brotherhood	brotherhood;
+
 
 	@NotNull
 	@Valid
