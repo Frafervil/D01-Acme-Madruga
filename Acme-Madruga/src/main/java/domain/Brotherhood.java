@@ -1,3 +1,4 @@
+
 package domain;
 
 import java.util.Collection;
@@ -10,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,9 +20,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Access(AccessType.PROPERTY)
 public class Brotherhood extends Actor {
 
-	private String title;
-	private Date establishmentDate;
-	private Collection<String> pictures;
+	private String				title;
+	private Date				establishmentDate;
+	private Collection<String>	pictures;
+	private String				email;
+
 
 	@NotBlank
 	public String getTitle() {
@@ -50,5 +54,14 @@ public class Brotherhood extends Actor {
 
 	public void setPictures(final Collection<String> pictures) {
 		this.pictures = pictures;
+	}
+
+	@Pattern(regexp = "^[a-zA-Z0-9 ]*[<]?\\w+[@][a-zA-Z0-9.]+[>]?$")
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(final String email) {
+		this.email = email;
 	}
 }

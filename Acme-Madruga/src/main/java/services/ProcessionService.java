@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.ProcessionRepository;
-import security.LoginService;
 import domain.Brotherhood;
 import domain.Procession;
 import domain.Request;
@@ -97,6 +96,8 @@ public class ProcessionService {
 		principal = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(principal);
 
+		procession.setIsDraft(false);
+
 		result = this.processionRepository.save(procession);
 		Assert.notNull(result);
 
@@ -158,7 +159,8 @@ public class ProcessionService {
 	public Collection<Procession> findVisibleProcessions() {
 		Collection<Procession> result = this.findAllFinal();
 		Collection<Procession> allProcessions;
-		String userNameOfPrincipal = LoginService.getPrincipal().getUsername();
+		String userNameOfPrincipal = this.brotherhoodService.findByPrincipal()
+				.getUserAccount().getUsername();
 
 		allProcessions = this.findAll();
 
@@ -169,6 +171,23 @@ public class ProcessionService {
 				result.add(p);
 			}
 		}
+		return result;
+	}
+
+	public Procession saveAsDraft(final Procession procession) {
+		Procession result;
+		Brotherhood principal;
+
+		Assert.notNull(procession);
+		Assert.isTrue(!procession.getIsDraft());
+
+		principal = this.brotherhoodService.findByPrincipal();
+
+		Assert.notNull(principal);
+
+		procession.setIsDraft(true);
+		result = this.processionRepository.save(procession);
+		Assert.notNull(result);
 		return result;
 	}
 
