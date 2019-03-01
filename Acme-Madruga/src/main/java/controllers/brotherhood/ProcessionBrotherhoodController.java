@@ -1,3 +1,4 @@
+
 package controllers.brotherhood;
 
 import java.util.Collection;
@@ -24,16 +25,16 @@ import domain.Procession;
 public class ProcessionBrotherhoodController extends AbstractController {
 
 	@Autowired
-	private ProcessionService processionService;
+	private ProcessionService	processionService;
 
 	@Autowired
-	private BrotherhoodService brotherhoodService;
+	private BrotherhoodService	brotherhoodService;
+
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView result;
-		final Collection<Procession> processions = this.processionService
-				.findVisibleProcessions();
+		final Collection<Procession> processions = this.processionService.findVisibleProcessions();
 
 		result = new ModelAndView("procession/list");
 		result.addObject("processions", processions);
@@ -66,26 +67,24 @@ public class ProcessionBrotherhoodController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Procession procession,
-			final BindingResult binding) {
+	public ModelAndView save(@Valid final Procession procession, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors())
+		if (binding.hasErrors()) {
+			System.out.println(binding.getAllErrors());
 			result = this.createEditModelAndView(procession);
-		else
+		} else
 			try {
 				this.processionService.save(procession);
 				result = new ModelAndView("redirect:list.do");
 			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(procession,
-						"procession.commit.error");
+				result = this.createEditModelAndView(procession, "procession.commit.error");
 			}
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "saveDraft")
-	public ModelAndView saveDraft(@Valid final Procession procession,
-			final BindingResult binding) {
+	public ModelAndView saveDraft(@Valid final Procession procession, final BindingResult binding) {
 		ModelAndView result;
 
 		if (binding.hasErrors()) {
@@ -96,16 +95,13 @@ public class ProcessionBrotherhoodController extends AbstractController {
 				this.processionService.saveAsDraft(procession);
 				result = new ModelAndView("redirect:list.do");
 			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(procession,
-						"procession.commit.error");
+				result = this.createEditModelAndView(procession, "procession.commit.error");
 			}
-
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "saveFinal")
-	public ModelAndView saveFinal(@Valid final Procession procession,
-			final BindingResult binding) {
+	public ModelAndView saveFinal(@Valid final Procession procession, final BindingResult binding) {
 		ModelAndView result;
 
 		if (binding.hasErrors()) {
@@ -116,28 +112,25 @@ public class ProcessionBrotherhoodController extends AbstractController {
 				this.processionService.save(procession);
 				result = new ModelAndView("redirect:list.do");
 			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(procession,
-						"procession.commit.error");
+				result = this.createEditModelAndView(procession, "procession.commit.error");
 			}
 
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final Procession procession,
-			final BindingResult binding) {
+	public ModelAndView delete(final Procession procession, final BindingResult binding) {
 		ModelAndView result;
-
 		try {
 			this.processionService.delete(procession);
 			result = new ModelAndView("redirect:list.do");
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(procession,
-					"procession.commit.error");
+			result = this.createEditModelAndView(procession, "procession.commit.error");
 		}
 		return result;
 	}
 
+	//-------------------
 	protected ModelAndView createEditModelAndView(final Procession procession) {
 		ModelAndView result;
 
@@ -146,15 +139,13 @@ public class ProcessionBrotherhoodController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final Procession procession,
-			final String messageCode) {
+	protected ModelAndView createEditModelAndView(final Procession procession, final String messageCode) {
 		ModelAndView result;
-		Brotherhood principal = this.brotherhoodService.findByPrincipal();
+		final Brotherhood principal = this.brotherhoodService.findByPrincipal();
 		boolean permission = false;
 
-		if (procession.getBrotherhood().getUserAccount().getUsername() == principal.getUserAccount().getUsername()) {
+		if (principal.getId() == procession.getBrotherhood().getId())
 			permission = true;
-		}
 
 		result = new ModelAndView("procession/edit");
 		result.addObject("procession", procession);

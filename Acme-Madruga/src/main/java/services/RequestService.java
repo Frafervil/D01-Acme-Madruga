@@ -104,18 +104,15 @@ public class RequestService {
 
 	}
 	public void delete(final Request request) {
-		Member principal;
 		final Place place;
 
 		Assert.notNull(request);
 		Assert.isTrue(request.getId() != 0);
 
-		principal = this.memberService.findByPrincipal();
-		Assert.notNull(principal);
-
 		place = request.getPlace();
 
-		this.placeService.delete(place);
+		if (place != null)
+			this.placeService.delete(place);
 
 		this.requestRepository.delete(request);
 

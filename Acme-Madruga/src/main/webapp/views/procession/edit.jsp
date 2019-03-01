@@ -23,6 +23,7 @@
 		<form:hidden path="version"/>
 		<form:hidden path="ticker"/>
 		<form:hidden path="isDraft"/>
+		<form:hidden path="brotherhood"/>
 		
 		<acme:textbox code="procession.title" path="title"/>
 		
@@ -34,7 +35,7 @@
 		
 		<acme:textbox code="procession.maxColumn" path="maxColumn"/>	
 		
-		<jstl:if test="${procession.isDraft == false}">
+		<jstl:if test="${procession.isDraft == true}">
 		
 		<acme:submit name="saveDraft" code="procession.saveDraft"/>
 		
