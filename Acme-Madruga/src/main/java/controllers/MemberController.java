@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.CustomisationService;
 import services.MemberService;
-import domain.FloatB;
 import domain.Member;
 
 @Controller
@@ -50,7 +49,7 @@ public class MemberController extends AbstractController {
 			oops.printStackTrace();
 			result = new ModelAndView("member/list");
 			result.addObject("message", "member.retrieve.error");
-			result.addObject("members", new ArrayList<FloatB>());
+			result.addObject("members", new ArrayList<domain.Float>());
 		}
 
 		return result;

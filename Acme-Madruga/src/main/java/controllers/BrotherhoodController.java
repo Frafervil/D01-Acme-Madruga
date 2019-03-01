@@ -16,12 +16,11 @@ import security.LoginService;
 import services.BrotherhoodService;
 import services.CustomisationService;
 import services.EnrolmentService;
-import services.FloatBService;
+import services.FloatService;
 import services.MemberService;
 import services.ProcessionService;
 import domain.Brotherhood;
 import domain.Enrolment;
-import domain.FloatB;
 import domain.Member;
 import domain.Procession;
 import forms.BrotherhoodForm;
@@ -42,7 +41,7 @@ public class BrotherhoodController extends AbstractController {
 	private ProcessionService		processionService;
 
 	@Autowired
-	private FloatBService			floatBService;
+	private FloatService			floatService;
 
 	@Autowired
 	private CustomisationService	customisationService;
@@ -75,7 +74,7 @@ public class BrotherhoodController extends AbstractController {
 		Brotherhood brotherhood;
 		Collection<Member> members;
 		final Collection<Procession> processions;
-		final Collection<FloatB> floats;
+		final Collection<domain.Float> floats;
 		Enrolment enrolment;
 		Member principal;
 
@@ -84,7 +83,7 @@ public class BrotherhoodController extends AbstractController {
 		brotherhood = this.brotherhoodService.findByPrincipal();
 		members = this.memberService.findAllMembersOfOneBrotherhood(brotherhoodId);
 		processions = this.processionService.findAllProcessionsOfOneBrotherhood(brotherhoodId);
-		floats = this.floatBService.findByBrotherhoodId(brotherhoodId);
+		floats = this.floatService.findByBrotherhoodId(brotherhoodId);
 		principal = this.memberService.findByPrincipal();
 		enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
 

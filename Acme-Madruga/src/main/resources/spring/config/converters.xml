@@ -34,8 +34,8 @@
 		<bean class="converters.EnrolmentToStringConverter" />
 		<bean class="converters.StringToEnrolmentConverter" />
 		
-		<bean class="converters.FloatBToStringConverter" />
-		<bean class="converters.StringToFloatBConverter" />
+		<bean class="converters.FloatToStringConverter" />
+		<bean class="converters.StringToFloatConverter" />
 
 		<bean class="converters.ProcessionToStringConverter" />
 		<bean class="converters.StringToProcessionConverter" />

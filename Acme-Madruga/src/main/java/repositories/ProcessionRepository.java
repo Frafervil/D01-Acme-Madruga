@@ -19,6 +19,9 @@ public interface ProcessionRepository extends
 	@Query("select p from Procession p where p.isDraft = 0")
 	Collection<Procession> findAllProcessionsFinal();
 
+	@Query("select p from Procession p where p.isDraft = 0 AND p.brotherhood.id = ?1")
+	Collection<Procession> findAllProcessionsFinalOfOneBrotherhood(int brotherhoodId);
+	
 	@Query("select p from Procession p where p.moment > NOW() AND p.moment < ?1")
 	Collection<Procession> findSoonProcessions(Date dateMax);
 }

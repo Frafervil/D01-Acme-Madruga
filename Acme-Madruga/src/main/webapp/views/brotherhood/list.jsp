@@ -30,7 +30,7 @@
 	</display:column>
 	
 	<display:column>
-	<a href="floatB/brotherhood/list.do?brotherhoodId=${row.id }"> <spring:message code="brotherhood.floats" /></a>
+	<a href="float/brotherhood/list.do?brotherhoodId=${row.id }"> <spring:message code="brotherhood.floats" /></a>
 	</display:column>
 	
 	<display:column>

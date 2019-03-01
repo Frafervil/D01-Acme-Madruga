@@ -237,9 +237,9 @@
 
 	</bean>
 
-	<!-- FloatBs -->
+	<!-- Floats -->
 
-	<bean id="floatB1" class="domain.FloatB">
+	<bean id="float1" class="domain.Float">
 		<property name="title" value="title float 1" />
 		<property name="description" value="description float 1" />
 		<property name="pictures">
@@ -252,7 +252,7 @@
 		<property name="procession" ref="procession1" />
 	</bean>
 
-	<bean id="floatB2" class="domain.FloatB">
+	<bean id="float2" class="domain.Float">
 		<property name="title" value="title float 2" />
 		<property name="description" value="description float 2" />
 		<property name="pictures">
@@ -265,7 +265,7 @@
 		<property name="procession" ref="procession1" />
 	</bean>
 
-	<bean id="floatB3" class="domain.FloatB">
+	<bean id="float3" class="domain.Float">
 		<property name="title" value="title float 3" />
 		<property name="description" value="description float 3" />
 		<property name="pictures">
@@ -278,7 +278,7 @@
 		<property name="procession" ref="procession2" />
 	</bean>
 
-	<bean id="floatB4" class="domain.FloatB">
+	<bean id="float4" class="domain.Float">
 		<property name="title" value="title float 4" />
 		<property name="description" value="description float 4" />
 		<property name="pictures">
@@ -290,7 +290,7 @@
 		<property name="brotherhood" ref="brotherhood2" />
 	</bean>
 
-	<bean id="floatB5" class="domain.FloatB">
+	<bean id="float5" class="domain.Float">
 		<property name="title" value="title float 5" />
 		<property name="description" value="description float 5" />
 		<property name="pictures">

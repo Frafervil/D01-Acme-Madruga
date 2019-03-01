@@ -60,7 +60,7 @@
 			<li><a class="fNiv"><spring:message	code="master.page.brotherhood" /></a>
 				<ul>
 					<li class="arrow"></li>
-					<li><a href="floatB/brotherhood/list.do"><spring:message code="master.page.brotherhood.floatBs" /></a></li>
+					<li><a href="float/brotherhood/list.do"><spring:message code="master.page.brotherhood.floats" /></a></li>
 					<li><a href="member/brotherhood/list.do"><spring:message code="master.page.brotherhood.members" /></a></li>	
 					<li><a href="member/list.do"><spring:message code="master.page.members" /></a></li>	
 					<li><a href="procession/brotherhood/list.do"><spring:message code="master.page.brotherhood.processions" /></a></li>	

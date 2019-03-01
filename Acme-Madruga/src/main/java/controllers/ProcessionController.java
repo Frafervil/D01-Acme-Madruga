@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import repositories.FloatBRepository;
+import repositories.FloatRepository;
 import services.ProcessionService;
-import domain.FloatB;
 import domain.Procession;
 
 @Controller
@@ -27,27 +26,27 @@ public class ProcessionController extends AbstractController {
 	// Repositorios
 
 	@Autowired
-	private FloatBRepository floatBRepository;
+	private FloatRepository floatRepository;
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView display(@RequestParam final int processionId) {
 		// Inicializa resultado
 		ModelAndView result;
 		Procession procession;
-		Collection<FloatB> floatBs;
+		Collection<domain.Float> floats;
 
 		// Busca en el repositorio
 		procession = this.processionService.findOne(processionId);
 		Assert.notNull(procession);
 
-		floatBs = this.floatBRepository.findByProcessionId(processionId);
-		Assert.notNull(floatBs);
+		floats = this.floatRepository.findByProcessionId(processionId);
+		Assert.notNull(floats);
 
 		// Crea y añade objetos a la vista
 		result = new ModelAndView("procession/display");
 		result.addObject("requestURI", "procession/display.do");
 		result.addObject("procession", procession);
-		result.addObject("floatBs", floatBs);
+		result.addObject("floats", floats);
 
 		// Envía la vista
 		return result;
