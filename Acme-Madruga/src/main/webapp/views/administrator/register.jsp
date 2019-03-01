@@ -20,12 +20,10 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 		
-<jstl:if test="${administratorForm != null }">
 
 	<form:form action="${formURI}" modelAttribute="administratorForm">
 		
 		<form:hidden path="idAdministrator" />
-		<form:hidden path="authority"/>
 		
 		<fieldset>
     	<legend><spring:message code="administrator.fieldset.personalInformation"/></legend>
@@ -44,14 +42,12 @@
 		<acme:textbox code="administrator.username" path="username" placeholder="HomerS"/>
 		
 		<acme:password code="administrator.password" path="password"/>
-		<acme:password code="administrator.passwordCheker" path="passwordChecker"/>
+		<acme:password code="administrator.passwordChecker" path="passwordChecker"/>
 		
 		</fieldset>
 		<br/>
-		<acme:checkbox code="actor.terms" path="legalConsentment"/>
 		
 		<acme:submit name="save" code="administrator.save"/>
 
-		<acme:cancel url="administrator/viewProfile.do" code="administrator.cancel"/>
+		<acme:cancel url="welcome/index.do" code="administrator.cancel"/>
 	</form:form>
-</jstl:if>

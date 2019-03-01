@@ -49,28 +49,28 @@ public class AdministratorService {
 	}
 
 	public Administrator create() {
-		Administrator principal;
 		Administrator result;
 		UserAccount userAccount;
-
-		principal = this.findByPrincipal();
-		Assert.notNull(principal);
+		Authority authority;
 
 		result = new Administrator();
-		userAccount = this.actorService.createUserAccount(Authority.ADMIN);
+		userAccount = new UserAccount();
+		authority = new Authority();
+
+		authority.setAuthority("ADMIN");
+		userAccount.addAuthority(authority);
 		result.setUserAccount(userAccount);
 		return result;
+
 	}
 
 	public Administrator save(final Administrator administrator) {
 		Administrator result, saved;
-		final UserAccount logedUserAccount;
-		Authority authority;
+		UserAccount logedUserAccount;
 		Md5PasswordEncoder encoder;
 
 		encoder = new Md5PasswordEncoder();
-		authority = new Authority();
-		authority.setAuthority("ADMINISTRATOR");
+		logedUserAccount = this.actorService.createUserAccount(Authority.ADMIN);
 		Assert.notNull(administrator, "administrator.not.null");
 
 		if (this.exists(administrator.getId())) {
@@ -100,25 +100,43 @@ public class AdministratorService {
 
 	}
 
-	public Administrator reconstruct(final Administrator administrator, final BindingResult binding) {
+	public AdministratorForm construct(final Administrator administrator) {
+		final AdministratorForm administratorForm = new AdministratorForm();
+		administratorForm.setAddress(administrator.getAddress());
+		administratorForm.setEmail(administrator.getEmail());
+		administratorForm.setIdAdministrator(administrator.getId());
+		administratorForm.setMiddleName(administrator.getMiddleName());
+		administratorForm.setName(administrator.getName());
+		administratorForm.setPhone(administrator.getPhone());
+		administratorForm.setPhoto(administrator.getPhoto());
+		administratorForm.setSurname(administrator.getSurname());
+		administratorForm.setUsername(administrator.getUserAccount().getUsername());
+		return administratorForm;
+
+	}
+
+	public Administrator reconstruct(final AdministratorForm administratorForm, final BindingResult binding) {
 		Administrator result;
 
-		if (administrator.getId() == 0)
-			result = administrator;
+		if (administratorForm.getIdAdministrator() == 0)
+			result = this.create();
 		else
-			result = (Administrator) this.actorService.findOne(administrator.getId());
-		result.setAddress(administrator.getAddress());
-		result.setEmail(administrator.getEmail());
-		result.setMiddleName(administrator.getMiddleName());
-		result.setName(administrator.getName());
-		result.setPhone(administrator.getPhone());
-		result.setPhoto(administrator.getPhoto());
-		result.setSurname(administrator.getSurname());
+			result = this.administratorRepository.findOne(administratorForm.getIdAdministrator());
+
+		//Crear un objeto nuevo, no setear sobre el resultado
+
+		result.setAddress(administratorForm.getAddress());
+		result.setEmail(administratorForm.getEmail());
+		result.setMiddleName(administratorForm.getMiddleName());
+		result.setName(administratorForm.getName());
+		result.setPhone(administratorForm.getPhone());
+		result.setPhoto(administratorForm.getPhoto());
+		result.setSurname(administratorForm.getSurname());
+		result.getUserAccount().setUsername(administratorForm.getUsername());
+		result.getUserAccount().setPassword(administratorForm.getPassword());
 		this.validator.validate(result, binding);
+		this.administratorRepository.flush();
 		return result;
 	}
 
-	public void flush() {
-		this.administratorRepository.flush();
-	}
 }

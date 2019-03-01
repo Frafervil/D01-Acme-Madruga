@@ -1,6 +1,6 @@
+
 package controllers.brotherhood;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import services.BrotherhoodService;
 import services.FloatBService;
 import services.ProcessionService;
-
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.FloatB;
@@ -28,45 +27,24 @@ import domain.Procession;
 public class ProcessionBrotherhoodController extends AbstractController {
 
 	@Autowired
-	private ProcessionService processionService;
+	private ProcessionService	processionService;
 
 	@Autowired
-	private BrotherhoodService brotherhoodService;
+	private BrotherhoodService	brotherhoodService;
 
 	@Autowired
-	private FloatBService floatBService;
+	private FloatBService		floatBService;
+
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
+	public ModelAndView list(@RequestParam final int brotherhoodId) {
 		ModelAndView result;
-		Collection<Procession> processions = processionService
-				.findVisibleProcessions();
+		final Collection<Procession> processions = this.processionService.findAllProcessionsOfOneBrotherhood(brotherhoodId);
 
 		result = new ModelAndView("procession/list");
 		result.addObject("processions", processions);
 		result.addObject("requestURI", "procession/brotherhood/list.do");
 
-		return result;
-	}
-
-	// List
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam final int brotherhoodId) {
-		ModelAndView result;
-		Collection<Procession> processions;
-		try {
-			processions = new ArrayList<Procession>();
-			processions = this.processionService
-					.findAllProcessionsOfOneBrotherhood(brotherhoodId);
-			result = new ModelAndView("procession/list");
-			result.addObject("processions", processions);
-			result.addObject("requestURI", "procession/brotherhood/list.do");
-		} catch (final Throwable oops) {
-			oops.printStackTrace();
-			result = new ModelAndView("procession/list");
-			result.addObject("message", "procession.retrieve.error");
-			result.addObject("processions", new ArrayList<FloatB>());
-		}
 		return result;
 	}
 
@@ -82,65 +60,61 @@ public class ProcessionBrotherhoodController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam int processionId) {
+	public ModelAndView edit(@RequestParam final int processionId) {
 		ModelAndView result;
 		Procession procession;
 
-		procession = processionService.findOne(processionId);
+		procession = this.processionService.findOne(processionId);
 		Assert.notNull(procession);
-		result = createEditModelAndView(procession);
+		result = this.createEditModelAndView(procession);
 
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid Procession procession, BindingResult binding) {
+	public ModelAndView save(@Valid final Procession procession, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors()) {
-			result = createEditModelAndView(procession);
-		} else {
+		if (binding.hasErrors())
+			result = this.createEditModelAndView(procession);
+		else
 			try {
-				processionService.save(procession);
+				this.processionService.save(procession);
 				result = new ModelAndView("redirect:list.do");
-			} catch (Throwable oops) {
-				result = createEditModelAndView(procession,
-						"procession.commit.error");
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(procession, "procession.commit.error");
 			}
-		}
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(Procession procession, BindingResult binding) {
+	public ModelAndView delete(final Procession procession, final BindingResult binding) {
 		ModelAndView result;
 
 		try {
-			processionService.delete(procession);
+			this.processionService.delete(procession);
 			result = new ModelAndView("redirect:list.do");
-		} catch (Throwable oops) {
-			result = createEditModelAndView(procession,
-					"procession.commit.error");
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(procession, "procession.commit.error");
 		}
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(Procession procession) {
+	protected ModelAndView createEditModelAndView(final Procession procession) {
 		ModelAndView result;
 
-		result = createEditModelAndView(procession, null);
+		result = this.createEditModelAndView(procession, null);
 
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(Procession procession,
-			String messageCode) {
+	protected ModelAndView createEditModelAndView(final Procession procession, final String messageCode) {
 		ModelAndView result;
 		Collection<Brotherhood> brotherhoods;
 		Collection<FloatB> floatBs;
 
-		brotherhoods = brotherhoodService.findAll();
-		floatBs = floatBService.findAll();
+		brotherhoods = this.brotherhoodService.findAll();
+		floatBs = this.floatBService.findAll();
 
 		result = new ModelAndView("procession/edit");
 		result.addObject("procession", procession);

@@ -31,6 +31,7 @@
 					<li><a href="dashboard/administrator/display.do"><spring:message code="master.page.administrator.dashboard" /></a></li>
 					<li><a href="customisation/administrator/display.do"><spring:message code="master.page.administrator.customisation" /></a></li>	
 					<li><a href="position/administrator/list.do"><spring:message code="master.page.administrator.position" /></a></li>	
+					<li><a href="administrator/administrator/register.do"><spring:message code="master.page.administrator.register"/></a></li>
 				</ul>
 			</li>
 		</security:authorize>

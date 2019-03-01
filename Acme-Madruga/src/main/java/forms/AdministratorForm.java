@@ -1,3 +1,4 @@
+
 package forms;
 
 import javax.validation.constraints.Size;
@@ -5,12 +6,11 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
-import security.Authority;
-
 public class AdministratorForm {
 
 	// --- AdministratorAtributes ---------------------------------------------
-	private int idAdministrator;
+	private int	idAdministrator;
+
 
 	public int getIdAdministrator() {
 		return this.idAdministrator;
@@ -20,13 +20,15 @@ public class AdministratorForm {
 		this.idAdministrator = idAdministrator;
 	}
 
-	private String name;
-	private String middleName;
-	private String surname;
-	private String photo;
-	private String email;
-	private String phone;
-	private String address;
+
+	private String	name;
+	private String	middleName;
+	private String	surname;
+	private String	photo;
+	private String	email;
+	private String	phone;
+	private String	address;
+
 
 	// --- Getters y Setters ---------------------------------------
 
@@ -91,13 +93,12 @@ public class AdministratorForm {
 		this.address = address;
 	}
 
+
 	// --- UserAccountAtributes ---------------------------------------
 
-	private String username;
-	private String password;
-	private Boolean legalConsentment;
+	private String	username;
+	private String	password;
 
-	private Authority authority;
 
 	// --- Getters y Setters ---------------------------------------
 
@@ -119,9 +120,11 @@ public class AdministratorForm {
 		this.password = password;
 	}
 
+
 	// --- Others -------------------------------------------------
 
-	private String passwordChecker;
+	private String	passwordChecker;
+
 
 	public String getPasswordChecker() {
 		return this.passwordChecker;
@@ -131,19 +134,4 @@ public class AdministratorForm {
 		this.passwordChecker = passwordChecker;
 	}
 
-	public Boolean getLegalConsentment() {
-		return this.legalConsentment;
-	}
-
-	public void setLegalConsentment(final Boolean legalConsentment) {
-		this.legalConsentment = legalConsentment;
-	}
-
-	public Authority getAuthority() {
-		return this.authority;
-	}
-
-	public void setAuthority(final Authority authority) {
-		this.authority = authority;
-	}
 }
