@@ -42,12 +42,14 @@ public class MemberBrotherhoodController extends AbstractController {
 	public ModelAndView list(@RequestParam final int brotherhoodId) {
 		ModelAndView result;
 		Collection<Member> members;
+		final Collection<Enrolment> enrolments;
 
 		try {
 			final Brotherhood hood = this.brotherhoodService.findOne(brotherhoodId);
 			Assert.notNull(hood);
 
 			members = this.memberService.findAllActiveMembersOfOneBrotherhood(brotherhoodId);
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(brotherhoodId);
 
 			result = new ModelAndView("member/brotherhood/list");
 			result.addObject("members", members);

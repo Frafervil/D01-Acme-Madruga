@@ -1,16 +1,19 @@
 
 package controllers.administrator;
 
+import java.util.Arrays;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import security.Authority;
 import services.AdministratorService;
 import controllers.AbstractController;
 import domain.Administrator;
@@ -29,55 +32,43 @@ public class AdministratorAdministratorController extends AbstractController {
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView register() {
 		ModelAndView res;
-		Administrator administratorForm;
-		administratorForm = this.administratorService.create();
-		res = this.createRegisterModelAndView(administratorForm, null);
+		Administrator administrator;
+		administrator = this.administratorService.create();
+		res = this.createRegisterModelAndView(administrator);
 		res.addObject("formURI", "administrator/administrator/register.do");
 		return res;
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST, params = "save")
-	public ModelAndView register(@Valid final AdministratorForm administratorForm, final BindingResult binding) {
+	public ModelAndView save(@ModelAttribute("administratorForm") @Valid final AdministratorForm administratorForm, final BindingResult binding) {
 		ModelAndView res;
 		Administrator admin;
-		admin = this.administratorService.reconstruct(administratorForm, binding);
-		if (binding.hasErrors()) {
-			System.out.println(binding.getAllErrors());
-			res = this.createRegisterModelAndView(administratorForm, null);
 
-		} else
-			try {
-				this.administratorService.save(admin);
+		try {
+			admin = this.administratorService.reconstruct(administratorForm, binding);
+			if (binding.hasErrors()) {
+				res = this.createRegisterModelAndView(admin);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+
+			} else {
+				admin = this.administratorService.save(admin);
 				res = new ModelAndView("welcome/index");
-			} catch (final Throwable oops) {
-				res = this.createRegisterModelAndView(admin, "admin.commit.error");
 			}
+		} catch (final Throwable oops) {
+			res = this.createRegisterModelAndView(administratorForm, "administrator.commit.error");
+		}
 		return res;
 	}
 
 	//Ancillary Methods------------------------------------------------------------------
 
-	private ModelAndView createRegisterModelAndView(final Administrator admin, final String messageCode) {
+	private ModelAndView createRegisterModelAndView(final Administrator admin) {
+		ModelAndView result;
 		AdministratorForm administratorForm;
-
-		administratorForm = new AdministratorForm();
-		//Hidden Attributes
-		administratorForm.setIdAdministrator(admin.getId());
-
-		administratorForm.setName(admin.getName());
-		administratorForm.setMiddleName(admin.getMiddleName());
-		administratorForm.setSurname(admin.getSurname());
-		administratorForm.setEmail(admin.getEmail());
-		administratorForm.setPhone(admin.getPhone());
-		administratorForm.setAddress(admin.getAddress());
-		administratorForm.setPhoto(admin.getPhoto());
-
-		administratorForm.setUsername(admin.getUserAccount().getUsername());
-		final Authority authority = new Authority();
-		authority.setAuthority(Authority.ADMIN);
-		administratorForm.setAuthority(authority);
-
-		return this.createRegisterModelAndView(administratorForm, messageCode);
+		administratorForm = this.administratorService.construct(admin);
+		result = this.createRegisterModelAndView(administratorForm, null);
+		return result;
 	}
 
 	private ModelAndView createRegisterModelAndView(final AdministratorForm administratorForm, final String messageCode) {
@@ -85,6 +76,7 @@ public class AdministratorAdministratorController extends AbstractController {
 
 		res = new ModelAndView("administrator/administrator/register");
 		res.addObject("administratorForm", administratorForm);
+		res.addObject("message", messageCode);
 		return res;
 	}
 }

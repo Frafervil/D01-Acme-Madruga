@@ -121,8 +121,7 @@ public class BrotherhoodService {
 		brotherhoodForm.setSurname(brotherhood.getSurname());
 		brotherhoodForm.setTitle(brotherhood.getTitle());
 		brotherhoodForm.setUsername(brotherhood.getUserAccount().getUsername());
-		brotherhoodForm.setPassword(brotherhood.getUserAccount().getPassword());
-
+		//En los construct no coger la contraseña
 		return brotherhoodForm;
 
 	}
@@ -160,7 +159,7 @@ public class BrotherhoodService {
 		//		result.getUserAccount().setUsername(brotherhoodForm.getUsername());
 		//		result.getUserAccount().setPassword(brotherhoodForm.getPassword());
 
-		// NO SE PONEN LAS COSAS DEL USERACCOUNT PORQUE ESO SE TIENE QUE RECONSTRUIR EN EN USERACCOUNTSERVICE (CREAR RECONSTRUCT AHï¿½)
+		// NO SE PONEN LAS COSAS DEL USERACCOUNT PORQUE EN EL EDIT NO SE PIDEN USERNAME NI PASSWORD
 
 		this.validator.validate(result, binding);
 		this.brotherhoodRepository.flush();

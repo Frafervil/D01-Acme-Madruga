@@ -31,8 +31,9 @@ public class ProcessionBrotherhoodController extends AbstractController {
 	private BrotherhoodService	brotherhoodService;
 
 
+
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list() {
+	public ModelAndView list(@RequestParam final int brotherhoodId) {
 		ModelAndView result;
 		final Collection<Procession> processions = this.processionService.findVisibleProcessions();
 

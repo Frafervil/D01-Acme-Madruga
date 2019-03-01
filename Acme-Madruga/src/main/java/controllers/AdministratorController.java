@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.AdministratorService;
 import domain.Administrator;
+import forms.AdministratorForm;
 
 @Controller
 @RequestMapping("/administrator")
@@ -52,20 +53,21 @@ public class AdministratorController extends AbstractController {
 
 	protected ModelAndView createEditModelAndView(final Administrator administrator) {
 		ModelAndView result;
-
-		result = this.createEditModelAndView(administrator, null);
+		AdministratorForm administratorForm;
+		administratorForm = this.administratorservice.construct(administrator);
+		result = this.createEditModelAndView(administratorForm, null);
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final Administrator administrator, final String messageCode) {
+	protected ModelAndView createEditModelAndView(final AdministratorForm administratorForm, final String messageCode) {
 		ModelAndView result;
 
-		if (administrator.getId() > 0)
+		if (administratorForm.getIdAdministrator() > 0)
 			result = new ModelAndView("administrator/edit");
 		else
 			result = new ModelAndView("administrator/registerAdministrator");
 
-		result.addObject("actor", administrator);
+		result.addObject("administratorForm", administratorForm);
 		result.addObject("message", messageCode);
 
 		return result;
@@ -84,11 +86,13 @@ public class AdministratorController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@ModelAttribute("administrator") Administrator administrator, final BindingResult binding) {
+	public ModelAndView save(@ModelAttribute("administratorForm") final AdministratorForm administratorForm, final BindingResult binding) {
 		ModelAndView result;
+		Administrator administrator;
 
 		try {
-			administrator = this.administratorservice.reconstruct(administrator, binding);
+			administrator = this.administratorservice.reconstruct(administratorForm, binding);
+
 			if (binding.hasErrors()) {
 				result = this.createEditModelAndView(administrator);
 				for (final ObjectError e : binding.getAllErrors())
@@ -98,7 +102,7 @@ public class AdministratorController extends AbstractController {
 				result = new ModelAndView("redirect:/welcome/index.do");
 			}
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(administrator, "administrator.commit.error");
+			result = this.createEditModelAndView(administratorForm, "administrator.commit.error");
 		}
 		return result;
 	}
