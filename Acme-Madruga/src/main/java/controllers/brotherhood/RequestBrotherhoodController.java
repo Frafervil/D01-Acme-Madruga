@@ -136,11 +136,12 @@ public class RequestBrotherhoodController extends AbstractController {
 		} else
 			try {
 				this.requestService.reject(request);
+				this.requestService.save(request);
+
 				result = new ModelAndView("redirect:list.do");
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(request, "request.commit.error", false);
 			}
-
 		return result;
 	}
 
@@ -173,6 +174,7 @@ public class RequestBrotherhoodController extends AbstractController {
 			result = this.createEditModelAndView(request, true);
 			System.out.println(binding.getAllErrors());
 		} else
+
 			try {
 				this.requestService.approve(request);
 				result = new ModelAndView("redirect:list.do");

@@ -80,7 +80,7 @@ public class PositionService {
 
 	public void delete(final Position position) {
 		Administrator principal;
-		Collection<Position> positions;
+		Integer positions;
 		Assert.notNull(position);
 		Assert.isTrue(position.getId() != 0);
 
@@ -90,7 +90,7 @@ public class PositionService {
 
 		Assert.notNull(principal);
 
-		if (positions == null)
+		if (positions == 0)
 			this.positionRepository.delete(position);
 		else
 			Assert.notNull(positions);
@@ -106,7 +106,7 @@ public class PositionService {
 		String lpos;
 
 		for (final Enrolment e : enrolments) {
-			lpos = e.getPosition().getLanguagePositions().iterator().next().getName().toString();
+			lpos = e.getPosition().getEnglishName().toString();
 			if (result.containsKey(lpos)) {
 				oldValue = result.get(lpos);
 				result.put(lpos, oldValue + 1);

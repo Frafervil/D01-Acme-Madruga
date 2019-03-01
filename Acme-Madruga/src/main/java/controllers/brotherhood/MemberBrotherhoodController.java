@@ -53,7 +53,6 @@ public class MemberBrotherhoodController extends AbstractController {
 
 			result = new ModelAndView("member/brotherhood/list");
 			result.addObject("members", members);
-			result.addObject("enrolments", enrolments);
 			result.addObject("requestURI", "member/brotherhood/list.do");
 
 		} catch (final Throwable oops) {

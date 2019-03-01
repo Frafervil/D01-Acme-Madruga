@@ -22,7 +22,6 @@ public class Actor extends DomainEntity implements Cloneable {
 	private String		middleName;
 	private String		surname;
 	private String		photo;
-	private String		email;
 	private String		phone;
 	private String		address;
 	private UserAccount	userAccount;
@@ -62,14 +61,6 @@ public class Actor extends DomainEntity implements Cloneable {
 
 	public void setPhoto(final String photo) {
 		this.photo = photo;
-	}
-
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(final String email) {
-		this.email = email;
 	}
 
 	public String getPhone() {

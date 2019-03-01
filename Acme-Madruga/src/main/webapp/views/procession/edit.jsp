@@ -18,15 +18,12 @@
 
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<jstl:choose>
-<jstl:when test="${procession.isDraft == false}">
-<h3><spring:message code="procession.nopermission" /></h3>
-</jstl:when>
-<jstl:otherwise>
-
 <form:form action="procession/brotherhood/edit.do" modelAttribute="procession">
 		<form:hidden path="id"/>
 		<form:hidden path="version"/>
+		<form:hidden path="ticker"/>
+		<form:hidden path="isDraft"/>
+		<form:hidden path="brotherhood"/>
 		
 		<acme:textbox code="procession.title" path="title"/>
 		
@@ -34,23 +31,17 @@
 		
 		<acme:textbox code="procession.moment" path="moment" placeholder="dd/MM/yyyy HH:mm" />
 		
-		<form:label path="isDraft">
-			<spring:message code="procession.isDraft" />:
-		</form:label>
-		<form:radiobutton path="isDraft" value="true" checked="checked" /><spring:message code="procession.isDraft.true" />
-		<form:radiobutton path="isDraft" value="false"/><spring:message code="procession.isDraft.false" />
-		<br>
-		<br>
-		
 		<acme:textbox code="procession.maxRow" path="maxRow"/>
 		
 		<acme:textbox code="procession.maxColumn" path="maxColumn"/>	
-	
-	<!-- Floatbs -->
-	
-		<acme:checkbox code="procession.floatBs" path="${floatBs}"/>
 		
-		<acme:submit name="save" code="procession.save"/>
+		<jstl:if test="${procession.isDraft == true}">
+		
+		<acme:submit name="saveDraft" code="procession.saveDraft"/>
+		
+		</jstl:if>
+		
+		<acme:submit name="saveFinal" code="procession.saveFinal"/>
 		
 		<jstl:if test="${procession.id != 0 }">
 			<acme:submit name="delete" code="procession.delete"/>
@@ -59,6 +50,3 @@
 		<acme:cancel url="procession/brotherhood/list.do" code="procession.cancel"/>
 		
 </form:form>
-
-</jstl:otherwise>
-</jstl:choose>

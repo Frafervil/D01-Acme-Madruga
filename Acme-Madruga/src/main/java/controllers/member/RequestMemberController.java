@@ -174,17 +174,17 @@ public class RequestMemberController extends AbstractController {
 		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(request);
 			System.out.println(binding.getAllErrors());
-		} else {
-			this.placeService.save(request.getPlace());
+		} else
+			try {
+				this.placeService.save(request.getPlace());
+				this.placeService.flushPlace();
+				this.requestService.save(request);
+				this.requestService.flushRequest();
+				result = new ModelAndView("redirect:list.do");
 
-			this.requestService.save(request);
-			result = new ModelAndView("redirect:list.do");
-			//			try {
-
-			//			} catch (final Throwable oops) {
-			//				result = this.createEditModelAndView(request, "request.commit.error");
-			//			}
-		}
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(request, "request.commit.error");
+			}
 		return result;
 	}
 	// Ancillary methods ------------------------------------------------------

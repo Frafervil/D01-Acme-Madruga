@@ -17,10 +17,6 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@ taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
-<!--  
-<jstl:if test="${(procession.isDraft == true && procession.brotherhood.userAccount.username == pageContext.request.userPrincipal.name) || procession.isDraft == false}">
-	<security:authorize access="hasRole('BROTHERHOOD')">
--->
 		<b><spring:message code="procession.title" /></b>:
 		<jstl:out value="${procession.title}"/><br/>
 	
@@ -78,5 +74,3 @@
 	
 		<a href="procession/brotherhood/list.do"><spring:message code="procession.list"/></a>
 		<br/>
-	<!-- </security:authorize>
-</jstl:if> -->

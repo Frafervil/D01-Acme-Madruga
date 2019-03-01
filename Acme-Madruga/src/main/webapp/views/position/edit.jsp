@@ -15,23 +15,21 @@
 	<form:hidden path="version" />
 	<br />
 	<br />
-	<form:label path="languagePositions">
-		<spring:message code="position.position" />:
+	<spring:message code="position.position" />:
+	<br />
+	<form:label path="englishName">
 	</form:label>
-	<spring:message code="position.name" />: <form:input path="languagePositions.name" />
-	<spring:message code="position.language" />: <form:input path="languagePositions.language" />
-	<form:errors cssClass="error" path="languagePositions" />
+	<spring:message code="position.englishName" />: <form:input path="englishName" />
+	<form:errors cssClass="error" path="englishName" />
 	<br />
 	<br />
-
-
+	<form:label path="spanishName">
+	</form:label>
+	<spring:message code="position.spanishName" />: <form:input path="spanishName" />
+	<form:errors cssClass="error" path="spanishName" />
 	<br />
 	<br />
-
-
-
-
-
+	
 	<spring:message code="position.save" var="savePosition" />
 	<spring:message code="position.delete" var="deletePosition" />
 	<spring:message code="position.cancel" var="cancelPosition" />

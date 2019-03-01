@@ -11,7 +11,6 @@ import org.springframework.util.Assert;
 import repositories.PlaceRepository;
 import domain.Place;
 import domain.Procession;
-import domain.Request;
 
 @Service
 @Transactional
@@ -38,23 +37,29 @@ public class PlaceService {
 		int columMax;
 		int r = 1;
 		int c = 1;
-		Collection<Request> requestOfProccesion;
 		Procession procession;
+		Collection<Place> placesInUse;
 
+		placesInUse = this.findByProcessionId(processionId);
 		procession = this.processionService.findOne(processionId);
 		rowMax = procession.getMaxRow();
 		columMax = procession.getMaxColumn();
 
-		requestOfProccesion = this.requestService.findAllByProcession(processionId);
-		if (requestOfProccesion != null)
+		if (placesInUse != null && (placesInUse.size() != 0))
 			outerloop: for (r = 1; r <= rowMax; r++)
-				for (c = 1; c <= columMax; c++)
-					for (final Request rq : requestOfProccesion)
-						if (rq.getPlace() != null)
-							if ((rq.getPlace().getcolumnP() != c) && (rq.getPlace().getrowP() != r))
+				for (final Place p : placesInUse)
+					if (p.getrowP() != r)
+						for (c = 1; c <= columMax; c++)
+							if (p.getcolumnP() != c)
 								break outerloop;
 		result.setcolumnP(c);
 		result.setrowP(r);
+		return result;
+	}
+
+	public Collection<Place> findByProcessionId(final int processionId) {
+		Collection<Place> result;
+		result = this.placeRepository.findPlacesByProcession(processionId);
 		return result;
 	}
 	public void save(final Place place) {
@@ -62,5 +67,9 @@ public class PlaceService {
 		result = this.placeRepository.save(place);
 		Assert.notNull(result);
 
+	}
+
+	public void flushPlace() {
+		this.placeRepository.flush();
 	}
 }
