@@ -9,8 +9,11 @@ import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.MemberRepository;
+import security.Authority;
 import security.LoginService;
 import security.UserAccount;
 import domain.Administrator;
@@ -18,6 +21,7 @@ import domain.Brotherhood;
 import domain.Enrolment;
 import domain.Member;
 import domain.Request;
+import forms.MemberForm;
 
 @Service
 @Transactional
@@ -41,6 +45,12 @@ public class MemberService {
 	@Autowired
 	private RequestService			requestService;
 
+	@Autowired
+	private ActorService			actorService;
+
+	@Autowired
+	private Validator				validator;
+
 
 	// Additional functions
 
@@ -50,6 +60,11 @@ public class MemberService {
 		Member result;
 
 		result = new Member();
+
+		//Nuevo userAccount con Member en la lista de authorities
+		final UserAccount userAccount = this.actorService.createUserAccount(Authority.MEMBER);
+
+		result.setUserAccount(userAccount);
 
 		return result;
 	}
@@ -113,6 +128,48 @@ public class MemberService {
 
 	public boolean exists(final Integer arg0) {
 		return this.memberRepository.exists(arg0);
+	}
+
+	public MemberForm construct(final Member member) {
+		final MemberForm memberForm = new MemberForm();
+		memberForm.setAddress(member.getAddress());
+		memberForm.setEmail(member.getEmail());
+		memberForm.setIdMember(member.getId());
+		memberForm.setMiddleName(member.getMiddleName());
+		memberForm.setName(member.getName());
+		memberForm.setPhone(member.getPhone());
+		memberForm.setPhoto(member.getPhoto());
+		memberForm.setSurname(member.getSurname());
+		memberForm.setUsername(member.getUserAccount().getUsername());
+		return memberForm;
+	}
+
+	public Member reconstruct(final MemberForm memberForm, final BindingResult binding) {
+		Member result;
+
+		if (memberForm.getIdMember() == 0) {
+			result = this.create();
+			result.getUserAccount().setUsername(memberForm.getUsername());
+			result.getUserAccount().setPassword(memberForm.getPassword());
+		} else
+			result = this.memberRepository.findOne(memberForm.getIdMember());
+
+		Assert.isTrue(memberForm.getPasswordChecker().equals(memberForm.getPassword()), "memberForm.validation.passwordsNotMatch");
+
+		//Crear un objeto nuevo, no setear sobre el resultado
+
+		result.setAddress(memberForm.getAddress());
+		result.setEmail(memberForm.getEmail());
+		result.setMiddleName(memberForm.getMiddleName());
+		result.setName(memberForm.getName());
+		result.setPhone(memberForm.getPhone());
+		result.setPhoto(memberForm.getPhoto());
+		result.setSurname(memberForm.getSurname());
+
+		this.validator.validate(result, binding);
+		this.memberRepository.flush();
+
+		return result;
 	}
 
 	// Business Method

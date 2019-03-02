@@ -10,111 +10,47 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="security"	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 <jstl:if test="${permission }">
 
-<form:form action="${actionURI}" modelAttribute="member" id="form" >
+<form:form action="${actionURI}" modelAttribute="memberForm" >
 
 
-	<form:hidden path="id"/>
-	<form:hidden path="version"/>
+	<form:hidden path="idMember"/>
 	
-	<form:label path="name">
-		<spring:message code="member.name" />:
-	</form:label>
-	<form:input path="name" />
-	<form:errors cssClass="error" path="name" />
-	<br />
-	<br />
-	
-	<form:label path="middleName">
-		<spring:message code="member.middleName" />:
-	</form:label>
-	<form:input path="middleName" />
-	<form:errors cssClass="error" path="middleName" />
-	<br />
-	<br />
-	
-	<form:label path="surname">
-		<spring:message code="member.surname" />:
-	</form:label>
-	<form:input path="surname" />
-	<form:errors cssClass="error" path="surname" />
-	<br />
-	<br />
-	
-	
-	<form:label path="email">
-		<spring:message code="member.email" />:
-	</form:label>
-	<form:input path="email" />
-	<form:errors cssClass="error" path="email" />
-	<br />
-	<br />
-	
-	<form:label path="phone">
-		<spring:message code="member.phone" />:
-	</form:label>
-	<spring:message code="member.phonePlaceholder" var="placeholder" />
-	<form:input path="phone" id="phone" placeholder="${placeholder }" size="30"/>
-	<form:errors cssClass="error" path="phone" />
-	<br />
-	<br />
-	
-	<form:label path="address">
-		<spring:message code="member.address" />:
-	</form:label>
-	<form:input path="address" />
-	<form:errors cssClass="error" path="address" />
-	<br />
-	<br />
+	<fieldset>
+    <legend><spring:message code="member.fieldset.personalInformation"/></legend>
+	<acme:textbox code="member.name" path="name" placeholder="Homer"/>
+	<acme:textbox code="member.middleName" path="middleName" placeholder="Jay"/>
+	<acme:textbox code="member.surname" path="surname" placeholder="Simpson"/>
+	<acme:textbox code="member.photo" path="photo" placeholder="https://www.jazzguitar.be/images/bio/homer-simpson.jpg"/>
+	<acme:textbox code="member.email" path="email" placeholder="homerjsimpson@email.com"/>
+	<acme:textbox code="member.phone" path="phone" placeholder="+34 600 1234"/>
+	<acme:textbox code="member.address" path="address" placeholder="123 Main St Anytown, Australia"/>
+	</fieldset>
+	<br/>
 	
 	<jstl:choose>
-	<jstl:when test="${member.id == 0}">
+	<jstl:when test="${memberForm.idMember == 0}">
 	
-	<form:hidden path="userAccount.authorities[0].authority" value="MEMBER" />
+	<fieldset>
+    <legend><spring:message code="member.fieldset.userAccount"/></legend>
+	<acme:textbox code="member.username" path="username" placeholder="HomerS"/>
 	
+	<acme:password code="member.password" path="password"/>
+	<acme:password code="member.passwordChecker" path="passwordChecker"/>
 	
-	<form:label path="userAccount.username">
-		<spring:message code="member.username" />:
-	</form:label>
-	<spring:message code="member.username.placeholder" var="usernamePlaceholder"/> 
-	<form:input path="userAccount.username" placeholder="${usernamePlaceholder}" size="25"/>
-	<form:errors cssClass="error" path="userAccount.username" />
-	<br />
-	<br />
-	
-	
-	
-	<form:label path="userAccount.password">
-	<spring:message code="member.password" />:
-	</form:label>
-	<spring:message code="member.password.placeholder" var="passwordPlaceholder"/> 
-	<form:password path="userAccount.password" placeholder="${passwordPlaceholder}" size="25"/>
-	<form:errors cssClass="error" path="userAccount.password" />
-	<br />
-	<br />
-	
-
-		
+	</fieldset>
+	<br/>
 	
 	</jstl:when>
-	<jstl:otherwise>
-	
-	
-	<form:hidden path="userAccount"/>
-	
-
-	</jstl:otherwise>
 	</jstl:choose>
 	
 
-	<input type="button" name="save" id="save"
-		value="<spring:message code="member.save" />" />&nbsp; 
-	<input type="button" name="cancel"
-		value="<spring:message code="member.cancel" />"
-		onclick="javascript: relativeRedir('${redirectURI}');" />
-	<br />
+	<acme:submit name="save" code="member.save"/>
+	
+	<acme:cancel url="welcome/index.do" code="member.cancel"/>
 
 </form:form>
 

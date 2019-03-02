@@ -58,7 +58,7 @@
 		<security:intercept-url pattern="/member/display.do" access="permitAll"/> 
 		<security:intercept-url pattern="/member/list.do" access="permitAll"/> 
 		<security:intercept-url pattern="/member/create.do" access="permitAll" />		
-		<security:intercept-url pattern="/member/edit.do" access="hasRole('MEMBER')"/>
+		<security:intercept-url pattern="/member/edit.do" access="permitAll" />
 		
 		<security:intercept-url pattern="/member/brotherhood/list.do" access="hasRole('BROTHERHOOD') or isAnonymous()"/>
 		<security:intercept-url pattern="/member/brotherhood/display.do" access="permitAll"/>
