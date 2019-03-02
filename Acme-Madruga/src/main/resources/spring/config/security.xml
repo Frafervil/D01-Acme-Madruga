@@ -73,6 +73,13 @@
 		<security:intercept-url pattern="/brotherhood/create.do" access="permitAll" />
 		<security:intercept-url pattern="/brotherhood/edit.do" access="hasRole('BROTHERHOOD')" />	
 		
+		<security:intercept-url pattern="/settle/brotherhood/list.do" access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/settle/display.do" access="hasAnyRole('ADMIN','BROTHERHOOD')" />
+		<security:intercept-url pattern="/settle/brotherhood/list.do" access="hasRole('BROTHERHOOD')" />
+		<security:intercept-url pattern="/settle/administrator/create.do" access="hasRole('ADMIN')"/> 
+		<security:intercept-url pattern="/settle/administrator/delete.do" access="hasRole('ADMIN')"/> 
+		<security:intercept-url pattern="/settle/administrator/edit.do" access="hasRole('ADMIN')"/> 
+			
 		<security:intercept-url pattern="/floatB/brotherhood/list.do" access="hasRole('BROTHERHOOD') or isAnonymous()" />
 		<security:intercept-url pattern="/floatB/display.do" access="permitAll" />
 		<security:intercept-url pattern="/floatB/list.do" access="permitAll" />

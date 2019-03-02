@@ -125,6 +125,8 @@
 				<value>http://www.fotolog2.com</value>
 			</list>
 		</property>
+		<property name="settle" ref="settle1" />
+		
 	</bean>
 
 	<bean class="domain.Brotherhood" id="brotherhood2">
@@ -144,6 +146,8 @@
 				<value>http://www.fotolog3.com</value>
 			</list>
 		</property>
+		<property name="settle" ref="settle2" />
+		
 	</bean>
 
 	<bean class="domain.Brotherhood" id="brotherhood3">
@@ -163,6 +167,8 @@
 
 			</list>
 		</property>
+		<property name="settle" ref="settle3" />
+		
 	</bean>
 
 	<!-- Members -->
@@ -421,5 +427,44 @@
 		<property name="maxRow" value="122" />
 		<property name="maxColumn" value="122" />
 		<property name="brotherhood" ref="brotherhood3" />
+	</bean>
+	
+	
+	<!-- Settle -->
+	
+	<bean class="domain.Settle" id="settle1">
+		<property name="area" value="Capilla Sixtina" />
+		<property name="pictures">
+			<list>
+				<value>https://www.nationalgeographic.com.es/medio/2016/02/12/cef63e13capilla_sixtina_ciudad_del_vaticano.jpg</value>
+				<value>https://205015-618768-raikfcquaxqncofqfm.stackpathdns.com/wp-content/uploads/2018/06/capilla-sixtina.jpeg</value>
+			</list>
+		</property>
+	</bean>
+	<bean class="domain.Settle" id="settle2">
+		<property name="area" value="Catedral de Sevilla" />
+		<property name="pictures">
+			<list>
+				<value>http://www.andalucia.org/media/fotos/image_249310_jpeg_800x600_q85.jpg</value>
+				<value>https://sevillasecreta.co/wp-content/uploads/2018/11/Coro_Catedral_de_Sevilla_Sevilla_Espa%C3%B1a_2015-12-06_DD_100-103_HDR.jpg</value>
+			</list>
+		</property>
+	</bean>
+	<bean class="domain.Settle" id="settle3">
+		<property name="area" value="Catedral de Granada" />
+		<property name="pictures">
+			<list>
+				<value>http://catedraldegranada.com/wp-content/uploads/2015/12/32.jpg</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="domain.Settle" id="settle4">
+		<property name="area" value="Settle sin brotherhood" />
+		<property name="pictures">
+			<list>
+				<value>http://catedraldegranada.com/wp-content/uploads/2015/12/32.jpg</value>
+			</list>
+		</property>
 	</bean>
 </beans>

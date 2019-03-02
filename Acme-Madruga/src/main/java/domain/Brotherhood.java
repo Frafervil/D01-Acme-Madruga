@@ -8,8 +8,10 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -63,5 +65,21 @@ public class Brotherhood extends Actor {
 
 	public void setEmail(final String email) {
 		this.email = email;
+	}
+
+
+	// Relationships----------------------------------------------
+
+	private Settle	settle;
+
+
+	@Valid
+	@OneToOne(optional = false)
+	public Settle getSettle() {
+		return this.settle;
+	}
+
+	public void setSettle(final Settle settle) {
+		this.settle = settle;
 	}
 }
