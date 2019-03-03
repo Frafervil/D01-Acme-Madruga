@@ -1,6 +1,8 @@
 
 package forms;
 
+import javax.persistence.Column;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -68,6 +70,7 @@ public class AdministratorForm {
 		this.photo = photo;
 	}
 
+	@Pattern(regexp = "^[a-zA-Z0-9 ]*[<]?\\w+[@]")
 	public String getEmail() {
 		return this.email;
 	}
@@ -101,8 +104,9 @@ public class AdministratorForm {
 
 
 	// --- Getters y Setters ---------------------------------------
-
+	@NotBlank
 	@Size(min = 5, max = 32)
+	@Column(unique = true)
 	public String getUsername() {
 		return this.username;
 	}
@@ -111,6 +115,7 @@ public class AdministratorForm {
 		this.username = username;
 	}
 
+	@NotBlank
 	@Size(min = 5, max = 32)
 	public String getPassword() {
 		return this.password;
@@ -126,6 +131,8 @@ public class AdministratorForm {
 	private String	passwordChecker;
 
 
+	@NotBlank
+	@Size(min = 5, max = 32)
 	public String getPasswordChecker() {
 		return this.passwordChecker;
 	}

@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -65,6 +65,8 @@ public class BrotherhoodForm {
 		this.photo = photo;
 	}
 
+	@NotBlank
+	@Pattern(regexp = "^[a-zA-Z0-9 ]*[<]?\\w+[@][a-zA-Z0-9.]+[>]?$")
 	public String getEmail() {
 		return this.email;
 	}
@@ -99,7 +101,6 @@ public class BrotherhoodForm {
 		this.title = title;
 	}
 
-	@NotNull
 	@ElementCollection
 	public Collection<String> getPictures() {
 		return this.pictures;
@@ -128,6 +129,20 @@ public class BrotherhoodForm {
 
 	public void setPassword(final String password) {
 		this.password = password;
+	}
+
+
+	private String	passwordChecker;
+
+
+	@NotBlank
+	@Size(min = 5, max = 32)
+	public String getPasswordChecker() {
+		return this.passwordChecker;
+	}
+
+	public void setPasswordChecker(final String passwordChecker) {
+		this.passwordChecker = passwordChecker;
 	}
 
 	public int getId() {

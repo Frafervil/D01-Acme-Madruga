@@ -70,7 +70,7 @@
 		<security:intercept-url pattern="/brotherhood/display.do" access="permitAll" />
 		<security:intercept-url pattern="/brotherhood/member/**" access="hasRole('MEMBER')" />
 
-		<security:intercept-url pattern="/brotherhood/create.do" access="permitAll" />
+		<security:intercept-url pattern="/brotherhood/register.do" access="isAnonymous()" />
 		<security:intercept-url pattern="/brotherhood/edit.do" access="hasRole('BROTHERHOOD')" />	
 		
 		<security:intercept-url pattern="/floatB/brotherhood/list.do" access="hasRole('BROTHERHOOD') or isAnonymous()" />
