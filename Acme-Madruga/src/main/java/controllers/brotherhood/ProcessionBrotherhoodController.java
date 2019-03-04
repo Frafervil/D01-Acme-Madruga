@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
+import services.FloatBService;
 import services.ProcessionService;
 import controllers.AbstractController;
 import domain.Brotherhood;
+import domain.FloatB;
 import domain.Procession;
 
 @Controller
@@ -149,15 +151,16 @@ public class ProcessionBrotherhoodController extends AbstractController {
 	protected ModelAndView createEditModelAndView(final Procession procession,
 			final String messageCode) {
 		ModelAndView result;
-		final Brotherhood principal = this.brotherhoodService.findByPrincipal();
-		boolean permission = false;
+		Collection<Brotherhood> brotherhoods;
+		Collection<FloatB> floatBs;
 
 		if (principal.getId() == procession.getBrotherhood().getId())
 			permission = true;
 
 		result = new ModelAndView("procession/edit");
 		result.addObject("procession", procession);
-		result.addObject("permission", permission);
+		result.addObject("brotherhoods", brotherhoods);
+		result.addObject("floatBs", floatBs);
 
 		result.addObject("message", messageCode);
 

@@ -1,12 +1,16 @@
 
 package controllers;
 
+import java.util.Arrays;
 import java.util.Collection;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -99,26 +103,31 @@ public class BrotherhoodController extends AbstractController {
 	}
 
 	//Create
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView create() {
 		ModelAndView result;
 		Brotherhood brotherhood;
+		BrotherhoodForm brotherhoodForm;
 
 		brotherhood = this.brotherhoodService.create();
-		result = this.createEditModelAndView(brotherhood);
+		brotherhoodForm = this.brotherhoodService.construct(brotherhood);
+		result = this.createEditModelAndView(brotherhoodForm);
 
 		return result;
 	}
-	//Edit
+
+	// Save de Edit
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@ModelAttribute("brotherhoodForm") final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
+	public ModelAndView save(@ModelAttribute("brotherhoodForm") @Valid final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
 		ModelAndView result;
 		Brotherhood brotherhood;
+
 		try {
 			brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm, binding);
 			if (binding.hasErrors()) {
-				result = this.createEditModelAndView(brotherhood);
-				System.out.println(binding.getAllErrors());
+				result = this.createEditModelAndView(brotherhoodForm);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
 			} else
 				brotherhood = this.brotherhoodService.save(brotherhood);
 			// AQUI NO SE PONE EL RECONTRUCT DEL USERACCOUNT PORQUE ESTE SAVE NO GUARDA EL USUARIO Y LA CONTRASEÑA
@@ -132,23 +141,48 @@ public class BrotherhoodController extends AbstractController {
 		return result;
 	}
 
+	//Save de Register
+	@RequestMapping(value = "/register", method = RequestMethod.POST, params = "register")
+	public ModelAndView register(@ModelAttribute("brotherhoodForm") @Valid final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
+		ModelAndView result;
+		Brotherhood brotherhood;
+
+		try {
+			brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm, binding);
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(brotherhoodForm);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+			} else {
+				brotherhood = this.brotherhoodService.save(brotherhood);
+				result = new ModelAndView("welcome/index");
+			}
+
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(brotherhoodForm, "brotherhood.commit.error");
+
+		}
+
+		return result;
+	}
+
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit() {
 		ModelAndView result;
 		Brotherhood brotherhood;
+		BrotherhoodForm brotherhoodForm;
 		brotherhood = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(brotherhood);
-		result = this.createEditModelAndView(brotherhood);
+		brotherhoodForm = this.brotherhoodService.construct(brotherhood);
+		result = this.createEditModelAndView(brotherhoodForm);
 
 		return result;
 	}
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected ModelAndView createEditModelAndView(final Brotherhood brotherhood) {
+	protected ModelAndView createEditModelAndView(final BrotherhoodForm brotherhoodForm) {
 		ModelAndView result;
-		BrotherhoodForm brotherhoodForm;
-		brotherhoodForm = this.brotherhoodService.construct(brotherhood);
 		result = this.createEditModelAndView(brotherhoodForm, null);
 
 		return result;
@@ -159,7 +193,11 @@ public class BrotherhoodController extends AbstractController {
 		String countryCode;
 
 		countryCode = this.customisationService.find().getCountryCode();
-		result = new ModelAndView("brotherhood/edit");
+		if (brotherhoodForm.getId() != 0)
+			result = new ModelAndView("brotherhood/edit");
+		else
+			result = new ModelAndView("brotherhood/register");
+
 		result.addObject("brotherhoodForm", brotherhoodForm);
 		result.addObject("actionURI", "brotherhood/edit.do");
 		result.addObject("redirectURI", "welcome/index.do");

@@ -13,8 +13,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import repositories.BrotherhoodRepository;
+import security.Authority;
 import security.LoginService;
 import security.UserAccount;
+import security.UserAccountRepository;
 import domain.Administrator;
 import domain.Brotherhood;
 import domain.Enrolment;
@@ -28,7 +30,13 @@ public class BrotherhoodService {
 	@Autowired
 	private BrotherhoodRepository	brotherhoodRepository;
 
+	@Autowired
+	private UserAccountRepository	useraccountRepository;
+
 	// Supporting services ----------------------------------------------------
+	@Autowired
+	private ActorService			actorService;
+
 	@Autowired
 	private AdministratorService	administratorService;
 
@@ -41,37 +49,75 @@ public class BrotherhoodService {
 
 	// Simple CRUD Methods
 
+	public boolean exists(final Integer arg0) {
+		return this.brotherhoodRepository.exists(arg0);
+	}
+
 	public Brotherhood create() {
 		Brotherhood result;
 		Date moment;
+		UserAccount userAccount;
+		Authority authority;
 
 		result = new Brotherhood();
+		userAccount = new UserAccount();
+		authority = new Authority();
 
 		moment = new Date(System.currentTimeMillis() - 1);
+		authority.setAuthority("BROTHERHOOD");
+		userAccount.addAuthority(authority);
+
 		Assert.notNull(moment);
+		Assert.notNull(userAccount);
+
+		result.setUserAccount(userAccount);
 		result.setEstablishmentDate(moment);
 		return result;
 	}
 
+	//	public Brotherhood save(final Brotherhood brotherhood) {
+	//		Brotherhood saved;
+	//		Assert.notNull(brotherhood);
+	//
+	//		if (brotherhood.getId() == 0) {
+	//
+	//			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+	//			brotherhood.getUserAccount().setPassword(passwordEncoder.encodePassword(brotherhood.getUserAccount().getPassword(), null));
+	//
+	//		} else {
+	//			Brotherhood principal;
+	//			principal = this.findByPrincipal();
+	//			Assert.notNull(principal);
+	//
+	//		}
+	//
+	//		saved = this.brotherhoodRepository.save(brotherhood);
+	//
+	//		return saved;
+	//	}
+
 	public Brotherhood save(final Brotherhood brotherhood) {
-		Brotherhood saved;
-		Assert.notNull(brotherhood);
+		final Brotherhood result, saved;
+		UserAccount logedUserAccount;
+		Md5PasswordEncoder encoder;
 
-		if (brotherhood.getId() == 0) {
+		encoder = new Md5PasswordEncoder();
+		logedUserAccount = this.actorService.createUserAccount(Authority.BROTHERHOOD);
+		Assert.notNull(brotherhood, "brotherhood.not.null");
 
-			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-			brotherhood.getUserAccount().setPassword(passwordEncoder.encodePassword(brotherhood.getUserAccount().getPassword(), null));
+		if (this.exists(brotherhood.getId())) {
+			logedUserAccount = LoginService.getPrincipal();
+			Assert.notNull(logedUserAccount, "brotherhood.notLogged");
+			Assert.isTrue(logedUserAccount.equals(brotherhood.getUserAccount()), "brotherhood.notEqual.userAccount");
+			saved = this.brotherhoodRepository.findOne(brotherhood.getId());
+			Assert.notNull(saved, "brotherhood.not.null");
+			Assert.isTrue(saved.getUserAccount().getUsername().equals(brotherhood.getUserAccount().getUsername()), "brotherhood.notEqual.username");
+			Assert.isTrue(saved.getUserAccount().getPassword().equals(brotherhood.getUserAccount().getPassword()), "brotherhood.notEqual.password");
+		} else
+			brotherhood.getUserAccount().setPassword(encoder.encodePassword(brotherhood.getUserAccount().getPassword(), null));
+		result = this.brotherhoodRepository.save(brotherhood);
 
-		} else {
-			Brotherhood principal;
-			principal = this.findByPrincipal();
-			Assert.notNull(principal);
-
-		}
-
-		saved = this.brotherhoodRepository.save(brotherhood);
-
-		return saved;
+		return result;
 	}
 
 	public Brotherhood findOne(final int brotherhoodId) {
@@ -115,8 +161,6 @@ public class BrotherhoodService {
 		brotherhoodForm.setName(brotherhood.getName());
 		brotherhoodForm.setPhone(brotherhood.getPhone());
 		brotherhoodForm.setPhoto(brotherhood.getPhoto());
-		//		result.getPictures().removeAll(result.getPictures());
-		//		result.getPictures().addAll(brotherhood.getPictures());
 		brotherhoodForm.setPictures(brotherhood.getPictures());
 		brotherhoodForm.setSurname(brotherhood.getSurname());
 		brotherhoodForm.setTitle(brotherhood.getTitle());
@@ -143,10 +187,15 @@ public class BrotherhoodService {
 	public Brotherhood reconstruct(final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
 		Brotherhood result;
 
-		if (brotherhoodForm.getId() == 0)
+		if (brotherhoodForm.getId() == 0) {
 			result = this.create();
-		else
+			result.getUserAccount().setUsername(brotherhoodForm.getUsername());
+			result.getUserAccount().setPassword(brotherhoodForm.getPassword());
+		} else
 			result = this.brotherhoodRepository.findOne(brotherhoodForm.getId());
+
+		//Assert.isTrue(this.useraccountRepository.findUserAccountsByUsername(brotherhoodForm.getUsername()).isEmpty(), "This username already exist");
+		//Assert.isTrue(password.equals(passwordChecker), "brotherhood.validation.passwordsNotMatch");
 		result.setAddress(brotherhoodForm.getAddress());
 		result.setEmail(brotherhoodForm.getEmail());
 		result.setMiddleName(brotherhoodForm.getMiddleName());
@@ -156,10 +205,13 @@ public class BrotherhoodService {
 		result.setPictures(brotherhoodForm.getPictures());
 		result.setSurname(brotherhoodForm.getSurname());
 		result.setTitle(brotherhoodForm.getTitle());
-		//		result.getUserAccount().setUsername(brotherhoodForm.getUsername());
-		//		result.getUserAccount().setPassword(brotherhoodForm.getPassword());
+		result.getUserAccount().setUsername(brotherhoodForm.getUsername());
+		result.getUserAccount().setPassword(brotherhoodForm.getPassword());
 
-		// NO SE PONEN LAS COSAS DEL USERACCOUNT PORQUE EN EL EDIT NO SE PIDEN USERNAME NI PASSWORD
+		if (!brotherhoodForm.getPassword().equals(brotherhoodForm.getPasswordChecker()))
+			binding.rejectValue("passwordChecker", "brotherhood.validation.passwordsNotMatch", "Passwords doesnt match");
+		if (!this.useraccountRepository.findUserAccountsByUsername(brotherhoodForm.getUsername()).isEmpty())
+			binding.rejectValue("username", "brotherhood.validation.usernameExists", "This username already exists");
 
 		this.validator.validate(result, binding);
 		this.brotherhoodRepository.flush();
@@ -167,7 +219,6 @@ public class BrotherhoodService {
 		return result;
 
 	}
-
 	public Brotherhood largestBrotherhood() {
 		Brotherhood result = null;
 		Administrator principal;

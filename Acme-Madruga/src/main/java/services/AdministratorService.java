@@ -13,6 +13,7 @@ import repositories.AdministratorRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
+import security.UserAccountRepository;
 import domain.Administrator;
 import forms.AdministratorForm;
 
@@ -24,6 +25,9 @@ public class AdministratorService {
 
 	@Autowired
 	private AdministratorRepository	administratorRepository;
+
+	@Autowired
+	private UserAccountRepository	useraccountRepository;
 
 	// Supporting services-------------------------------------------
 	@Autowired
@@ -75,7 +79,7 @@ public class AdministratorService {
 
 		if (this.exists(administrator.getId())) {
 			logedUserAccount = LoginService.getPrincipal();
-			Assert.notNull(logedUserAccount, "administrator.notLogged ");
+			Assert.notNull(logedUserAccount, "administrator.notLogged");
 			Assert.isTrue(logedUserAccount.equals(administrator.getUserAccount()), "administrator.notEqual.userAccount");
 			saved = this.administratorRepository.findOne(administrator.getId());
 			Assert.notNull(saved, "administrator.not.null");
@@ -123,6 +127,8 @@ public class AdministratorService {
 		else
 			result = this.administratorRepository.findOne(administratorForm.getIdAdministrator());
 
+		Assert.isTrue(this.useraccountRepository.findUserAccountsByUsername(administratorForm.getUsername()).isEmpty(), "This username already exist");
+		Assert.isTrue(administratorForm.getPasswordChecker().equals(administratorForm.getPassword()), "administrator.validation.passwordsNotMatch");
 		//Crear un objeto nuevo, no setear sobre el resultado
 
 		result.setAddress(administratorForm.getAddress());

@@ -48,7 +48,6 @@ public class Brotherhood extends Actor {
 		this.establishmentDate = establishmentDate;
 	}
 
-	@NotNull
 	@ElementCollection
 	public Collection<String> getPictures() {
 		return this.pictures;
@@ -58,6 +57,7 @@ public class Brotherhood extends Actor {
 		this.pictures = pictures;
 	}
 
+	@NotBlank
 	@Pattern(regexp = "^[a-zA-Z0-9 ]*[<]?\\w+[@][a-zA-Z0-9.]+[>]?$")
 	public String getEmail() {
 		return this.email;

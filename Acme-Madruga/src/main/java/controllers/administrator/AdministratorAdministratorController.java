@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.AdministratorService;
+import services.CustomisationService;
 import controllers.AbstractController;
 import domain.Administrator;
 import forms.AdministratorForm;
@@ -25,6 +26,9 @@ public class AdministratorAdministratorController extends AbstractController {
 
 	@Autowired
 	private AdministratorService	administratorService;
+
+	@Autowired
+	private CustomisationService	customisationService;
 
 
 	//Register----------------------------------------------------
@@ -73,10 +77,15 @@ public class AdministratorAdministratorController extends AbstractController {
 
 	private ModelAndView createRegisterModelAndView(final AdministratorForm administratorForm, final String messageCode) {
 		ModelAndView res;
+		String countryCode;
+
+		countryCode = this.customisationService.find().getCountryCode();
 
 		res = new ModelAndView("administrator/administrator/register");
 		res.addObject("administratorForm", administratorForm);
+		res.addObject("countryCode", countryCode);
 		res.addObject("message", messageCode);
+
 		return res;
 	}
 }

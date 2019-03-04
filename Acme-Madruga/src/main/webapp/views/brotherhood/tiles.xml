@@ -6,20 +6,34 @@
 
 <tiles-definitions>
 
+	<definition name="administrator/dashboard" extends="master.page">	
+		<put-attribute name="title" value="Dashboard" />
+		<put-attribute name="body" value="/views/administrator/dashboard.jsp" />
+	</definition>
+
 	<definition name="brotherhood/list" extends="master.page">
 		<put-attribute name="title" value="List of brotherhoods" />
 		<put-attribute name="body" value="/views/brotherhood/list.jsp" />
 	</definition>
+	
 	<definition name="brotherhood/display" extends="master.page">
 		<put-attribute name="title" value="Display brotherhood" />
 		<put-attribute name="body" value="/views/brotherhood/display.jsp" />
 	</definition>
+	
 	<definition name="brotherhood/edit" extends="master.page">
 		<put-attribute name="title" value="Edit brotherhood" />
 		<put-attribute name="body" value="/views/brotherhood/edit.jsp" />
 	</definition>
+	
 	<definition name="brotherhood/member/list" extends="master.page">
 		<put-attribute name="title" value="My list of brotherhoods" />
 		<put-attribute name="body" value="/views/brotherhood/list.jsp" />
 	</definition>
+	
+	<definition name="brotherhood/register" extends="master.page">
+		<put-attribute name="title" value="New brotherhood registration" />
+		<put-attribute name="body" value="/views/brotherhood/register.jsp" />
+	</definition>
+	
 </tiles-definitions>
