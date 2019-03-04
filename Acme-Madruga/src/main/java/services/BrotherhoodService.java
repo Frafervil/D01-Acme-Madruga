@@ -212,4 +212,12 @@ public class BrotherhoodService {
 		}
 		return result;
 	}
+
+	public Brotherhood findBySettleId(final int settleId) {
+		Brotherhood result;
+
+		result = this.brotherhoodRepository.findBySettleId(settleId);
+		return result;
+
+	}
 }

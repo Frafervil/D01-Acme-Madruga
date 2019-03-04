@@ -17,7 +17,7 @@
 <%@taglib prefix="jstl"  uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div>
-	<a href="#"><img src="${bannerWelcome }" alt="Acme Madruga Co., Inc." /></a>
+	<a href="#"><img width="300px" src="${bannerWelcome }" alt="Acme Madruga Co., Inc." /></a>
 </div>
 
 <div>
@@ -66,6 +66,7 @@
 					<li><a href="procession/brotherhood/list.do"><spring:message code="master.page.brotherhood.processions" /></a></li>	
 					<li><a href="member/list.do"><spring:message code="master.page.members" /></a></li>
 					<li><a href="request/brotherhood/list.do"><spring:message code="master.page.brotherhood.request" /></a></li>
+					<li><a href="settle/brotherhood/list.do"><spring:message code="master.page.brotherhood.settle" /></a></li>					
 				</ul>
 			</li>
 		</security:authorize>

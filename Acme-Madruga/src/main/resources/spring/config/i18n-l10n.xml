@@ -34,6 +34,8 @@
 		<value>/views/procession/messages</value>
 		<value>/views/customisation/messages</value>
 		<value>/views/position/messages</value>
+		<value>/views/settle/messages</value>
+
 	</util:list>
 
 </beans>
