@@ -24,7 +24,7 @@
  
 <%@ attribute name="dataLabel" required="true" %>
 <%@ attribute name="code" required="true" %>
-<%@ attribute name="path" required="true" %>
+<%@ attribute name="path" required="false" %>
 
 <%-- Definition --%>
 

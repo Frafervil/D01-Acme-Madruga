@@ -19,9 +19,7 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<h2 style="text-align: center;">
-	<strong>POLÍTICA DE PRIVACIDAD</strong>
-</h2>
+
 <p>&nbsp;</p>
 <p>El presente Política de Privacidad establece los términos en que
 	Acme-Madrugá usa y protege la información que es proporcionada por sus

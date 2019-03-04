@@ -25,6 +25,9 @@
 		
 		<form:hidden path="id" />
 		
+		<acme:displayText dataLabel="Terms and conditions" code="brotherhood.confirmTerms"/>
+		<br/>
+		<br/>
 		<fieldset>
     	<legend><spring:message code="brotherhood.fieldset.personalInformation"/></legend>
 		<acme:textbox code="brotherhood.name" path="name" placeholder="Homer"/>
@@ -37,6 +40,8 @@
 		<acme:textbox code="brotherhood.title" path="title" placeholder="La Pasion"/>
 		</fieldset>
 		<br/>
+		
+		
 		
 		<fieldset>
     	<legend><spring:message code="brotherhood.fieldset.userAccount"/></legend>
@@ -56,9 +61,15 @@
 		<acme:cancel url="welcome/index.do" code="brotherhood.cancel"/>
 	</form:form>
 	
+	
+	
+
+	
 	<script type="text/javascript">
-$("#register").on("click",function(){validatePhone("<spring:message code='brotherhood.confirmationPhone'/>","${countryCode}");});
-
-
-	 
+	$("#register").on("click",function(){validatePhone("<spring:message code='brotherhood.confirmationPhone'/>","${countryCode}");}); 
 </script>
+
+	
+
+
+
