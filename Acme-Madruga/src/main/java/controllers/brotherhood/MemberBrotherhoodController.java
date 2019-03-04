@@ -1,4 +1,3 @@
-
 package controllers.brotherhood;
 
 import java.util.ArrayList;
@@ -27,14 +26,13 @@ public class MemberBrotherhoodController extends AbstractController {
 	// Servicios
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService brotherhoodService;
 
 	@Autowired
-	private MemberService		memberService;
+	private MemberService memberService;
 
 	@Autowired
-	private EnrolmentService	enrolmentService;
-
+	private EnrolmentService enrolmentService;
 
 	// List
 
@@ -42,15 +40,13 @@ public class MemberBrotherhoodController extends AbstractController {
 	public ModelAndView list(@RequestParam final int brotherhoodId) {
 		ModelAndView result;
 		Collection<Member> members;
-		final Collection<Enrolment> enrolments;
-
 		try {
-			final Brotherhood hood = this.brotherhoodService.findOne(brotherhoodId);
+			final Brotherhood hood = this.brotherhoodService
+					.findOne(brotherhoodId);
 			Assert.notNull(hood);
 
-			members = this.memberService.findAllActiveMembersOfOneBrotherhood(brotherhoodId);
-			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(brotherhoodId);
-
+			members = this.memberService
+					.findAllActiveMembersOfOneBrotherhood(brotherhoodId);
 			result = new ModelAndView("member/brotherhood/list");
 			result.addObject("members", members);
 			result.addObject("requestURI", "member/brotherhood/list.do");
@@ -79,7 +75,9 @@ public class MemberBrotherhoodController extends AbstractController {
 
 		principal = this.brotherhoodService.findByPrincipal();
 
-		enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(principal.getId(), memberId);
+		enrolment = this.enrolmentService
+				.findActiveEnrolmentByBrotherhoodIdAndMemberId(
+						principal.getId(), memberId);
 
 		// Crea y a�ade objetos a la vista
 		result = new ModelAndView("member/display");
