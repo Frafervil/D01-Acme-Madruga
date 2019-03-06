@@ -24,7 +24,7 @@
 class="displaytag" keepStatus="true">
 
 	<!-- Display -->
-	<security:authorize access="hasAnyRole('MEMBER','BROTHERHOOD')">
+	<security:authorize access="hasRole('BROTHERHOOD')">
 	<display:column>
 		<a href="member/brotherhood/display.do?memberId=${row.id}"><spring:message code="member.display"/></a>
 	</display:column>

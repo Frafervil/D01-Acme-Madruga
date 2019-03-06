@@ -52,6 +52,9 @@
 		<bean class="converters.PlaceToStringConverter" />
 		<bean class="converters.StringToPlaceConverter" />	
 		
+		<bean class="converters.SettleToStringConverter" />
+		<bean class="converters.StringToSettleConverter" />	
+		
 		<bean class="converters.UserAccountToStringConverter"/>
 		<bean class="converters.StringToUserAccount"/>
 

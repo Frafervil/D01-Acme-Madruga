@@ -31,7 +31,7 @@
 		<acme:textbox code="administrator.middleName" path="middleName" placeholder="Jay"/>
 		<acme:textbox code="administrator.surname" path="surname" placeholder="Simpson"/>
 		<acme:textbox code="administrator.photo" path="photo" placeholder="https://www.jazzguitar.be/images/bio/homer-simpson.jpg"/>
-		<acme:textbox code="administrator.email" path="email" placeholder="homerjsimpson@email.com"/>
+		<acme:textbox code="administrator.email" path="email" placeholder="homerjsimpson@"/>
 		<acme:textbox code="administrator.phone" path="phone" placeholder="+34 600 1234"/>
 		<acme:textbox code="administrator.address" path="address" placeholder="123 Main St Anytown, Australia"/>
 		</fieldset>
@@ -47,7 +47,18 @@
 		</fieldset>
 		<br/>
 		
-		<acme:submit name="save" code="administrator.save"/>
+		<acme:checkbox code="administrator.confirmTerms" path="checkBox"/>
+		
+			<a href="terms/terms.do"><spring:message code="administrator.terms"/></a>
+			<br/>
+			<br/>	
+				
+		<input type="submit" name="register" id="register"
+		value="<spring:message code="administrator.save" />" >&nbsp;
 
 		<acme:cancel url="welcome/index.do" code="administrator.cancel"/>
 	</form:form>
+	
+	<script type="text/javascript">
+	$("#register").on("click",function(){validatePhone("<spring:message code='admin.confirmationPhone'/>","${countryCode}");}); 
+</script>

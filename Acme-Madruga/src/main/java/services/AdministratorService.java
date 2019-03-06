@@ -41,10 +41,9 @@ public class AdministratorService {
 		Administrator res;
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
-		if (userAccount == null)
-			res = null;
-		else
-			res = this.administratorRepository.findByUserAccountId(userAccount.getId());
+		Assert.notNull(userAccount);
+		res = this.administratorRepository.findByUserAccountId(userAccount.getId());
+		Assert.notNull(res);
 		return res;
 	}
 
@@ -114,6 +113,7 @@ public class AdministratorService {
 		administratorForm.setPhone(administrator.getPhone());
 		administratorForm.setPhoto(administrator.getPhoto());
 		administratorForm.setSurname(administrator.getSurname());
+		administratorForm.setCheckBox(administratorForm.getCheckBox());
 		administratorForm.setUsername(administrator.getUserAccount().getUsername());
 		return administratorForm;
 
@@ -122,14 +122,16 @@ public class AdministratorService {
 	public Administrator reconstruct(final AdministratorForm administratorForm, final BindingResult binding) {
 		Administrator result;
 
-		if (administratorForm.getIdAdministrator() == 0)
+		if (administratorForm.getIdAdministrator() == 0) {
 			result = this.create();
-		else
+			result.getUserAccount().setUsername(administratorForm.getUsername());
+			result.getUserAccount().setPassword(administratorForm.getPassword());
+			if (!administratorForm.getPassword().equals(administratorForm.getPasswordChecker()))
+				binding.rejectValue("passwordChecker", "administrator.validation.passwordsNotMatch", "Passwords doesnt match");
+			if (!this.useraccountRepository.findUserAccountsByUsername(administratorForm.getUsername()).isEmpty() || administratorForm.getUsername().equals(LoginService.getPrincipal().getUsername()))
+				binding.rejectValue("username", "administrator.validation.usernameExists", "This username already exists");
+		} else
 			result = this.administratorRepository.findOne(administratorForm.getIdAdministrator());
-
-		Assert.isTrue(this.useraccountRepository.findUserAccountsByUsername(administratorForm.getUsername()).isEmpty(), "This username already exist");
-		Assert.isTrue(administratorForm.getPasswordChecker().equals(administratorForm.getPassword()), "administrator.validation.passwordsNotMatch");
-		//Crear un objeto nuevo, no setear sobre el resultado
 
 		result.setAddress(administratorForm.getAddress());
 		result.setEmail(administratorForm.getEmail());
@@ -138,11 +140,9 @@ public class AdministratorService {
 		result.setPhone(administratorForm.getPhone());
 		result.setPhoto(administratorForm.getPhoto());
 		result.setSurname(administratorForm.getSurname());
-		result.getUserAccount().setUsername(administratorForm.getUsername());
-		result.getUserAccount().setPassword(administratorForm.getPassword());
+
 		this.validator.validate(result, binding);
 		this.administratorRepository.flush();
 		return result;
 	}
-
 }

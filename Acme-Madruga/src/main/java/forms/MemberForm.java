@@ -1,6 +1,8 @@
 
 package forms;
 
+import javax.persistence.Column;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -68,6 +70,8 @@ public class MemberForm {
 		this.photo = photo;
 	}
 
+	@NotBlank
+	@Pattern(regexp = "^[a-zA-Z0-9 ]*[<]?\\w+[@][a-zA-Z0-9.]+[>]?$")
 	public String getEmail() {
 		return this.email;
 	}
@@ -102,7 +106,9 @@ public class MemberForm {
 
 	// --- Getters y Setters ---------------------------------------
 
+	@NotBlank
 	@Size(min = 5, max = 32)
+	@Column(unique = true)
 	public String getUsername() {
 		return this.username;
 	}
@@ -111,6 +117,7 @@ public class MemberForm {
 		this.username = username;
 	}
 
+	@NotBlank
 	@Size(min = 5, max = 32)
 	public String getPassword() {
 		return this.password;
@@ -124,10 +131,21 @@ public class MemberForm {
 	// --- Others -------------------------------------------------
 
 	private String	passwordChecker;
+	private boolean	checkBox;
 
 
+	@NotBlank
+	@Size(min = 5, max = 32)
 	public String getPasswordChecker() {
 		return this.passwordChecker;
+	}
+
+	public boolean getCheckBox() {
+		return this.checkBox;
+	}
+
+	public void setCheckBox(final boolean checkBox) {
+		this.checkBox = checkBox;
 	}
 
 	public void setPasswordChecker(final String passwordChecker) {

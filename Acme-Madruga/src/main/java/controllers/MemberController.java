@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -57,20 +59,22 @@ public class MemberController extends AbstractController {
 	}
 
 	// Create
-	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView create() {
 		ModelAndView result;
 		Member member;
+		MemberForm memberForm;
 
 		member = this.memberService.create();
-		result = this.createEditModelAndView(member);
+		memberForm = this.memberService.construct(member);
+		result = this.createEditModelAndView(memberForm);
 
 		return result;
 	}
 
-	// Edit
+	// Save de Edit
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@ModelAttribute("memberForm") final MemberForm memberForm, final BindingResult binding) {
+	public ModelAndView save(@ModelAttribute("memberForm") @Valid final MemberForm memberForm, final BindingResult binding) {
 		ModelAndView result;
 		Member member;
 
@@ -79,25 +83,34 @@ public class MemberController extends AbstractController {
 			if (binding.hasErrors()) {
 				for (final ObjectError e : binding.getAllErrors())
 					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
-				result = this.createEditModelAndView(member);
+				result = this.createEditModelAndView(memberForm);
 			} else {
 				member = this.memberService.save(member);
-				result = new ModelAndView("redirect:/security/login.do");
+				result = new ModelAndView("welcome/index");
 			}
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(memberForm, "member.commit.error");
+		}
 
-			//			SimpleDateFormat formatter;
-			//			String moment;
-			//			final String welcomeMessage;
-			//
-			//			formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-			//			moment = formatter.format(new Date());
-			//
-			//			welcomeMessage = "welcome.greeting.signUp.member";
-			//
-			//			result.addObject("welcomeMessage", welcomeMessage);
-			//			result.addObject("moment", moment);
-			//			result.addObject("signUp", true);
+		return result;
+	}
 
+	// Save de register o create
+	@RequestMapping(value = "/register", method = RequestMethod.POST, params = "register")
+	public ModelAndView register(@ModelAttribute("memberForm") @Valid final MemberForm memberForm, final BindingResult binding) {
+		ModelAndView result;
+		Member member;
+
+		try {
+			member = this.memberService.reconstruct(memberForm, binding);
+			if (binding.hasErrors()) {
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+				result = this.createEditModelAndView(memberForm);
+			} else {
+				member = this.memberService.save(member);
+				result = new ModelAndView("welcome/index");
+			}
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(memberForm, "member.commit.error");
 		}
@@ -119,21 +132,20 @@ public class MemberController extends AbstractController {
 	public ModelAndView edit() {
 		ModelAndView result;
 		Member member;
+		MemberForm memberForm;
 
 		member = this.memberService.findByPrincipal();
 		Assert.notNull(member);
-		result = this.createEditModelAndView(member);
+		memberForm = this.memberService.construct(member);
+		result = this.createEditModelAndView(memberForm);
 
 		return result;
 	}
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected ModelAndView createEditModelAndView(final Member member) {
+	protected ModelAndView createEditModelAndView(final MemberForm memberForm) {
 		ModelAndView result;
-		MemberForm memberForm;
-
-		memberForm = this.memberService.construct(member);
 		result = this.createEditModelAndView(memberForm, null);
 
 		return result;
@@ -142,23 +154,15 @@ public class MemberController extends AbstractController {
 	protected ModelAndView createEditModelAndView(final MemberForm memberForm, final String message) {
 		ModelAndView result;
 		String countryCode;
-		boolean permission;
-
-		permission = false;
-
-		if (memberForm.getIdMember() == 0)
-			permission = true;
-		else if (this.memberService.findByPrincipal().getId() == memberForm.getIdMember())
-			permission = true;
 
 		countryCode = this.customisationService.find().getCountryCode();
-
-		result = new ModelAndView("member/edit");
+		if (memberForm.getIdMember() != 0)
+			result = new ModelAndView("member/edit");
+		else
+			result = new ModelAndView("member/register");
 		result.addObject("memberForm", memberForm);
-		result.addObject("actionURI", "member/edit.do");
 		result.addObject("redirectURI", "welcome/index.do");
 		result.addObject("countryCode", countryCode);
-		result.addObject("permission", permission);
 
 		result.addObject("message", message);
 

@@ -6,7 +6,7 @@ function validatePhone(message, countryCode) {
 
 		} else {
 			if (confirm(message)) {
-				document.getElementById("phone").value = countryCode + " " + document.getElementById("phone").value;
+				// document.getElementById("phone").value = countryCode + " " + document.getElementById("phone").value;
 				document.getElementById("form").submit();
 
 			} else {

@@ -164,6 +164,8 @@ public class BrotherhoodService {
 		brotherhoodForm.setPictures(brotherhood.getPictures());
 		brotherhoodForm.setSurname(brotherhood.getSurname());
 		brotherhoodForm.setTitle(brotherhood.getTitle());
+		brotherhoodForm.setCheckBox(brotherhoodForm.getCheckBox());
+		brotherhoodForm.setSettle(brotherhood.getSettle());
 		brotherhoodForm.setUsername(brotherhood.getUserAccount().getUsername());
 		//En los construct no coger la contraseña
 		return brotherhoodForm;
@@ -205,13 +207,15 @@ public class BrotherhoodService {
 		result.setPictures(brotherhoodForm.getPictures());
 		result.setSurname(brotherhoodForm.getSurname());
 		result.setTitle(brotherhoodForm.getTitle());
-		result.getUserAccount().setUsername(brotherhoodForm.getUsername());
-		result.getUserAccount().setPassword(brotherhoodForm.getPassword());
+		//result.getUserAccount().setUsername(brotherhoodForm.getUsername());
+		//result.getUserAccount().setPassword(brotherhoodForm.getPassword());
 
 		if (!brotherhoodForm.getPassword().equals(brotherhoodForm.getPasswordChecker()))
 			binding.rejectValue("passwordChecker", "brotherhood.validation.passwordsNotMatch", "Passwords doesnt match");
 		if (!this.useraccountRepository.findUserAccountsByUsername(brotherhoodForm.getUsername()).isEmpty())
 			binding.rejectValue("username", "brotherhood.validation.usernameExists", "This username already exists");
+		if (brotherhoodForm.getCheckBox() == false)
+			binding.rejectValue("checkBox", "brotherhood.validation.checkBox", "This checkbox must be checked");
 
 		this.validator.validate(result, binding);
 		this.brotherhoodRepository.flush();
