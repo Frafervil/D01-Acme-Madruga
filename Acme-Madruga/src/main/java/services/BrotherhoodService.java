@@ -75,27 +75,6 @@ public class BrotherhoodService {
 		return result;
 	}
 
-	//	public Brotherhood save(final Brotherhood brotherhood) {
-	//		Brotherhood saved;
-	//		Assert.notNull(brotherhood);
-	//
-	//		if (brotherhood.getId() == 0) {
-	//
-	//			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
-	//			brotherhood.getUserAccount().setPassword(passwordEncoder.encodePassword(brotherhood.getUserAccount().getPassword(), null));
-	//
-	//		} else {
-	//			Brotherhood principal;
-	//			principal = this.findByPrincipal();
-	//			Assert.notNull(principal);
-	//
-	//		}
-	//
-	//		saved = this.brotherhoodRepository.save(brotherhood);
-	//
-	//		return saved;
-	//	}
-
 	public Brotherhood save(final Brotherhood brotherhood) {
 		final Brotherhood result, saved;
 		UserAccount logedUserAccount;
