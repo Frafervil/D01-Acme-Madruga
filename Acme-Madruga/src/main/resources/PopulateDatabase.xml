@@ -182,6 +182,8 @@
 		<property name="phone" value="+33923680976" />
 		<property name="address" value="Calle Musica, 1, CP: 32123, Cadiz" />
 		<property name="userAccount" ref="userAccount2" />
+		<property name="finder" ref="finder1" />
+		
 	</bean>
 
 	<bean class="domain.Member" id="member2">
@@ -193,6 +195,8 @@
 		<property name="phone" value="+34678918234" />
 		<property name="address" value="Calle Napoleon, 10, CP: 32123, Madrid" />
 		<property name="userAccount" ref="userAccount3" />
+		<property name="finder" ref="finder2" />
+		
 	</bean>
 
 	<bean class="domain.Member" id="member3">
@@ -204,6 +208,8 @@
 		<property name="phone" value="+34678918234" />
 		<property name="address" value="Calle Napoleon, 10, CP: 32123, Madrid" />
 		<property name="userAccount" ref="userAccount4" />
+		<property name="finder" ref="finder3" />
+		
 	</bean>
 
 	<!-- Customisation -->
@@ -214,6 +220,8 @@
 		<property name="welcomeMessageEn" value="Welcome to Acme Madrugá, the site to organise your processions." />
 		<property name="welcomeMessageEs" value="¡Bienvenidos a Acme Madrugá! Tu sitio para organizar procesiones." />
 		<property name="countryCode" value="+34" />
+		<property name="finderCacheTime" value="1" />
+		<property name="finderMaxResults" value="10" />
 	</bean>
 
 	<!-- Enrolments -->
@@ -467,4 +475,50 @@
 			</list>
 		</property>
 	</bean>
+	
+	<!-- Finder -->
+	
+	<bean class="domain.Finder" id="finder1">
+		<property name="keyWord" value="macarena" />
+		<property name="area" value="macarena" />
+		<property name="dateMin" value="2017/01/01" />
+		<property name="dateMax" value="2017/03/01" />
+		<property name="lastRefreshed" value="2017/02/01 23:59" />
+		<property name="results">
+			<list>
+				<ref bean="procession1" />
+			</list>
+		</property>
+		<property name="member" ref="member1" />
+	</bean>
+	
+		
+	<bean class="domain.Finder" id="finder2">
+		<property name="keyWord" value="macarena" />
+		<property name="area" value="macarena" />
+		<property name="dateMin" value="2017/01/01" />
+		<property name="dateMax" value="2017/03/01" />
+		<property name="lastRefreshed" value="2017/02/01 23:59" />
+		<property name="results">
+			<list>
+				<ref bean="procession2" />
+			</list>
+		</property>
+		<property name="member" ref="member2" />
+	</bean>
+	
+			
+	<bean class="domain.Finder" id="finder3">
+		<property name="keyWord" value="macarena" />
+		<property name="area" value="macarena" />
+		<property name="dateMin" value="2017/01/01" />
+		<property name="dateMax" value="2017/03/01" />
+		<property name="lastRefreshed" value="2017/02/01 23:59" />
+		<property name="results">
+			<list>
+			</list>
+		</property>
+		<property name="member" ref="member3" />
+	</bean>
+	
 </beans>

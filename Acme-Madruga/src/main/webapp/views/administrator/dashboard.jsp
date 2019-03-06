@@ -68,6 +68,12 @@
 
 	</table>
 	
+	<h3><spring:message code="administrator.largest.brotherhood" /></h3>
+	<jstl:out value="${largestBrotherhood.title}"></jstl:out>
+	
+	<h3><spring:message code="administrator.smallest.brotherhood" /></h3>
+	<jstl:out value="${smallestBroterhood.title}"></jstl:out>
+
 	<h3><spring:message code="administrator.startingSoonProcession" /></h3>
 	
 	<display:table pagesize="10" class="displaytag" 

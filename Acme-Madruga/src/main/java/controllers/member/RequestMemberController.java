@@ -64,7 +64,9 @@ public class RequestMemberController extends AbstractController {
 		return result;
 
 	}
-
+	@RequestMapping(value = "/list", method = RequestMethod.GET, params = {
+		"requestStatus"
+	})
 	public ModelAndView listByStatus(@RequestParam final int requestStatus) {
 		final ModelAndView result;
 		Map<String, List<Request>> groupedRequest;
