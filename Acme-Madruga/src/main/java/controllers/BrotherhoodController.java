@@ -19,13 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 import security.LoginService;
 import services.BrotherhoodService;
 import services.CustomisationService;
-import services.EnrolmentService;
 import services.FloatService;
 import services.MemberService;
 import services.ProcessionService;
 import services.SettleService;
 import domain.Brotherhood;
-import domain.Enrolment;
 import domain.Member;
 import domain.Procession;
 import forms.BrotherhoodForm;
@@ -54,9 +52,6 @@ public class BrotherhoodController extends AbstractController {
 	@Autowired
 	private CustomisationService	customisationService;
 
-	@Autowired
-	private EnrolmentService		enrolmentService;
-
 
 	// List
 
@@ -83,8 +78,6 @@ public class BrotherhoodController extends AbstractController {
 		Collection<Member> members;
 		final Collection<Procession> processions;
 		final Collection<domain.Float> floats;
-		Enrolment enrolment;
-		Member principal;
 
 		int brotherhoodId;
 		brotherhoodId = LoginService.getPrincipal().getId();
@@ -92,15 +85,12 @@ public class BrotherhoodController extends AbstractController {
 		members = this.memberService.findAllMembersOfOneBrotherhood(brotherhoodId);
 		processions = this.processionService.findAllProcessionsOfOneBrotherhood(brotherhoodId);
 		floats = this.floatService.findByBrotherhoodId(brotherhoodId);
-		principal = this.memberService.findByPrincipal();
-		enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
 
 		result = new ModelAndView("brotherhood/display");
 		result.addObject("brotherhood", brotherhood);
 		result.addObject("members", members);
 		result.addObject("processions", processions);
 		result.addObject("floats", floats);
-		result.addObject("enrolment", enrolment);
 
 		return result;
 

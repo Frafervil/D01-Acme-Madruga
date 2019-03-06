@@ -106,6 +106,7 @@
 		
 		<security:intercept-url pattern="/messageBox/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/message/**" access="isAuthenticated()" />
+		<security:intercept-url pattern="/messageBox/actor/list.do" access="isAuthenticated()" />
 		<security:intercept-url pattern="/message/administrator/create.do" access="hasRole('ADMIN')" /> 
 
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />

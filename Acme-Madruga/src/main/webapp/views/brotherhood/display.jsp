@@ -29,7 +29,7 @@
 			<td data-label="name">${brotherhood.name}</td>
 		</tr>
 		<tr>
-			<td><spring:message code="brotherhood.middlename" />
+			<td><spring:message code="brotherhood.middleName" />
 			<td data-label="MiddleName">${brotherhood.middleName}</td>
 		</tr>
 		<tr>

@@ -17,6 +17,7 @@
 <%@taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
 <table class="ui celled table">
 	<thead>
@@ -57,16 +58,11 @@
 	</tbody>
 </table>
 
-<jstl:if test="${member.userAccount.username == pageContext.request.userPrincipal.name}">
-	<security:authorize access="hasRole('MEMBER')">
-
-<input type="button" name="save" class="ui button"
-	value="<spring:message code="member.edit" />"
-	onclick="javascript: relativeRedir('member/edit.do');" />
-</security:authorize>
-</jstl:if>
+<security:authorize access="hasRole('MEMBER')">
+	<acme:button url="member/edit.do" code="member.edit"/>
 	<br>
 	<br>
+	</security:authorize>
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
 	<jstl:choose>

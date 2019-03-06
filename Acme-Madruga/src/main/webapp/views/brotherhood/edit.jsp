@@ -27,7 +27,7 @@
 	<br />
 	
 	<form:label path="middleName">
-		<spring:message code="brotherhood.middlename" />:
+		<spring:message code="brotherhood.middleName" />:
 	</form:label>
 	<form:input path="middleName" />
 	<form:errors cssClass="error" path="middleName" />
@@ -81,7 +81,7 @@
 	<br />
 	<br />
 	
-	<jstl:if test="${brotherhoodForm.setle.id ==0}">
+	<jstl:if test="${brotherhoodForm.settle.id ==0}">
 	<acme:select items="${settles}" itemLabel="area" code="brotherhood.area" path="settle" id="selttle"/>
 	</jstl:if>
 	<br />
