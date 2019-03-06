@@ -181,7 +181,8 @@ public class MemberService {
 			binding.rejectValue("passwordChecker", "member.validation.passwordsNotMatch", "Passwords doesnt match");
 		if (!this.useraccountRepository.findUserAccountsByUsername(memberForm.getUsername()).isEmpty())
 			binding.rejectValue("username", "member.validation.usernameExists", "This username already exists");
-
+		if (memberForm.getCheckBox() == false)
+			binding.rejectValue("checkBox", "member.validation.checkBox", "This checkbox must be checked");
 		this.validator.validate(result, binding);
 		this.memberRepository.flush();
 
