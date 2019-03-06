@@ -33,19 +33,11 @@ import forms.AdministratorForm;
 @RequestMapping("/administrator")
 public class AdministratorController extends AbstractController {
 
-	// Constructors -----------------------------------------------------------
-
-	public AdministratorController() {
-		super();
-	}
-
+	@Autowired
+	private AdministratorService administratorservice;
 
 	@Autowired
-	private AdministratorService	administratorservice;
-
-	@Autowired
-	private CustomisationService	customisationService;
-
+	private CustomisationService customisationService;
 
 	@RequestMapping("/viewProfile")
 	public ModelAndView view() {
@@ -57,7 +49,8 @@ public class AdministratorController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final Administrator administrator) {
+	protected ModelAndView createEditModelAndView(
+			final Administrator administrator) {
 		ModelAndView result;
 		AdministratorForm administratorForm;
 		administratorForm = this.administratorservice.construct(administrator);
@@ -65,7 +58,8 @@ public class AdministratorController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final AdministratorForm administratorForm, final String messageCode) {
+	protected ModelAndView createEditModelAndView(
+			final AdministratorForm administratorForm, final String messageCode) {
 		ModelAndView result;
 		String countryCode;
 
@@ -78,37 +72,41 @@ public class AdministratorController extends AbstractController {
 
 		return result;
 	}
+
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public ModelAndView edit() {
 		ModelAndView result;
 		Administrator administrator;
-		AdministratorForm administratorForm;
-
 		administrator = this.administratorservice.findByPrincipal();
 		Assert.notNull(administrator);
-		administratorForm = this.administratorservice.construct(administrator);
 		result = this.createEditModelAndView(administrator);
 
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@ModelAttribute("administratorForm") @Valid final AdministratorForm administratorForm, final BindingResult binding) {
+	public ModelAndView save(
+			@ModelAttribute("administratorForm") @Valid final AdministratorForm administratorForm,
+			final BindingResult binding) {
 		ModelAndView result;
 		Administrator administrator;
 
 		try {
-			administrator = this.administratorservice.reconstruct(administratorForm, binding);
+			administrator = this.administratorservice.reconstruct(
+					administratorForm, binding);
 			if (binding.hasErrors()) {
 				result = this.createEditModelAndView(administrator);
 				for (final ObjectError e : binding.getAllErrors())
-					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+					System.out.println(e.getObjectName() + " error ["
+							+ e.getDefaultMessage() + "] "
+							+ Arrays.toString(e.getCodes()));
 			} else {
 				administrator = this.administratorservice.save(administrator);
 				result = new ModelAndView("redirect:/welcome/index.do");
 			}
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(administratorForm, "administrator.commit.error");
+			result = this.createEditModelAndView(administratorForm,
+					"administrator.commit.error");
 		}
 		return result;
 	}
