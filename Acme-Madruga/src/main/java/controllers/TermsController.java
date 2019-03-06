@@ -10,12 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/terms")
 public class TermsController extends AbstractController {
 
-	// Constructors -----------------------------------------------------------
-
-	public TermsController() {
-		super();
-	}
-
 	@RequestMapping(value = "/terms", method = RequestMethod.GET)
 	public ModelAndView show() {
 		ModelAndView result;
