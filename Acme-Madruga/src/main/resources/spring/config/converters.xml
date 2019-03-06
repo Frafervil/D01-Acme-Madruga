@@ -64,6 +64,11 @@
 		<bean class="converters.MessageToStringConverter"/>
 		<bean class="converters.StringToMessageConverter"/>
 
+		<bean class="converters.SettleToStringConverter" />
+		<bean class="converters.StringToSettleConverter" />	
+
+		<bean class="converters.FinderToStringConverter" />
+		<bean class="converters.StringToFinderConverter" />		
 	</util:list>
 	
 </beans>

@@ -53,8 +53,20 @@
 	<form:errors cssClass="error" path="countryCode" />
 	<br />
 	<br />
-	
-
+	<form:label path="finderCacheTime">
+		<spring:message code="customisation.finderCacheTime" />:
+	</form:label>
+	<form:input path="finderCacheTime" />
+	<form:errors cssClass="error" path="finderCacheTime" />
+	<br />
+	<br />	
+	<form:label path="finderMaxResults">
+		<spring:message code="customisation.finderMaxResults" />:
+	</form:label>
+	<form:input path="finderMaxResults" />
+	<form:errors cssClass="error" path="finderMaxResults" />
+	<br />
+	<br />	
 	
 	
 
