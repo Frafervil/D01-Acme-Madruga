@@ -1,10 +1,13 @@
 
 package domain;
 
+import java.util.List;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -18,13 +21,14 @@ import security.UserAccount;
 @Access(AccessType.PROPERTY)
 public class Actor extends DomainEntity implements Cloneable {
 
-	private String		name;
-	private String		middleName;
-	private String		surname;
-	private String		photo;
-	private String		phone;
-	private String		address;
-	private UserAccount	userAccount;
+	private String				name;
+	private String				middleName;
+	private String				surname;
+	private String				photo;
+	private String				phone;
+	private String				address;
+	private List<MessageBox>	messageBoxes;
+	private UserAccount			userAccount;
 
 
 	@NotBlank
@@ -93,4 +97,12 @@ public class Actor extends DomainEntity implements Cloneable {
 		this.userAccount = userAccount;
 	}
 
+	@OneToMany(mappedBy = "actor")
+	public List<MessageBox> getMessageBoxes() {
+		return this.messageBoxes;
+	}
+
+	public void setMessageBoxes(final List<MessageBox> messageBoxes) {
+		this.messageBoxes = messageBoxes;
+	}
 }
