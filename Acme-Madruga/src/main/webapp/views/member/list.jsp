@@ -24,11 +24,10 @@
 class="displaytag" keepStatus="true">
 
 	<!-- Display -->
-	<security:authorize access="hasRole('BROTHERHOOD')">
 	<display:column>
-		<a href="member/brotherhood/display.do?memberId=${row.id}"><spring:message code="member.display"/></a>
+		<a href="member/display.do?memberId=${row.id}"><spring:message code="member.display"/></a>
 	</display:column>
-	</security:authorize>
+	
 	<!-- Name -->
 	<spring:message code="member.name" var="nameHeader" />
 	<display:column  property="name" title="${nameHeader}" />

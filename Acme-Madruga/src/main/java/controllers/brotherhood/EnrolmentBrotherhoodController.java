@@ -93,16 +93,21 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final Enrolment enrolment) {
+	public ModelAndView delete(@Valid final Enrolment enrolment, final BindingResult binding) {
 		ModelAndView result;
-		try {
-			Assert.isTrue(enrolment.getId() != 0);
-			this.enrolmentService.delete(enrolment);
-			result = new ModelAndView("member/brotherhood/list");
-		} catch (final Exception oops) {
-			oops.printStackTrace();
-			result = this.createEditModelAndView(enrolment, "enrolment.commit.error");
-		}
+
+		if (binding.hasErrors()) {
+			System.out.println(binding.getAllErrors());
+			result = this.createEditModelAndView(enrolment);
+		} else
+			try {
+				Assert.isTrue(enrolment.getId() != 0);
+				this.enrolmentService.delete(enrolment);
+				result = new ModelAndView("member/brotherhood/list");
+			} catch (final Exception oops) {
+				oops.printStackTrace();
+				result = this.createEditModelAndView(enrolment, "enrolment.commit.error");
+			}
 
 		return result;
 	}

@@ -15,10 +15,15 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.BrotherhoodService;
 import services.CustomisationService;
+import services.EnrolmentService;
 import services.MemberService;
+import domain.Brotherhood;
+import domain.Enrolment;
 import domain.Member;
 import forms.MemberForm;
 
@@ -32,6 +37,12 @@ public class MemberController extends AbstractController {
 
 	@Autowired
 	private CustomisationService	customisationService;
+
+	@Autowired
+	private BrotherhoodService		brotherhoodService;
+
+	@Autowired
+	private EnrolmentService		enrolmentService;
 
 
 	// List
@@ -118,12 +129,34 @@ public class MemberController extends AbstractController {
 		return result;
 	}
 
-	@RequestMapping("/display")
-	public ModelAndView view() {
-		ModelAndView result;
+	//	@RequestMapping("/display")
+	//	public ModelAndView view() {
+	//		ModelAndView result;
+	//
+	//		result = new ModelAndView("member/display");
+	//		result.addObject("actor", this.memberService.findByPrincipal());
+	//
+	//		return result;
+	//	}
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView view(@RequestParam(required = false) final Integer memberId) {
+		final ModelAndView result;
+		Member member = new Member();
+		Enrolment enrolment;
+		Brotherhood principal;
+
+		if (memberId == null)
+			member = this.memberService.findByPrincipal();
+		else
+			member = this.memberService.findOne(memberId);
+
+		principal = this.brotherhoodService.findByPrincipal();
+		enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(principal.getId(), memberId);
 
 		result = new ModelAndView("member/display");
-		result.addObject("actor", this.memberService.findByPrincipal());
+		result.addObject("member", member);
+		result.addObject("enrolment", enrolment);
 
 		return result;
 	}

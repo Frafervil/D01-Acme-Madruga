@@ -104,9 +104,11 @@
 		<security:intercept-url pattern="/procession/brotherhood/create.do" access="hasRole('BROTHERHOOD')" />	
 		<security:intercept-url pattern="/procession/brotherhood/edit.do" access="hasRole('BROTHERHOOD')" />
 		
-		<security:intercept-url pattern="/messageBox/**" access="isAuthenticated()" />
-		<security:intercept-url pattern="/message/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/messageBox/actor/list.do" access="isAuthenticated()" />
+		<security:intercept-url pattern="/messageBox/actor/create.do" access="isAuthenticated()" />
+		<security:intercept-url pattern="/messageBox/actor/edit.do" access="isAuthenticated()" />
+		<security:intercept-url pattern="/message/actor/edit.do" access="isAuthenticated()" />
+		<security:intercept-url pattern="/message/actor/create.do" access="isAuthenticated()" />
 		<security:intercept-url pattern="/message/administrator/create.do" access="hasRole('ADMIN')" /> 
 
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />
