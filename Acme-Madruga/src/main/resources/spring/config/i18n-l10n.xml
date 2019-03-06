@@ -35,6 +35,8 @@
 		<value>/views/customisation/messages</value>
 		<value>/views/position/messages</value>
 		<value>/views/settle/messages</value>
+		<value>/views/messageBox/messages</value>
+		<value>/views/message/messages</value>
 
 	</util:list>
 
