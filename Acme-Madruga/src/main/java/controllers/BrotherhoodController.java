@@ -14,18 +14,13 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import security.LoginService;
 import services.BrotherhoodService;
 import services.CustomisationService;
-import services.FloatService;
-import services.MemberService;
-import services.ProcessionService;
 import services.SettleService;
 import domain.Brotherhood;
-import domain.Member;
-import domain.Procession;
 import forms.BrotherhoodForm;
 
 @Controller
@@ -39,15 +34,6 @@ public class BrotherhoodController extends AbstractController {
 
 	@Autowired
 	private SettleService			settleService;
-
-	@Autowired
-	private MemberService			memberService;
-
-	@Autowired
-	private ProcessionService		processionService;
-
-	@Autowired
-	private FloatService			floatService;
 
 	@Autowired
 	private CustomisationService	customisationService;
@@ -72,25 +58,17 @@ public class BrotherhoodController extends AbstractController {
 	// Display
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	public ModelAndView show() {
+	public ModelAndView show(@RequestParam(required = false) final Integer brotherhoodId) {
 		final ModelAndView result;
-		Brotherhood brotherhood;
-		Collection<Member> members;
-		final Collection<Procession> processions;
-		final Collection<domain.Float> floats;
+		Brotherhood brotherhood = new Brotherhood();
 
-		int brotherhoodId;
-		brotherhoodId = LoginService.getPrincipal().getId();
-		brotherhood = this.brotherhoodService.findByPrincipal();
-		members = this.memberService.findAllMembersOfOneBrotherhood(brotherhoodId);
-		processions = this.processionService.findAllProcessionsOfOneBrotherhood(brotherhoodId);
-		floats = this.floatService.findByBrotherhoodId(brotherhoodId);
+		if (brotherhoodId == null)
+			brotherhood = this.brotherhoodService.findByPrincipal();
+		else
+			brotherhood = this.brotherhoodService.findOne(brotherhoodId);
 
 		result = new ModelAndView("brotherhood/display");
 		result.addObject("brotherhood", brotherhood);
-		result.addObject("members", members);
-		result.addObject("processions", processions);
-		result.addObject("floats", floats);
 
 		return result;
 
