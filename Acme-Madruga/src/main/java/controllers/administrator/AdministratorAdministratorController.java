@@ -37,21 +37,23 @@ public class AdministratorAdministratorController extends AbstractController {
 	public ModelAndView register() {
 		ModelAndView res;
 		Administrator administrator;
+		AdministratorForm administratorForm;
 		administrator = this.administratorService.create();
-		res = this.createRegisterModelAndView(administrator);
+		administratorForm = this.administratorService.construct(administrator);
+		res = this.createRegisterModelAndView(administratorForm);
 		res.addObject("formURI", "administrator/administrator/register.do");
 		return res;
 	}
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@ModelAttribute("administratorForm") @Valid final AdministratorForm administratorForm, final BindingResult binding) {
+	@RequestMapping(value = "/register", method = RequestMethod.POST, params = "register")
+	public ModelAndView register(@ModelAttribute("administratorForm") @Valid final AdministratorForm administratorForm, final BindingResult binding) {
 		ModelAndView res;
 		Administrator admin;
 
 		try {
 			admin = this.administratorService.reconstruct(administratorForm, binding);
 			if (binding.hasErrors()) {
-				res = this.createRegisterModelAndView(admin);
+				res = this.createRegisterModelAndView(administratorForm);
 				for (final ObjectError e : binding.getAllErrors())
 					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
 
@@ -67,10 +69,8 @@ public class AdministratorAdministratorController extends AbstractController {
 
 	//Ancillary Methods------------------------------------------------------------------
 
-	private ModelAndView createRegisterModelAndView(final Administrator admin) {
+	private ModelAndView createRegisterModelAndView(final AdministratorForm administratorForm) {
 		ModelAndView result;
-		AdministratorForm administratorForm;
-		administratorForm = this.administratorService.construct(admin);
 		result = this.createRegisterModelAndView(administratorForm, null);
 		return result;
 	}

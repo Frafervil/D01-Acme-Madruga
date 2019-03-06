@@ -38,10 +38,16 @@
 		<acme:textbox code="brotherhood.phone" path="phone" placeholder="+34 600 1234"/>
 		<acme:textbox code="brotherhood.address" path="address" placeholder="123 Main St Anytown, Australia"/>
 		<acme:textbox code="brotherhood.title" path="title" placeholder="La Pasion"/>
-		</fieldset>
-		<br/>
 		
 		
+		 <acme:select items="${settles}" itemLabel="area" code="brotherhood.area" path="settle" id="settle"/> 
+		
+	<%-- 	<form:select path="settle">
+			<jstl:forEach items="${settles}" var="e">
+				<form:option value="${e.id}">${e.area}
+				</form:option>
+			</jstl:forEach>
+		</form:select> --%>
 		
 		<fieldset>
     	<legend><spring:message code="brotherhood.fieldset.userAccount"/></legend>
@@ -53,17 +59,18 @@
 		</fieldset>
 		<br/>
 		
-		<%-- <acme:submit name="register" code="brotherhood.save"/> --%>
-
+		<acme:checkbox code="brotherhood.confirmTerms" path="checkBox"/>
+		
+		<a href="terms/terms.do"><spring:message code="brotherhood.terms"/></a>
+		<br/>
+		<br/>
+		
 		<input type="submit" name="register" id="register"
 		value="<spring:message code="brotherhood.save" />" >&nbsp; 
 		
 		<acme:cancel url="welcome/index.do" code="brotherhood.cancel"/>
 	</form:form>
 	
-	
-	
-
 	
 	<script type="text/javascript">
 	$("#register").on("click",function(){validatePhone("<spring:message code='brotherhood.confirmationPhone'/>","${countryCode}");}); 

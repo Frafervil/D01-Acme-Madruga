@@ -13,10 +13,14 @@
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 
-<form:form action="member/edit.do" modelAttribute="memberForm" >
+<form:form action="member/register.do" modelAttribute="memberForm" >
 
 
 	<form:hidden path="idMember"/>
+	
+	<acme:displayText dataLabel="Terms and conditions" code="member.confirmTerms"/>
+		<br/>
+		<br/>
 	
 	<fieldset>
     <legend><spring:message code="member.fieldset.personalInformation"/></legend>
@@ -30,8 +34,23 @@
 	</fieldset>
 	<br/>
 	
-
-	<input type="submit" name="save" id="save"
+	<fieldset>
+    <legend><spring:message code="member.fieldset.userAccount"/></legend>
+	<acme:textbox code="member.username" path="username" placeholder="HomerS"/>
+	
+	<acme:password code="member.password" path="password"/>
+	<acme:password code="member.passwordChecker" path="passwordChecker"/>
+	
+	</fieldset>
+	<br/>
+	
+	<acme:checkbox code="member.confirmTerms" path="checkBox"/>
+		
+		<a href="terms/terms.do"><spring:message code="member.terms"/></a>
+		<br/>
+		<br/>
+	
+	<input type="submit" name="register" id="register"
 		value="<spring:message code="member.save" />" >&nbsp; 
 	
 	<acme:cancel url="welcome/index.do" code="member.cancel"/>
@@ -40,7 +59,7 @@
 
 
 <script type="text/javascript">
-$("#save").on("click",function(){validatePhone("<spring:message code='member.confirmationPhone'/>","${countryCode}");});
+$("#register").on("click",function(){validatePhone("<spring:message code='member.confirmationPhone'/>","${countryCode}");});
 </script>
 
 

@@ -70,6 +70,7 @@ public class AdministratorForm {
 		this.photo = photo;
 	}
 
+	@NotBlank
 	@Pattern(regexp = "^[a-zA-Z0-9 ]*[<]?\\w+[@]")
 	public String getEmail() {
 		return this.email;
@@ -129,7 +130,16 @@ public class AdministratorForm {
 	// --- Others -------------------------------------------------
 
 	private String	passwordChecker;
+	private boolean	checkBox;
 
+
+	public boolean getCheckBox() {
+		return this.checkBox;
+	}
+
+	public void setCheckBox(final boolean checkBox) {
+		this.checkBox = checkBox;
+	}
 
 	@NotBlank
 	@Size(min = 5, max = 32)

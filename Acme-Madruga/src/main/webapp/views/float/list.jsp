@@ -24,9 +24,13 @@
 class="displaytag" keepStatus="true">
 
 	<!-- Display -->
+	<security:authorize access = "hasRole('BROTHERHOOD')">
+	<jstl:if test = "${row.brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
 	<display:column>
 		<a href="float/display.do?floatId=${row.id}"><spring:message code="float.display"/></a>
 	</display:column>
+	</jstl:if>
+	</security:authorize>
 	
 	<!-- Title -->
 	<spring:message code="float.title" var="titleHeader" />
@@ -40,8 +44,10 @@ class="displaytag" keepStatus="true">
 
 <!-- Create float -->
 <security:authorize access="hasRole('BROTHERHOOD')">
+<jstl:if test = "${row.brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
 	<div>
 		<a href="float/brotherhood/create.do"><spring:message
 				code="float.create" /></a>
 	</div>
+	</jstl:if>
 </security:authorize> 

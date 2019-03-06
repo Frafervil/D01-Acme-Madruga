@@ -16,6 +16,7 @@ import repositories.MemberRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
+import security.UserAccountRepository;
 import domain.Administrator;
 import domain.Brotherhood;
 import domain.Enrolment;
@@ -30,6 +31,9 @@ public class MemberService {
 	// Managed repository -----------------------------------------------------
 	@Autowired
 	private MemberRepository		memberRepository;
+
+	@Autowired
+	private UserAccountRepository	useraccountRepository;
 
 	// Supporting services ----------------------------------------------------
 
@@ -70,23 +74,29 @@ public class MemberService {
 	}
 
 	public Member save(final Member member) {
-		Member saved;
+		Member result, saved;
 		Assert.notNull(member);
+		UserAccount logedUserAccount;
 
-		if (member.getId() == 0) {
+		final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+		logedUserAccount = this.actorService.createUserAccount(Authority.MEMBER);
+		Assert.notNull(member, "member.not.null");
 
-			final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+		if (member.getId() == 0)
 			member.getUserAccount().setPassword(passwordEncoder.encodePassword(member.getUserAccount().getPassword(), null));
-		} else {
-			Member principal;
-			principal = this.findByPrincipal();
-			Assert.notNull(principal);
-
+		else {
+			logedUserAccount = LoginService.getPrincipal();
+			Assert.notNull(logedUserAccount, "member.notLogged");
+			Assert.isTrue(logedUserAccount.equals(member.getUserAccount()), "memer.notEqual.userAccount");
+			saved = this.memberRepository.findOne(member.getId());
+			Assert.notNull(saved, "member.not.null");
+			Assert.isTrue(saved.getUserAccount().getUsername().equals(member.getUserAccount().getUsername()));
+			Assert.isTrue(saved.getUserAccount().getPassword().equals(member.getUserAccount().getUsername()));
 		}
 
-		saved = this.memberRepository.save(member);
+		result = this.memberRepository.save(member);
 
-		return saved;
+		return result;
 	}
 
 	public Member findOne(final int memberId) {
@@ -140,6 +150,7 @@ public class MemberService {
 		memberForm.setPhone(member.getPhone());
 		memberForm.setPhoto(member.getPhoto());
 		memberForm.setSurname(member.getSurname());
+		memberForm.setCheckBox(memberForm.getCheckBox());
 		memberForm.setUsername(member.getUserAccount().getUsername());
 		return memberForm;
 	}
@@ -154,7 +165,7 @@ public class MemberService {
 		} else
 			result = this.memberRepository.findOne(memberForm.getIdMember());
 
-		Assert.isTrue(memberForm.getPasswordChecker().equals(memberForm.getPassword()), "memberForm.validation.passwordsNotMatch");
+		//Assert.isTrue(memberForm.getPasswordChecker().equals(memberForm.getPassword()), "memberForm.validation.passwordsNotMatch");
 
 		//Crear un objeto nuevo, no setear sobre el resultado
 
@@ -165,6 +176,11 @@ public class MemberService {
 		result.setPhone(memberForm.getPhone());
 		result.setPhoto(memberForm.getPhoto());
 		result.setSurname(memberForm.getSurname());
+
+		if (!memberForm.getPassword().equals(memberForm.getPasswordChecker()))
+			binding.rejectValue("passwordChecker", "member.validation.passwordsNotMatch", "Passwords doesnt match");
+		if (!this.useraccountRepository.findUserAccountsByUsername(memberForm.getUsername()).isEmpty())
+			binding.rejectValue("username", "member.validation.usernameExists", "This username already exists");
 
 		this.validator.validate(result, binding);
 		this.memberRepository.flush();

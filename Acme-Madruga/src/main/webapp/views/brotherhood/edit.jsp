@@ -12,7 +12,6 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
-<jstl:if test="${permission }">
 
 <form:form action="brotherhood/edit.do" modelAttribute="brotherhoodForm">
 
@@ -82,6 +81,12 @@
 	<br />
 	<br />
 	
+	<jstl:if test="${brotherhoodForm.setle.id ==0}">
+	<acme:select items="${settles}" itemLabel="area" code="brotherhood.area" path="settle" id="selttle"/>
+	</jstl:if>
+	<br />
+	<br />
+	
 	<form:label path="pictures">
 		<spring:message code="brotherhood.pictures" />:
 	</form:label>
@@ -89,36 +94,6 @@
 	<form:errors cssClass="error" path="pictures" />
 	<br />
 	<br />
-	
-	<jstl:choose>
-	<jstl:when test="${brotherhood.id == 0}">
-	
-	
-	<form:label path="username">
-		<spring:message code="brotherhood.username" />:
-	</form:label>
-	<spring:message code="brotherhood.username.placeholder" var="usernamePlaceholder"/> 
-	<form:input path="username" placeholder="${usernamePlaceholder}" size="25"/>
-	<form:errors cssClass="error" path="username" />
-	<br />
-	<br />
-	
-	
-	
-	<form:label path="password">
-	<spring:message code="brotherhood.password" />:
-	</form:label>
-	<spring:message code="brotherhood.password.placeholder" var="passwordPlaceholder"/> 
-	<form:password path="password" placeholder="${passwordPlaceholder}" size="25"/>
-	<form:errors cssClass="error" path="password" />
-	<br />
-	<br />
-	
-
-		
-	
-	</jstl:when>
-	</jstl:choose>
 	
 
 	<input type="submit" name="save" id="save"
@@ -133,17 +108,7 @@
 
 <script type="text/javascript">
 $("#save").on("click",function(){validatePhone("<spring:message code='brotherhood.confirmationPhone'/>","${countryCode}");});
-
-
-	 
 </script>
 
-
-
-</jstl:if>
-
-<jstl:if test="${!permission }">
-<h3><spring:message code="member.nopermission" /></h3>
-</jstl:if>
 
 

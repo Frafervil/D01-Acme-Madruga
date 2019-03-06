@@ -23,6 +23,7 @@ import services.EnrolmentService;
 import services.FloatService;
 import services.MemberService;
 import services.ProcessionService;
+import services.SettleService;
 import domain.Brotherhood;
 import domain.Enrolment;
 import domain.Member;
@@ -37,6 +38,9 @@ public class BrotherhoodController extends AbstractController {
 
 	@Autowired
 	private BrotherhoodService		brotherhoodService;
+
+	@Autowired
+	private SettleService			settleService;
 
 	@Autowired
 	private MemberService			memberService;
@@ -130,8 +134,6 @@ public class BrotherhoodController extends AbstractController {
 					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
 			} else
 				brotherhood = this.brotherhoodService.save(brotherhood);
-			// AQUI NO SE PONE EL RECONTRUCT DEL USERACCOUNT PORQUE ESTE SAVE NO GUARDA EL USUARIO Y LA CONTRASEÑA
-			// SI HUBIERA QUE GUARDAR ALGO DE OTRA ENTIDAD, HABRIA QUE PONER EL RECONSTRUCT DE ESA ENTIDAD
 			result = new ModelAndView("welcome/index");
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(brotherhoodForm, "brotherhood.commit.error");
@@ -150,9 +152,9 @@ public class BrotherhoodController extends AbstractController {
 		try {
 			brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm, binding);
 			if (binding.hasErrors()) {
-				result = this.createEditModelAndView(brotherhoodForm);
 				for (final ObjectError e : binding.getAllErrors())
 					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+				result = this.createEditModelAndView(brotherhoodForm);
 			} else {
 				brotherhood = this.brotherhoodService.save(brotherhood);
 				result = new ModelAndView("welcome/index");
@@ -171,6 +173,7 @@ public class BrotherhoodController extends AbstractController {
 		ModelAndView result;
 		Brotherhood brotherhood;
 		BrotherhoodForm brotherhoodForm;
+
 		brotherhood = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(brotherhood);
 		brotherhoodForm = this.brotherhoodService.construct(brotherhood);
@@ -201,8 +204,8 @@ public class BrotherhoodController extends AbstractController {
 		result.addObject("brotherhoodForm", brotherhoodForm);
 		result.addObject("actionURI", "brotherhood/edit.do");
 		result.addObject("redirectURI", "welcome/index.do");
+		result.addObject("settles", this.settleService.findAll());
 		result.addObject("countryCode", countryCode);
-		result.addObject("permission", true);
 
 		result.addObject("message", message);
 

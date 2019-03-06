@@ -9,36 +9,42 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
-<form:form action="administrator/edit.do" modelAttribute="actor">
-	<form:hidden path="id" />
-	<form:hidden path="version" />
+<form:form action="administrator/edit.do" modelAttribute="administratorForm">
+	<form:hidden path="idAdministrator" />
 
 	<div class="ui equal width form">
 		<div class="fields">
 			<!-- Name -->
-			<acme:textbox code="administrator.name" path="name"/>
+			<acme:textbox code="administrator.name" path="name" placeholder="Homer"/>
 			<!-- MiddleName -->
-			<acme:textbox code="administrator.middleName" path="middleName"/>
+			<acme:textbox code="administrator.middleName" path="middleName" placeholder="Jay"/>
 			<!-- Surname -->
-			<acme:textbox code="administrator.surname" path="surname"/>
+			<acme:textbox code="administrator.surname" path="surname" placeholder="Simpson"/>
 		</div>
 		<div class="fields">
 			<!-- Email -->
-			<acme:textbox code="administrator.email" path="email"/>
+			<acme:textbox code="administrator.email" path="email" placeholder="homerjsimpson@"/>
 			<!-- Phone Number -->
-			<acme:textbox code="administrator.phone" path="phone"/>
+			<acme:textbox code="administrator.phone" path="phone" placeholder="+34 600123456"/>
 		</div>
 		<div class="fields">
 			<!-- Address -->
-			<acme:textbox code="administrator.address" path="address"/>
+			<acme:textbox code="administrator.address" path="address" placeholder="123 Main St Anytown, Australia"/>
 			<!-- Photo -->
-			<acme:textbox code="administrator.photo" path="photo"/>
+			<acme:textbox code="administrator.photo" path="photo" placeholder="https://www.jazzguitar.be/images/bio/homer-simpson.jpg"/>
 		</div>
 	</div>
 
-	<acme:submit name="save" code="administrator.save"/>
+	
+	<input type="submit" name="save" id="save"
+		value="<spring:message code="administrator.save" />" />
 	
 	<acme:cancel url="administrator/viewProfile.do" code="administrator.cancel"/>
 
 
 </form:form>
+
+
+<script type="text/javascript">
+$("#save").on("click",function(){validatePhone("<spring:message code='admin.confirmationPhone'/>","${countryCode}");});
+</script>

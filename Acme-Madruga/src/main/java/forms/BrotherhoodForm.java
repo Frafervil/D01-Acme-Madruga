@@ -11,6 +11,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
+import domain.Settle;
+
 public class BrotherhoodForm {
 
 	private String				name;
@@ -133,7 +135,25 @@ public class BrotherhoodForm {
 
 
 	private String	passwordChecker;
+	private boolean	checkBox;
+	private Settle	settle;
 
+
+	public Settle getSettle() {
+		return this.settle;
+	}
+
+	public void setSettle(final Settle settle) {
+		this.settle = settle;
+	}
+
+	public boolean getCheckBox() {
+		return this.checkBox;
+	}
+
+	public void setCheckBox(final boolean checkBox) {
+		this.checkBox = checkBox;
+	}
 
 	@NotBlank
 	@Size(min = 5, max = 32)

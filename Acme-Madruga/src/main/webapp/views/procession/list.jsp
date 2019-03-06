@@ -20,15 +20,18 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
-<security:authorize access="hasRole('BROTHERHOOD')">
 
 <display:table name="processions" id="row" pagesize="5" requestURI="${requestURI}" 
 class="displaytag" keepStatus="true">
 
 	<!-- Display -->
+	<security:authorize access = "hasRole('BROTHERHOOD')">
+	<jstl:if test = "${row.brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
 	<display:column>
 		<a href="procession/display.do?processionId=${row.id}"><spring:message code="procession.display"/></a>
 	</display:column>
+	</jstl:if>
+	</security:authorize>
 	
 	<!-- Title -->
 	<spring:message code="procession.title" var="titleHeader" />
@@ -40,12 +43,13 @@ class="displaytag" keepStatus="true">
 	
 </display:table>
 
-</security:authorize>
 
 <!-- Create procession -->
 <security:authorize access="hasRole('BROTHERHOOD')">
+<jstl:if test = "${row.brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
 	<div>
 		<a href="procession/brotherhood/create.do"><spring:message
 				code="procession.create" /></a>
 	</div>
+	</jstl:if>
 </security:authorize> 
