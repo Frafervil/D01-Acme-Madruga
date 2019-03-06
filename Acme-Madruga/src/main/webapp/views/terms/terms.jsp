@@ -1,7 +1,7 @@
 <%--
  * terms.jsp
  *
- * Copyright (C) 2018 Universidad de Sevilla
+ * Copyright (C) 2019 Universidad de Sevilla
  * 
  * The use of this project is hereby constrained to the conditions of the 
  * TDG Licence, a copy of which you may download from 
@@ -80,8 +80,8 @@
 <p>
 	<strong>Enlaces a Terceros</strong>
 </p>
-<p>Este sitio web pudiera contener enlaces a otros sitios que
-	pudieran ser de su interés. Una vez que usted de click en estos enlaces
+<p>Este sitio web podrían contener enlaces a otros sitios que
+	podrían ser de su interés. Una vez que usted de click en estos enlaces
 	y abandone nuestra página, ya no tenemos control sobre al sitio al que
 	es redirigido y por lo tanto no somos responsables de los términos o
 	privacidad ni de la protección de sus datos en esos otros sitios
