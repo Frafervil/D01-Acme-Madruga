@@ -254,4 +254,29 @@ public class BrotherhoodService {
 		return result;
 
 	}
+	
+	public Brotherhood reconstructPruned(final Brotherhood brotherhood, final BindingResult binding){
+		Brotherhood result;
+		
+		if(brotherhood.getId() == 0){
+			result = brotherhood;
+		}else{
+			result = this.brotherhoodRepository.findOne(brotherhood.getId());
+		}
+		result.setAddress(brotherhood.getAddress());
+		result.setEmail(brotherhood.getEmail());
+		result.setEstablishmentDate(brotherhood.getEstablishmentDate());
+		result.setMessageBoxes(brotherhood.getMessageBoxes());
+		result.setMiddleName(brotherhood.getMiddleName());
+		result.setName(brotherhood.getName());
+		result.setPhone(brotherhood.getPhone());
+		result.setPhoto(brotherhood.getPhoto());
+		result.setPictures(brotherhood.getPictures());
+		result.setSurname(brotherhood.getSurname());
+		result.setTitle(brotherhood.getTitle());
+		this.validator.validate(result, binding);
+		this.brotherhoodRepository.flush();
+		return result;
+	}
+	
 }

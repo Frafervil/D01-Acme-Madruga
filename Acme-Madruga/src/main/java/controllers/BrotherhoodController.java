@@ -1,4 +1,3 @@
-
 package controllers;
 
 import java.util.Arrays;
@@ -30,14 +29,13 @@ public class BrotherhoodController extends AbstractController {
 	// Services
 
 	@Autowired
-	private BrotherhoodService		brotherhoodService;
+	private BrotherhoodService brotherhoodService;
 
 	@Autowired
-	private SettleService			settleService;
+	private SettleService settleService;
 
 	@Autowired
-	private CustomisationService	customisationService;
-
+	private CustomisationService customisationService;
 
 	// List
 
@@ -58,7 +56,8 @@ public class BrotherhoodController extends AbstractController {
 	// Display
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	public ModelAndView show(@RequestParam(required = false) final Integer brotherhoodId) {
+	public ModelAndView show(
+			@RequestParam(required = false) final Integer brotherhoodId) {
 		final ModelAndView result;
 		Brotherhood brotherhood = new Brotherhood();
 
@@ -74,7 +73,7 @@ public class BrotherhoodController extends AbstractController {
 
 	}
 
-	//Create
+	// Create
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView create() {
 		ModelAndView result;
@@ -90,38 +89,49 @@ public class BrotherhoodController extends AbstractController {
 
 	// Save de Edit
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@ModelAttribute("brotherhoodForm") @Valid final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
+	public ModelAndView save(
+			@ModelAttribute("brotherhood") Brotherhood brotherhood,
+			final BindingResult binding) {
 		ModelAndView result;
-		Brotherhood brotherhood;
 
 		try {
-			brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm, binding);
+			brotherhood = this.brotherhoodService.reconstructPruned(
+					brotherhood, binding);
 			if (binding.hasErrors()) {
-				result = this.createEditModelAndView(brotherhoodForm);
+				result = this.editModelAndView(brotherhood);
 				for (final ObjectError e : binding.getAllErrors())
-					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
-			} else
+					System.out.println(e.getObjectName() + " error ["
+							+ e.getDefaultMessage() + "] "
+							+ Arrays.toString(e.getCodes()));
+			} else {
 				brotherhood = this.brotherhoodService.save(brotherhood);
-			result = new ModelAndView("welcome/index");
+				result = new ModelAndView("redirect:/welcome/index.do");
+			}
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(brotherhoodForm, "brotherhood.commit.error");
+			result = this.editModelAndView(brotherhood,
+					"brotherhood.commit.error");
 
 		}
 
 		return result;
 	}
 
-	//Save de Register
+	// Save de Register
 	@RequestMapping(value = "/register", method = RequestMethod.POST, params = "register")
-	public ModelAndView register(@ModelAttribute("brotherhoodForm") @Valid final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
+	public ModelAndView register(
+			@ModelAttribute("brotherhoodForm") @Valid final BrotherhoodForm brotherhoodForm,
+			final BindingResult binding) {
 		ModelAndView result;
 		Brotherhood brotherhood;
 
 		try {
-			brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm, binding);
+			brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm,
+					binding);
 			if (binding.hasErrors()) {
 				for (final ObjectError e : binding.getAllErrors())
-					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+					System.out.println(e.getObjectName() + " error ["
+							+ e.getDefaultMessage() + "] "
+							+ Arrays.toString(e.getCodes()));
 				result = this.createEditModelAndView(brotherhoodForm);
 			} else {
 				brotherhood = this.brotherhoodService.save(brotherhood);
@@ -129,7 +139,8 @@ public class BrotherhoodController extends AbstractController {
 			}
 
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(brotherhoodForm, "brotherhood.commit.error");
+			result = this.createEditModelAndView(brotherhoodForm,
+					"brotherhood.commit.error");
 
 		}
 
@@ -140,26 +151,26 @@ public class BrotherhoodController extends AbstractController {
 	public ModelAndView edit() {
 		ModelAndView result;
 		Brotherhood brotherhood;
-		BrotherhoodForm brotherhoodForm;
 
 		brotherhood = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(brotherhood);
-		brotherhoodForm = this.brotherhoodService.construct(brotherhood);
-		result = this.createEditModelAndView(brotherhoodForm);
+		result = this.editModelAndView(brotherhood);
 
 		return result;
 	}
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected ModelAndView createEditModelAndView(final BrotherhoodForm brotherhoodForm) {
+	protected ModelAndView createEditModelAndView(
+			final BrotherhoodForm brotherhoodForm) {
 		ModelAndView result;
 		result = this.createEditModelAndView(brotherhoodForm, null);
 
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final BrotherhoodForm brotherhoodForm, final String message) {
+	protected ModelAndView createEditModelAndView(
+			final BrotherhoodForm brotherhoodForm, final String message) {
 		ModelAndView result;
 		String countryCode;
 
@@ -179,4 +190,26 @@ public class BrotherhoodController extends AbstractController {
 
 		return result;
 	}
+
+	protected ModelAndView editModelAndView(final Brotherhood brotherhood) {
+		ModelAndView result;
+		result = this.editModelAndView(brotherhood, null);
+		return result;
+	}
+
+	protected ModelAndView editModelAndView(final Brotherhood brotherhood,
+			final String messageCode) {
+		ModelAndView result;
+		String countryCode;
+
+		countryCode = this.customisationService.find().getCountryCode();
+
+		result = new ModelAndView("brotherhood/edit");
+		result.addObject("brotherhood", brotherhood);
+		result.addObject("countryCode", countryCode);
+		result.addObject("message", messageCode);
+
+		return result;
+	}
+
 }

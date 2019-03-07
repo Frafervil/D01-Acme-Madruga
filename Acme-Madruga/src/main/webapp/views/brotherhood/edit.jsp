@@ -13,10 +13,10 @@
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
 
-<form:form action="brotherhood/edit.do" modelAttribute="brotherhoodForm">
-
+<form:form action="brotherhood/edit.do" modelAttribute="brotherhood">
 
 	<form:hidden path="id"/>
+	<form:hidden path="version"/>
 	
 	<form:label path="name">
 		<spring:message code="brotherhood.name" />:
