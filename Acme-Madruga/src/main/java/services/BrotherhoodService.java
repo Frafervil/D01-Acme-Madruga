@@ -265,7 +265,7 @@ public class BrotherhoodService {
 		}
 		result.setAddress(brotherhood.getAddress());
 		result.setEmail(brotherhood.getEmail());
-		result.setEstablishmentDate(brotherhood.getEstablishmentDate());
+		//result.setEstablishmentDate(brotherhood.getEstablishmentDate());
 		result.setMessageBoxes(brotherhood.getMessageBoxes());
 		result.setMiddleName(brotherhood.getMiddleName());
 		result.setName(brotherhood.getName());
@@ -274,6 +274,8 @@ public class BrotherhoodService {
 		result.setPictures(brotherhood.getPictures());
 		result.setSurname(brotherhood.getSurname());
 		result.setTitle(brotherhood.getTitle());
+		result.setSettle(brotherhood.getSettle());
+		//result.setUserAccount(brotherhood.getUserAccount());
 		this.validator.validate(result, binding);
 		this.brotherhoodRepository.flush();
 		return result;
