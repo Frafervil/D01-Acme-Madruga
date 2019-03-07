@@ -9,8 +9,9 @@
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
-<form:form action="administrator/edit.do" modelAttribute="administratorForm">
-	<form:hidden path="idAdministrator" />
+<form:form action="administrator/edit.do" modelAttribute="administrator">
+	<form:hidden path="id" />
+	<form:hidden path="version"/>
 
 	<div class="ui equal width form">
 		<div class="fields">

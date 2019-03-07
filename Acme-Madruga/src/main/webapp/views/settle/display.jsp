@@ -43,3 +43,9 @@
 </jstl:otherwise>
 </jstl:choose>
 
+<security:authorize access="hasRole('ADMIN')">
+<br />
+<a href="settle/administrator/edit.do?settleId=${settle.id}"> <spring:message
+						code="settle.edit" /></a>
+</security:authorize>
+

@@ -4,9 +4,11 @@ package domain;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.URL;
 
 @Entity
@@ -18,6 +20,8 @@ public class Customisation extends DomainEntity {
 	private String	welcomeMessageEn;
 	private String	welcomeMessageEs;
 	private String	countryCode;
+	private int		finderCacheTime;
+	private int		finderMaxResults;
 
 
 	@NotBlank
@@ -64,6 +68,26 @@ public class Customisation extends DomainEntity {
 
 	public void setCountryCode(final String countryCode) {
 		this.countryCode = countryCode;
+	}
+
+	@NotNull
+	@Range(min = 1, max = 24)
+	public int getFinderCacheTime() {
+		return this.finderCacheTime;
+	}
+
+	public void setFinderCacheTime(final int finderCacheTime) {
+		this.finderCacheTime = finderCacheTime;
+	}
+
+	@NotNull
+	@Range(min = 10, max = 100)
+	public int getFinderMaxResults() {
+		return this.finderMaxResults;
+	}
+
+	public void setFinderMaxResults(final int finderMaxResults) {
+		this.finderMaxResults = finderMaxResults;
 	}
 
 }

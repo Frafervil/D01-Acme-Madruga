@@ -20,6 +20,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 
+<security:authorize access="hasRole('BROTHERHOOD')">
 <jstl:choose>
 <jstl:when test="${(selected == true)}">
 	<h3><spring:message code="settle.mysettle" /></h3>
@@ -42,3 +43,23 @@ class="displaytag" >
 	
 	
 </display:table>
+</security:authorize>
+<security:authorize access="hasRole('ADMIN')">
+<display:table name="settles" id="row" pagesize="5" requestURI="${requestURI}" 
+class="displaytag" >
+
+	<!-- Display -->
+	<display:column>
+		<a href="settle/display.do?settleId=${row.id}"><spring:message code="settle.display"/></a>
+	</display:column>
+	
+	<!-- Title -->
+	<spring:message code="settle.area" var="areaHeader" />
+	<display:column  property="area" title="${areaHeader}" />
+	
+	
+</display:table>
+
+<a href="settle/administrator/create.do" ><spring:message code="settle.create" /></a>					
+				
+</security:authorize>

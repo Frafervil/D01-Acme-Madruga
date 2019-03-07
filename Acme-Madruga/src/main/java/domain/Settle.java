@@ -7,7 +7,6 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -17,7 +16,6 @@ public class Settle extends DomainEntity {
 	private Collection<String>	pictures;
 
 
-	@NotNull
 	public String getArea() {
 		return this.area;
 	}

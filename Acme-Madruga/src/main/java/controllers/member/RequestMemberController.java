@@ -52,9 +52,12 @@ public class RequestMemberController extends AbstractController {
 		final ModelAndView result;
 		final Collection<Request> requests;
 		Collection<Procession> processions;
+		Member principal;
+
+		principal = this.memberService.findByPrincipal();
 
 		requests = this.requestService.findByPrincipal();
-		processions = this.processionService.findAllFinal();
+		processions = this.processionService.findAllAvailableRequest(principal.getId());
 
 		result = new ModelAndView("request/list");
 		result.addObject("requests", requests);
@@ -64,11 +67,18 @@ public class RequestMemberController extends AbstractController {
 		return result;
 
 	}
-
+	@RequestMapping(value = "/list", method = RequestMethod.GET, params = {
+		"requestStatus"
+	})
 	public ModelAndView listByStatus(@RequestParam final int requestStatus) {
 		final ModelAndView result;
 		Map<String, List<Request>> groupedRequest;
 		final Collection<Request> requests;
+		Collection<Procession> processions;
+		Member principal;
+
+		principal = this.memberService.findByPrincipal();
+		processions = this.processionService.findAllAvailableRequest(principal.getId());
 
 		groupedRequest = this.requestService.groupByStatus();
 
@@ -85,6 +95,7 @@ public class RequestMemberController extends AbstractController {
 
 		result = new ModelAndView("request/list");
 		result.addObject("requests", requests);
+		result.addObject("processions", processions);
 		result.addObject("requestURI", "request/member/list.do");
 
 		return result;
@@ -143,16 +154,13 @@ public class RequestMemberController extends AbstractController {
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create(@RequestParam final int processionId) {
 		ModelAndView result;
-		final Request request;
-
+		Request request = new Request();
 		request = this.requestService.create(processionId);
-
 		result = this.createEditModelAndView(request);
 
 		return result;
 
 	}
-
 	// Edition
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
@@ -176,7 +184,7 @@ public class RequestMemberController extends AbstractController {
 			System.out.println(binding.getAllErrors());
 		} else
 			try {
-				this.placeService.save(request.getPlace());
+				this.placeService.save(request.getProcession().getId(), request.getPlace());
 				this.placeService.flushPlace();
 				this.requestService.save(request);
 				this.requestService.flushRequest();

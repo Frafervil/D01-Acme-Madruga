@@ -8,6 +8,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
 <h3> <jstl:out value="${brotherhood.title}"> </jstl:out> </h3>
 <br />
@@ -47,6 +48,11 @@
 		<tr>
 			<td><spring:message code="brotherhood.address" />
 			<td data-label="address">${brotherhood.address}</td>
+		</tr>
+		<tr>
+			<%-- <acme:displayText dataLabel="area" code="brotherhood.area"/> --%>
+			<td><spring:message code="brotherhood.area" />
+			<td data-label="settle">${brotherhood.settle.area}</td>
 		</tr>
 	</tbody>
 </table>

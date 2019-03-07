@@ -25,6 +25,12 @@
 		<put-attribute name="title" value="Display settle" />
 		<put-attribute name="body" value="/views/settle/display.jsp" />
 	</definition>
+	
+	<definition name="settle/edit" extends="master.page">	
+		<put-attribute name="title" value="Edit settle" />
+		<put-attribute name="body" value="/views/settle/edit.jsp" />
+	</definition>
+	
 
 	
 </tiles-definitions>

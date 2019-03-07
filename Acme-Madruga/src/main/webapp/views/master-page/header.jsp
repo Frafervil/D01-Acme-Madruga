@@ -33,6 +33,7 @@
 					<li><a href="customisation/administrator/display.do"><spring:message code="master.page.administrator.customisation" /></a></li>	
 					<li><a href="position/administrator/list.do"><spring:message code="master.page.administrator.position" /></a></li>	
 					<li><a href="administrator/administrator/register.do"><spring:message code="master.page.administrator.register"/></a></li>
+					<li><a href="settle/administrator/list.do"><spring:message code="master.page.administrator.settle" /></a></li>	
 				</ul>
 			</li>
 			<li><a class="fNiv"><spring:message code="master.page.terms" /></a>
@@ -85,6 +86,7 @@
 					<li><a href="request/member/list.do"><spring:message code="master.page.member.request" /></a></li>
 					<li><a href="brotherhood/member/list.do"><spring:message code="master.page.member.brotherhood" /></a></li>
 					<li><a href="enrolment/member/list.do"><spring:message code="master.page.member.brotherhood" /></a></li>
+					<li><a href="finder/member/edit.do"><spring:message code="master.page.member.finder" /></a></li>
 				</ul>
 			</li>
 			<li><a class="fNiv"><spring:message code="master.page.terms" /></a>
