@@ -58,11 +58,13 @@
 	</tbody>
 </table>
 
+<jstl:if test="${member.userAccount.username == pageContext.request.userPrincipal.name}">
 <security:authorize access="hasRole('MEMBER')">
 	<acme:button url="member/edit.do" code="member.edit"/>
 	<br>
 	<br>
 	</security:authorize>
+</jstl:if>
 
 	<security:authorize access="hasRole('BROTHERHOOD')">
 	<jstl:choose>
