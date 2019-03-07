@@ -23,7 +23,6 @@ import services.CustomisationService;
 import services.EnrolmentService;
 import services.MemberService;
 import domain.Brotherhood;
-import domain.Enrolment;
 import domain.Member;
 import forms.MemberForm;
 
@@ -150,17 +149,16 @@ public class MemberController extends AbstractController {
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView view(@RequestParam(required = false) final Integer memberId) {
 		final ModelAndView result;
-		Member member = new Member();
-		Enrolment enrolment = null;
+		new Member();
 		Brotherhood principal = null;
 
 		if (memberId == null)
-			member = this.memberService.findByPrincipal();
+			this.memberService.findByPrincipal();
 		else {
-			member = this.memberService.findOne(memberId);
+			this.memberService.findOne(memberId);
 			if (this.brotherhoodService.findByPrincipal2() != null) {
 				principal = this.brotherhoodService.findByPrincipal();
-				enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(principal.getId(), memberId);
+				this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(principal.getId(), memberId);
 			}
 		}
 
