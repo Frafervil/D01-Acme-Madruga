@@ -12,8 +12,6 @@ package controllers;
 
 import java.util.Arrays;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -34,10 +32,11 @@ import forms.AdministratorForm;
 public class AdministratorController extends AbstractController {
 
 	@Autowired
-	private AdministratorService administratorservice;
+	private AdministratorService	administratorservice;
 
 	@Autowired
-	private CustomisationService customisationService;
+	private CustomisationService	customisationService;
+
 
 	@RequestMapping("/viewProfile")
 	public ModelAndView view() {
@@ -49,8 +48,7 @@ public class AdministratorController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(
-			final Administrator administrator) {
+	protected ModelAndView createEditModelAndView(final Administrator administrator) {
 		ModelAndView result;
 		AdministratorForm administratorForm;
 		administratorForm = this.administratorservice.construct(administrator);
@@ -58,8 +56,7 @@ public class AdministratorController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(
-			final AdministratorForm administratorForm, final String messageCode) {
+	protected ModelAndView createEditModelAndView(final AdministratorForm administratorForm, final String messageCode) {
 		ModelAndView result;
 		String countryCode;
 
@@ -79,35 +76,48 @@ public class AdministratorController extends AbstractController {
 		Administrator administrator;
 		administrator = this.administratorservice.findByPrincipal();
 		Assert.notNull(administrator);
-		result = this.createEditModelAndView(administrator);
+		result = this.editModelAndView(administrator);
 
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(
-			@ModelAttribute("administratorForm") @Valid final AdministratorForm administratorForm,
-			final BindingResult binding) {
+	public ModelAndView save(@ModelAttribute("administrator") Administrator administrator, final BindingResult binding) {
 		ModelAndView result;
-		Administrator administrator;
 
 		try {
-			administrator = this.administratorservice.reconstruct(
-					administratorForm, binding);
+			administrator = this.administratorservice.reconstructPruned(administrator, binding);
 			if (binding.hasErrors()) {
-				result = this.createEditModelAndView(administrator);
+				result = this.editModelAndView(administrator);
 				for (final ObjectError e : binding.getAllErrors())
-					System.out.println(e.getObjectName() + " error ["
-							+ e.getDefaultMessage() + "] "
-							+ Arrays.toString(e.getCodes()));
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
 			} else {
 				administrator = this.administratorservice.save(administrator);
 				result = new ModelAndView("redirect:/welcome/index.do");
 			}
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(administratorForm,
-					"administrator.commit.error");
+			result = this.editModelAndView(administrator, "administrator.commit.error");
 		}
+		return result;
+	}
+
+	private ModelAndView editModelAndView(final Administrator administrator) {
+		ModelAndView result;
+		result = this.editModelAndView(administrator, null);
+		return result;
+	}
+
+	private ModelAndView editModelAndView(final Administrator administrator, final String messageCode) {
+		ModelAndView result;
+		String countryCode;
+
+		countryCode = this.customisationService.find().getCountryCode();
+
+		result = new ModelAndView("administrator/edit");
+		result.addObject("administrator", administrator);
+		result.addObject("countryCode", countryCode);
+		result.addObject("message", messageCode);
+
 		return result;
 	}
 

@@ -77,5 +77,3 @@
 	</jstl:choose>
 	</security:authorize>
 
-</body>
-</html>

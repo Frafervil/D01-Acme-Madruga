@@ -24,5 +24,10 @@
 		<put-attribute name="title" value="Editar procesión" />
 		<put-attribute name="body" value="/views/procession/edit.jsp" />
 	</definition>
+	
+	<definition name="procession/create" extends="master.page">
+		<put-attribute name="title" value="Crear procesion" />
+		<put-attribute name="body" value="/views/procession/create.jsp" />
+	</definition>
 
 </tiles-definitions>
