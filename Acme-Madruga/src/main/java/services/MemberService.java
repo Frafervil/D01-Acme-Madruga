@@ -128,6 +128,16 @@ public class MemberService {
 
 	}
 
+	public Member findByPrincipal2() {
+		Member result;
+		UserAccount userAccount;
+
+		userAccount = LoginService.getPrincipal();
+		result = this.memberRepository.findByUserAccountId(userAccount.getId());
+
+		return result;
+	}
+
 	public Member findByUserAccount(final UserAccount userAccount) {
 		Assert.notNull(userAccount);
 		Member result;

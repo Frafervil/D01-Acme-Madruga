@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import security.Authority;
-import security.LoginService;
 import services.BrotherhoodService;
 import services.CustomisationService;
 import services.EnrolmentService;
@@ -80,7 +78,7 @@ public class BrotherhoodController extends AbstractController {
 			brotherhood = this.brotherhoodService.findByPrincipal();
 		else {
 			brotherhood = this.brotherhoodService.findOne(brotherhoodId);
-			if (LoginService.getPrincipal().getAuthorities().contains(Authority.MEMBER)) {
+			if (this.memberService.findByPrincipal2() != null) {
 				principal = this.memberService.findByPrincipal();
 				enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
 			}

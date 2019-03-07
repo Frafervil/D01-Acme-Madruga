@@ -15,7 +15,6 @@ import services.MemberService;
 import services.PositionService;
 import controllers.AbstractController;
 import domain.Enrolment;
-import domain.Member;
 import domain.Position;
 
 @Controller
@@ -39,8 +38,6 @@ public class BrotherhoodMemberController extends AbstractController {
 	@RequestMapping(value = "/dropOut", method = RequestMethod.GET)
 	public ModelAndView dropOut(@RequestParam final int brotherhoodId) {
 		ModelAndView result;
-		Enrolment enrolment;
-		Member principal;
 
 		try {
 
@@ -48,10 +45,9 @@ public class BrotherhoodMemberController extends AbstractController {
 			result = new ModelAndView("redirect:/enrolment/member/list.do");
 
 		} catch (final Exception oops) {
-			principal = this.memberService.findByPrincipal();
-			enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
 			oops.printStackTrace();
-			result = this.createEditModelAndView(enrolment, "enrolment.commit.error");
+			result = new ModelAndView("redirect:display.do?brotherhoodId=" + brotherhoodId);
+			result.addObject("ERROR");
 		}
 
 		return result;
