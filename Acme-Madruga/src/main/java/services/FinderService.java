@@ -72,6 +72,7 @@ public class FinderService {
 	}
 
 	public void save(final Finder finder) {
+		Finder result;
 		final Collection<Procession> searchResults;
 		Date currentMoment;
 
@@ -82,8 +83,9 @@ public class FinderService {
 		finder.setResults(searchResults);
 		finder.setLastRefreshed(currentMoment);
 
-		this.finderRepository.save(finder);
+		result = this.finderRepository.save(finder);
 		this.finderRepository.flush();
+		Assert.notNull(result);
 	}
 	// Business methods
 
