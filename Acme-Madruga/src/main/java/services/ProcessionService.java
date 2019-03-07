@@ -152,6 +152,18 @@ public class ProcessionService {
 		return result;
 	}
 
+	public Collection<Procession> findAllAvailableRequest(final int memberId) {
+		Collection<Procession> result;
+		Collection<Procession> processions;
+		processions = this.findAllFinal();
+		result = this.findAllFinal();
+
+		for (final Procession p : processions)
+			if ((this.requestService.findRepeated(memberId, p.getId())) > 0)
+				result.remove(p);
+		return result;
+	}
+
 	public Collection<Procession> startingSoonProcessions() {
 		final Collection<Procession> result;
 		final Calendar c = new GregorianCalendar();

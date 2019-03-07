@@ -59,14 +59,19 @@ public class RequestService {
 		Place place;
 		Procession procession;
 
-		result = new Request();
-
 		principal = this.memberService.findByPrincipal();
 		Assert.notNull(principal);
-		result.setMember(principal);
 
 		procession = this.processionService.findOne(processionId);
 		Assert.notNull(procession);
+
+		//Comprobamos si principal tiene alguna request pendiente o aceptada con esa procession
+		//En ese caso no podrá crear más
+		Assert.isTrue(!(this.findRepeated(principal.getId(), procession.getId()) > 1), "request.commit.error.repeated");
+		//
+
+		result = new Request();
+		result.setMember(principal);
 		result.setProcession(procession);
 
 		place = this.placeService.create(processionId);
@@ -77,7 +82,6 @@ public class RequestService {
 
 		return result;
 	}
-
 	public Collection<Request> findByPrincipal() {
 		Member principal;
 
@@ -252,7 +256,15 @@ public class RequestService {
 
 		r.setStatus("APPROVED");
 
+		this.placeService.save(r.getProcession().getId(), r.getPlace());
 		this.requestRepository.save(r);
+	}
+
+	public Integer findRepeated(final int memberId, final int processionId) {
+		Integer result;
+		result = this.requestRepository.findRepeated(memberId, processionId);
+
+		return result;
 	}
 
 	public void flushRequest() {
