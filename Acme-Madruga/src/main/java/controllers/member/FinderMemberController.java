@@ -53,17 +53,13 @@ public class FinderMemberController extends AbstractController {
 		if (binding.hasErrors()) {
 			System.out.println(binding.getAllErrors());
 			result = this.createEditModelAndView(finder);
-		} else {
-			this.finderService.save(finder);
-			result = this.createEditModelAndView(finder, null);
-			//			try {
-			//				this.finderService.save(finder);
-			//				this.finderService.deleteOldFinder();
-			//				result = new ModelAndView("redirect:/finder/member/edit.do");
-			//			} catch (final Throwable oops) {
-			//				result = this.createEditModelAndView(finder, "finder.commit.error");
-			//			}
-		}
+		} else
+			try {
+				this.finderService.save(finder);
+				result = this.createEditModelAndView(finder, null);
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(finder, "finder.commit.error");
+			}
 		return result;
 	}
 
