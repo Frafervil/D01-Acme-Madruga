@@ -18,8 +18,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
 import services.CustomisationService;
+import services.EnrolmentService;
+import services.MemberService;
 import services.SettleService;
 import domain.Brotherhood;
+import domain.Enrolment;
+import domain.Member;
 import forms.BrotherhoodForm;
 
 @Controller
@@ -36,6 +40,13 @@ public class BrotherhoodController extends AbstractController {
 
 	@Autowired
 	private CustomisationService customisationService;
+
+	@Autowired
+	private EnrolmentService		enrolmentService;
+
+	@Autowired
+	private MemberService			memberService;
+
 
 	// List
 
@@ -60,14 +71,20 @@ public class BrotherhoodController extends AbstractController {
 			@RequestParam(required = false) final Integer brotherhoodId) {
 		final ModelAndView result;
 		Brotherhood brotherhood = new Brotherhood();
+		Enrolment enrolment;
+		Member principal;
 
 		if (brotherhoodId == null)
 			brotherhood = this.brotherhoodService.findByPrincipal();
 		else
 			brotherhood = this.brotherhoodService.findOne(brotherhoodId);
 
+		principal = this.memberService.findByPrincipal();
+		enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
+
 		result = new ModelAndView("brotherhood/display");
 		result.addObject("brotherhood", brotherhood);
+		result.addObject("enrolment", enrolment);
 
 		return result;
 

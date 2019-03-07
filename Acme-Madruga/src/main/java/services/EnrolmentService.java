@@ -85,7 +85,44 @@ public class EnrolmentService {
 
 		enrolment.setDropOutMoment(moment);
 
-		this.enrolmentRepository.save(enrolment);
+		this.save(enrolment);
+	}
+
+	public Enrolment saveAsMember(final Enrolment enrolment) {
+
+		Member principal;
+		Enrolment result;
+
+		Assert.notNull(enrolment);
+
+		principal = this.memberService.findByPrincipal();
+		Assert.notNull(principal);
+
+		Assert.isTrue(enrolment.getMember().getId() == principal.getId());
+
+		result = this.enrolmentRepository.save(enrolment);
+		Assert.notNull(result);
+
+		return result;
+	}
+
+	public void deleteAsMember(final Enrolment enrolment) {
+
+		Member principal;
+		Date moment;
+
+		Assert.notNull(enrolment);
+
+		principal = this.memberService.findByPrincipal();
+		Assert.notNull(principal);
+
+		Assert.isTrue(enrolment.getMember().getId() == principal.getId());
+
+		moment = new Date(System.currentTimeMillis() - 1000);
+
+		enrolment.setDropOutMoment(moment);
+
+		this.saveAsMember(enrolment);
 	}
 
 	public Enrolment findOne(final int enrolmentId) {
@@ -164,5 +201,7 @@ public class EnrolmentService {
 		enrolment = this.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
 
 		enrolment.setDropOutMoment(new Date(System.currentTimeMillis() - 1000));
+
+		this.save(enrolment);
 	}
 }
