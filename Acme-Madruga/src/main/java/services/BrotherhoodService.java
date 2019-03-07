@@ -131,6 +131,16 @@ public class BrotherhoodService {
 
 	}
 
+	public Brotherhood findByPrincipal2() {
+		Brotherhood result;
+		UserAccount userAccount;
+
+		userAccount = LoginService.getPrincipal();
+		result = this.brotherhoodRepository.findByUserAccountId(userAccount.getId());
+
+		return result;
+	}
+
 	public BrotherhoodForm construct(final Brotherhood brotherhood) {
 		final BrotherhoodForm brotherhoodForm = new BrotherhoodForm();
 		brotherhoodForm.setAddress(brotherhood.getAddress());

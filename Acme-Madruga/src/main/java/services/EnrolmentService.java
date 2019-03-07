@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.EnrolmentRepository;
 import domain.Brotherhood;
@@ -29,6 +31,9 @@ public class EnrolmentService {
 
 	@Autowired
 	private MemberService		memberService;
+
+	@Autowired
+	private Validator			validator;
 
 
 	// Simple CRUD Methods
@@ -201,7 +206,24 @@ public class EnrolmentService {
 		enrolment = this.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
 
 		enrolment.setDropOutMoment(new Date(System.currentTimeMillis() - 1000));
+	}
 
-		this.save(enrolment);
+	public Enrolment reconstruct(final Enrolment enrolment, final BindingResult binding) {
+		Enrolment result;
+
+		if (enrolment.getId() == 0)
+			result = enrolment;
+		else
+			result = this.enrolmentRepository.findOne(enrolment.getId());
+
+		result.setDropOutMoment(enrolment.getDropOutMoment());
+		result.setEnrolmentMoment(enrolment.getEnrolmentMoment());
+		result.setBrotherhood(enrolment.getBrotherhood());
+		result.setMember(enrolment.getMember());
+		result.setPosition(enrolment.getPosition());
+
+		this.validator.validate(result, binding);
+		this.enrolmentRepository.flush();
+		return result;
 	}
 }

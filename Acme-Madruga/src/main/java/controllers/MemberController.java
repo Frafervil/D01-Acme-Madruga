@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import security.Authority;
-import security.LoginService;
 import services.BrotherhoodService;
 import services.CustomisationService;
 import services.EnrolmentService;
@@ -131,16 +129,6 @@ public class MemberController extends AbstractController {
 		return result;
 	}
 
-	//	@RequestMapping("/display")
-	//	public ModelAndView view() {
-	//		ModelAndView result;
-	//
-	//		result = new ModelAndView("member/display");
-	//		result.addObject("actor", this.memberService.findByPrincipal());
-	//
-	//		return result;
-	//	}
-
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView view(@RequestParam(required = false) final Integer memberId) {
 		final ModelAndView result;
@@ -152,7 +140,7 @@ public class MemberController extends AbstractController {
 			member = this.memberService.findByPrincipal();
 		else {
 			member = this.memberService.findOne(memberId);
-			if (LoginService.getPrincipal().getAuthorities().contains(Authority.BROTHERHOOD)) {
+			if (this.brotherhoodService.findByPrincipal2() != null) {
 				principal = this.brotherhoodService.findByPrincipal();
 				enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(principal.getId(), memberId);
 			}

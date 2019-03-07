@@ -1,6 +1,7 @@
 
 package controllers.brotherhood;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -9,15 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.BrotherhoodService;
 import services.EnrolmentService;
 import services.MemberService;
 import services.PositionService;
 import controllers.AbstractController;
+import domain.Brotherhood;
 import domain.Enrolment;
 import domain.Member;
 import domain.Position;
@@ -36,6 +41,9 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 
 	@Autowired
 	private MemberService		memberService;
+
+	@Autowired
+	private BrotherhoodService	brotherhoodService;
 
 
 	// Create
@@ -75,20 +83,24 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid Enrolment enrolment, final BindingResult binding) {
+	public ModelAndView save(@ModelAttribute("enrolment") @Valid Enrolment enrolment, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors()) {
-			System.out.println(binding.getAllErrors());
-			result = this.createEditModelAndView(enrolment);
-		} else
-			try {
+		try {
+			enrolment = this.enrolmentService.reconstruct(enrolment, binding);
+
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(enrolment);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+			} else {
+				final Brotherhood principal = this.brotherhoodService.findByPrincipal();
 				enrolment = this.enrolmentService.save(enrolment);
-				result = new ModelAndView("redirect:/welcome/index.do");
-			} catch (final Throwable oops) {
-				oops.printStackTrace();
-				result = this.createEditModelAndView(enrolment, "enrolment.commit.error");
+				result = new ModelAndView("redirect:/member/brotherhood/list.do?brotherhoodId=" + principal.getId());
 			}
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(enrolment, "enrolment.commit.error");
+		}
 		return result;
 	}
 
@@ -103,7 +115,8 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 			try {
 				Assert.isTrue(enrolment.getId() != 0);
 				this.enrolmentService.delete(enrolment);
-				result = new ModelAndView("member/brotherhood/list");
+				final Brotherhood principal = this.brotherhoodService.findByPrincipal();
+				result = new ModelAndView("redirect:/member/brotherhood/list.do?brotherhoodId=" + principal.getId());
 			} catch (final Exception oops) {
 				oops.printStackTrace();
 				result = this.createEditModelAndView(enrolment, "enrolment.commit.error");
