@@ -3,6 +3,7 @@ package services;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
@@ -18,6 +19,7 @@ import security.UserAccount;
 import domain.Administrator;
 import domain.Brotherhood;
 import domain.Enrolment;
+import domain.Settle;
 import forms.BrotherhoodForm;
 
 @Service
@@ -37,6 +39,9 @@ public class BrotherhoodService {
 
 	@Autowired
 	private Validator				validator;
+
+	@Autowired
+	private SettleService			settleService;
 
 
 	// Simple CRUD Methods
@@ -219,5 +224,81 @@ public class BrotherhoodService {
 		result = this.brotherhoodRepository.findBySettleId(settleId);
 		return result;
 
+	}
+
+	public HashMap<String, Integer> countBrotherhoodsPerSettle() {
+		Integer nSettles = 0;
+		Collection<Settle> settles;
+		settles = this.settleService.findAll();
+		final HashMap<String, Integer> result = new HashMap<String, Integer>();
+
+		for (final Settle s : settles) {
+			nSettles = this.brotherhoodRepository.countBrotherhoodPerSeetle(s.getId());
+			result.put(s.getArea(), nSettles);
+		}
+		return result;
+	}
+	public HashMap<String, Double> ratioBrotherhoodsPerSettle() {
+		Integer nSettles = 0;
+		Double total;
+		Collection<Settle> settles;
+		settles = this.settleService.findAll();
+		total = (double) settles.size();
+		final HashMap<String, Double> result = new HashMap<String, Double>();
+
+		for (final Settle s : settles) {
+			nSettles = this.brotherhoodRepository.countBrotherhoodPerSeetle(s.getId());
+			result.put(s.getArea(), (nSettles / total));
+		}
+		return result;
+	}
+	public Integer minBrotherhoodsPerSettle() {
+		Integer result;
+
+		Collection<Settle> settles;
+		settles = this.settleService.findAll();
+		result = settles.size();
+		for (final Settle s : settles) {
+			Integer n;
+			n = this.brotherhoodRepository.countBrotherhoodPerSeetle(s.getId());
+			if (n < result)
+				result = n;
+		}
+		return result;
+	}
+	public Integer maxBrotherhoodsPerSettle() {
+		Integer result = 0;
+
+		Collection<Settle> settles;
+		settles = this.settleService.findAll();
+		for (final Settle s : settles) {
+			Integer n;
+			n = this.brotherhoodRepository.countBrotherhoodPerSeetle(s.getId());
+			if (n > result)
+				result = n;
+		}
+		return result;
+	}
+
+	public Double avgBrotherhoodsPerSettle() {
+		Double result = 0.0;
+
+		Collection<Settle> settles;
+		settles = this.settleService.findAll();
+		for (final Settle s : settles) {
+			Integer n;
+			n = this.brotherhoodRepository.countBrotherhoodPerSeetle(s.getId());
+			result = result + n;
+		}
+
+		result = result / settles.size();
+		return result;
+	}
+
+	public Double stddevBrotherhoodsPerSettle() {
+		Double result;
+		result = this.avgBrotherhoodsPerSettle();
+		result = Math.sqrt(result);
+		return result;
 	}
 }

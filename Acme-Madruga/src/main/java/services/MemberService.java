@@ -257,22 +257,9 @@ public class MemberService {
 	}
 
 	public Double stddevMemberPerBrotherhood() {
-		Administrator principal;
-		Collection<Brotherhood> brotherhoods;
-		Collection<Enrolment> enrolments;
-		int total = 0;
-		final Double result;
-
-		principal = this.administratorService.findByPrincipal();
-		Assert.notNull(principal);
-
-		brotherhoods = this.brotherhoodService.findAll();
-		Assert.notNull(brotherhoods);
-		for (final Brotherhood b : brotherhoods) {
-			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
-			total = total + enrolments.size();
-		}
-		result = (double) (total / (brotherhoods.size()));
+		double result;
+		result = this.averageMemberPerBrotherhood();
+		result = Math.sqrt(result);
 		return result;
 	}
 

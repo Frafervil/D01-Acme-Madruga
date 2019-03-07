@@ -171,4 +171,10 @@ public class FinderService {
 
 		return finder;
 	}
+	public Integer countEmptyFinders() {
+		Integer result;
+		result = this.finderRepository.emptyFinders();
+
+		return result;
+	}
 }

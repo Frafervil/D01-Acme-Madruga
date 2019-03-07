@@ -103,6 +103,72 @@
 <jstl:out value="${positionStats}"></jstl:out>
 <canvas id="myChart" width="500px"></canvas>
 
+	<h3><spring:message code="administrator.finder.ratio" /></h3>
+
+	<table class="displayStyle">
+		<tr>
+			<th colspan="2"><spring:message code="administrator.finder.ratio" /></th>
+		</tr>
+		
+		<tr>
+			<th><spring:message code="administrator.metrics" /></th>
+			<th><spring:message code="administrator.value" /></th>
+		</tr>
+		
+		<tr>
+			<td><spring:message code="administrator.ratioEmptyFinder" /></td>
+			<td>${ratioEmptyFinders }</td>
+		</tr>
+		<tr>
+			<td><spring:message code="administrator.ratioNotEmptyFinder" /></td>
+			<td>${ratioCompletedFinders }</td>
+		</tr>
+	</table>
+	
+	<h3><spring:message code="administrator.statistics.areas" /></h3>
+	
+	<table class="displayStyle">
+		<tr>
+			<th colspan="5"><spring:message code="administrator.statistics.areas" /></th>
+		</tr>
+		
+		<tr>
+			<th><spring:message code="administrator.metrics" /></th>
+			<th><spring:message code="administrator.average" /></th>
+			<th><spring:message code="administrator.minimum" /></th>
+			<th><spring:message code="administrator.maximum" /></th>
+			<th><spring:message code="administrator.std" /></th>
+		</tr>
+		
+		<tr>
+			<td><spring:message code="administrator.brotherhoodsPerArea" /></td>
+			<td>${minBrotherhoodsPerSettle }</td>
+			<td>${maxBrotherhoodsPerSettle }</td>
+			<td>${avgBrotherhoodsPerSettle }</td>
+			<td>${stddevBrotherhoodsPerSettle }</td>
+		</tr>
+		
+	</table>
+		
+	<h3><spring:message code="administrator.statistics.count" /></h3>
+	
+	<ul>
+	<jstl:forEach items="${countBrotherhoodsPerSettle}" var="count">
+
+			<li> <jstl:out value="${count.key}"/> - <jstl:out value="${count.value}"/> </li>
+
+	</jstl:forEach>
+	</ul>
+		
+	<h3><spring:message code="administrator.statistics.ratio" /></h3>
+	
+	<ul>
+	<jstl:forEach items="${ratioBrotherhoodsPerSettle}" var="count">
+
+			<li> <jstl:out value="${count.key}"/> - <jstl:out value="${count.value}"/> </li>
+
+	</jstl:forEach>
+	</ul>
 </security:authorize>
 <script>
 window.onload = function() {
