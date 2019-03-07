@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.EnrolmentService;
-import services.MemberService;
 import services.PositionService;
 import controllers.AbstractController;
 import domain.Enrolment;
@@ -25,9 +24,6 @@ public class BrotherhoodMemberController extends AbstractController {
 
 	@Autowired
 	private EnrolmentService	enrolmentService;
-
-	@Autowired
-	private MemberService		memberService;
 
 	@Autowired
 	private PositionService		positionService;

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import services.BrotherhoodService;
 import services.ProcessionService;
 import controllers.AbstractController;
 import domain.Procession;
@@ -28,10 +27,6 @@ public class ProcessionBrotherhoodController extends AbstractController {
 
 	@Autowired
 	private ProcessionService	processionService;
-
-	@Autowired
-	private BrotherhoodService	brotherhoodService;
-
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(@RequestParam final int brotherhoodId) {

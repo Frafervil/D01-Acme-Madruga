@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
-import services.EnrolmentService;
 import services.MemberService;
 import controllers.AbstractController;
 import domain.Brotherhood;
@@ -30,9 +29,6 @@ public class MemberBrotherhoodController extends AbstractController {
 
 	@Autowired
 	private MemberService		memberService;
-
-	@Autowired
-	private EnrolmentService	enrolmentService;
 
 
 	// List
