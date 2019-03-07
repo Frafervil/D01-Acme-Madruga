@@ -75,7 +75,6 @@ public class MemberService {
 
 	public Member save(final Member member) {
 		Member result, saved;
-		Assert.notNull(member);
 		UserAccount logedUserAccount;
 
 		final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
@@ -91,7 +90,7 @@ public class MemberService {
 			saved = this.memberRepository.findOne(member.getId());
 			Assert.notNull(saved, "member.not.null");
 			Assert.isTrue(saved.getUserAccount().getUsername().equals(member.getUserAccount().getUsername()));
-			Assert.isTrue(saved.getUserAccount().getPassword().equals(member.getUserAccount().getUsername()));
+			Assert.isTrue(saved.getUserAccount().getPassword().equals(member.getUserAccount().getPassword()));
 		}
 
 		result = this.memberRepository.save(member);
@@ -158,17 +157,9 @@ public class MemberService {
 	public Member reconstruct(final MemberForm memberForm, final BindingResult binding) {
 		Member result;
 
-		if (memberForm.getIdMember() == 0) {
-			result = this.create();
-			result.getUserAccount().setUsername(memberForm.getUsername());
-			result.getUserAccount().setPassword(memberForm.getPassword());
-		} else
-			result = this.memberRepository.findOne(memberForm.getIdMember());
-
-		//Assert.isTrue(memberForm.getPasswordChecker().equals(memberForm.getPassword()), "memberForm.validation.passwordsNotMatch");
-
-		//Crear un objeto nuevo, no setear sobre el resultado
-
+		result = this.create();
+		result.getUserAccount().setUsername(memberForm.getUsername());
+		result.getUserAccount().setPassword(memberForm.getPassword());
 		result.setAddress(memberForm.getAddress());
 		result.setEmail(memberForm.getEmail());
 		result.setMiddleName(memberForm.getMiddleName());
@@ -183,9 +174,30 @@ public class MemberService {
 			binding.rejectValue("username", "member.validation.usernameExists", "This username already exists");
 		if (memberForm.getCheckBox() == false)
 			binding.rejectValue("checkBox", "member.validation.checkBox", "This checkbox must be checked");
+
 		this.validator.validate(result, binding);
 		this.memberRepository.flush();
 
+		return result;
+	}
+
+	public Member reconstructPruned(final Member member, final BindingResult binding) {
+		Member result;
+
+		if (member.getId() == 0)
+			result = member;
+		else
+			result = this.memberRepository.findOne(member.getId());
+		result.setAddress(member.getAddress());
+		result.setEmail(member.getEmail());
+		result.setMessageBoxes(member.getMessageBoxes());
+		result.setMiddleName(member.getMiddleName());
+		result.setName(member.getName());
+		result.setPhone(member.getPhone());
+		result.setPhoto(member.getPhoto());
+		result.setSurname(member.getSurname());
+		this.validator.validate(result, binding);
+		this.memberRepository.flush();
 		return result;
 	}
 

@@ -74,24 +74,42 @@ public class MemberController extends AbstractController {
 
 	// Save de Edit
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@ModelAttribute("memberForm") @Valid final MemberForm memberForm, final BindingResult binding) {
+	public ModelAndView save(@ModelAttribute("member") Member member, final BindingResult binding) {
 		ModelAndView result;
-		Member member;
 
 		try {
-			member = this.memberService.reconstruct(memberForm, binding);
+			member = this.memberService.reconstructPruned(member, binding);
 			if (binding.hasErrors()) {
 				for (final ObjectError e : binding.getAllErrors())
 					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
-				result = this.createEditModelAndView(memberForm);
+				result = this.editModelAndView(member);
 			} else {
 				member = this.memberService.save(member);
 				result = new ModelAndView("welcome/index");
 			}
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(memberForm, "member.commit.error");
+			result = this.editModelAndView(member, "member.commit.error");
 		}
 
+		return result;
+	}
+
+	private ModelAndView editModelAndView(final Member member) {
+		ModelAndView result;
+		result = this.editModelAndView(member, null);
+		return result;
+	}
+
+	private ModelAndView editModelAndView(final Member member, final String messageCode) {
+		ModelAndView result;
+		String countryCode;
+
+		countryCode = this.customisationService.find().getCountryCode();
+
+		result = new ModelAndView("member/edit");
+		result.addObject("member", member);
+		result.addObject("countryCode", countryCode);
+		result.addObject("message", messageCode);
 		return result;
 	}
 
@@ -118,12 +136,12 @@ public class MemberController extends AbstractController {
 		return result;
 	}
 
-	@RequestMapping("/display")
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
 	public ModelAndView view() {
 		ModelAndView result;
 
 		result = new ModelAndView("member/display");
-		result.addObject("actor", this.memberService.findByPrincipal());
+		result.addObject("member", this.memberService.findByPrincipal());
 
 		return result;
 	}
@@ -132,12 +150,10 @@ public class MemberController extends AbstractController {
 	public ModelAndView edit() {
 		ModelAndView result;
 		Member member;
-		MemberForm memberForm;
 
 		member = this.memberService.findByPrincipal();
 		Assert.notNull(member);
-		memberForm = this.memberService.construct(member);
-		result = this.createEditModelAndView(memberForm);
+		result = this.editModelAndView(member);
 
 		return result;
 	}

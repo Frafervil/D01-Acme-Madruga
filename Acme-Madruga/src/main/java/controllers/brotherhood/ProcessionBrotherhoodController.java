@@ -1,5 +1,7 @@
+
 package controllers.brotherhood;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.validation.Valid;
@@ -8,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import services.BrotherhoodService;
 import services.ProcessionService;
 import controllers.AbstractController;
-import domain.Brotherhood;
 import domain.Procession;
 
 @Controller
@@ -24,16 +27,16 @@ import domain.Procession;
 public class ProcessionBrotherhoodController extends AbstractController {
 
 	@Autowired
-	private ProcessionService processionService;
+	private ProcessionService	processionService;
 
 	@Autowired
-	private BrotherhoodService brotherhoodService;
+	private BrotherhoodService	brotherhoodService;
+
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(@RequestParam final int brotherhoodId) {
 		ModelAndView result;
-		Collection<Procession> processions = processionService
-				.findAllFinalOfOneBrotherhood(brotherhoodId);
+		final Collection<Procession> processions = this.processionService.findAllFinalOfOneBrotherhood(brotherhoodId);
 
 		result = new ModelAndView("procession/list");
 		result.addObject("processions", processions);
@@ -48,7 +51,7 @@ public class ProcessionBrotherhoodController extends AbstractController {
 		Procession procession;
 
 		procession = this.processionService.create();
-		result = this.createEditModelAndView(procession);
+		result = this.createModelAndView(procession);
 
 		return result;
 	}
@@ -66,8 +69,7 @@ public class ProcessionBrotherhoodController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Procession procession,
-			final BindingResult binding) {
+	public ModelAndView save(@Valid final Procession procession, final BindingResult binding) {
 		ModelAndView result;
 
 		if (binding.hasErrors()) {
@@ -78,61 +80,60 @@ public class ProcessionBrotherhoodController extends AbstractController {
 				this.processionService.save(procession);
 				result = new ModelAndView("redirect:list.do");
 			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(procession,
-						"procession.commit.error");
+				result = this.createEditModelAndView(procession, "procession.commit.error");
 			}
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "saveDraft")
-	public ModelAndView saveDraft(@Valid final Procession procession,
-			final BindingResult binding) {
+	public ModelAndView saveDraft(@ModelAttribute("procession") Procession procession, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(procession);
-			System.out.println(binding.getAllErrors());
-		} else
-			try {
-				this.processionService.saveAsDraft(procession);
+		try {
+			procession = this.processionService.reconstruct(procession, binding);
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(procession);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+			} else {
+				procession = this.processionService.saveAsDraft(procession);
 				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(procession,
-						"procession.commit.error");
 			}
+
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(procession, "procession.commit.error");
+		}
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "saveFinal")
-	public ModelAndView saveFinal(@Valid final Procession procession,
-			final BindingResult binding) {
+	public ModelAndView saveFinal(@ModelAttribute("procession") Procession procession, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors()) {
-			System.out.println(binding.getAllErrors());
-			result = this.createEditModelAndView(procession);
-		} else
-			try {
+		try {
+			procession = this.processionService.reconstruct(procession, binding);
+			if (binding.hasErrors()) {
+				System.out.println(binding.getAllErrors());
+				result = this.createEditModelAndView(procession);
+			} else {
 				this.processionService.save(procession);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(procession,
-						"procession.commit.error");
+				result = new ModelAndView("redirect:/welcome/index.do");
 			}
+
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(procession, "procession.commit.error");
+		}
 
 		return result;
 	}
-
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final Procession procession,
-			final BindingResult binding) {
+	public ModelAndView delete(final Procession procession, final BindingResult binding) {
 		ModelAndView result;
 		try {
 			this.processionService.delete(procession);
-			result = new ModelAndView("redirect:list.do");
+			result = new ModelAndView("redirect:/welcome/index.do");
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(procession,
-					"procession.commit.error");
+			result = this.createEditModelAndView(procession, "procession.commit.error");
 		}
 		return result;
 	}
@@ -146,23 +147,30 @@ public class ProcessionBrotherhoodController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final Procession procession,
-			final String messageCode) {
+	protected ModelAndView createEditModelAndView(final Procession procession, final String messageCode) {
 		ModelAndView result;
-		Brotherhood principal = this.brotherhoodService.findByPrincipal();
-		boolean permission = false;
-
-		if (principal.getUserAccount().getUsername() == procession
-				.getBrotherhood().getUserAccount().getUsername())
-			permission = true;
 
 		result = new ModelAndView("procession/edit");
 		result.addObject("procession", procession);
-		result.addObject("permission", permission);
 
 		result.addObject("message", messageCode);
 
 		return result;
+	}
+
+	private ModelAndView createModelAndView(final Procession procession) {
+		ModelAndView result;
+
+		result = this.createModelAndView(procession, null);
+		return result;
+	}
+
+	private ModelAndView createModelAndView(final Procession procession, final String messageCode) {
+		ModelAndView result;
+		result = new ModelAndView("procession/create");
+		result.addObject("procession", procession);
+		result.addObject("message", messageCode);
+		return null;
 	}
 
 }

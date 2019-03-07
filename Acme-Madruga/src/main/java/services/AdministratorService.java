@@ -122,17 +122,9 @@ public class AdministratorService {
 	public Administrator reconstruct(final AdministratorForm administratorForm, final BindingResult binding) {
 		Administrator result;
 
-		if (administratorForm.getIdAdministrator() == 0) {
-			result = this.create();
-			result.getUserAccount().setUsername(administratorForm.getUsername());
-			result.getUserAccount().setPassword(administratorForm.getPassword());
-			if (!administratorForm.getPassword().equals(administratorForm.getPasswordChecker()))
-				binding.rejectValue("passwordChecker", "administrator.validation.passwordsNotMatch", "Passwords doesnt match");
-			if (!this.useraccountRepository.findUserAccountsByUsername(administratorForm.getUsername()).isEmpty() || administratorForm.getUsername().equals(LoginService.getPrincipal().getUsername()))
-				binding.rejectValue("username", "administrator.validation.usernameExists", "This username already exists");
-		} else
-			result = this.administratorRepository.findOne(administratorForm.getIdAdministrator());
-
+		result = this.create();
+		result.getUserAccount().setUsername(administratorForm.getUsername());
+		result.getUserAccount().setPassword(administratorForm.getPassword());
 		result.setAddress(administratorForm.getAddress());
 		result.setEmail(administratorForm.getEmail());
 		result.setMiddleName(administratorForm.getMiddleName());
@@ -141,8 +133,36 @@ public class AdministratorService {
 		result.setPhoto(administratorForm.getPhoto());
 		result.setSurname(administratorForm.getSurname());
 
+		if (!administratorForm.getPassword().equals(administratorForm.getPasswordChecker()))
+			binding.rejectValue("passwordChecker", "administrator.validation.passwordsNotMatch", "Passwords doesnt match");
+		if (!this.useraccountRepository.findUserAccountsByUsername(administratorForm.getUsername()).isEmpty() || administratorForm.getUsername().equals(LoginService.getPrincipal().getUsername()))
+			binding.rejectValue("username", "administrator.validation.usernameExists", "This username already exists");
+		if (administratorForm.getCheckBox() == false)
+			binding.rejectValue("checkBox", "administrator.validation.checkBox", "This checkbox must be checked");
+
 		this.validator.validate(result, binding);
 		this.administratorRepository.flush();
 		return result;
 	}
+
+	public Administrator reconstructPruned(final Administrator administrator, final BindingResult binding) {
+		Administrator result;
+
+		if (administrator.getId() == 0)
+			result = administrator;
+		else
+			result = this.administratorRepository.findOne(administrator.getId());
+		result.setAddress(administrator.getAddress());
+		result.setEmail(administrator.getEmail());
+		result.setMessageBoxes(administrator.getMessageBoxes());
+		result.setMiddleName(administrator.getMiddleName());
+		result.setName(administrator.getName());
+		result.setPhone(administrator.getPhone());
+		result.setPhoto(administrator.getPhoto());
+		result.setSurname(administrator.getSurname());
+		this.validator.validate(result, binding);
+		this.administratorRepository.flush();
+		return result;
+	}
+
 }

@@ -40,7 +40,7 @@
 		<acme:textbox code="brotherhood.title" path="title" placeholder="La Pasion"/>
 		
 		
-		 <acme:select items="${settles}" itemLabel="area" code="brotherhood.area" path="settle" id="settle"/> 
+		 <%-- acme:select items="${settles}" itemLabel="area" code="brotherhood.area" path="settle" id="settle"/>  --%>
 		
 	<%-- 	<form:select path="settle">
 			<jstl:forEach items="${settles}" var="e">
@@ -48,6 +48,16 @@
 				</form:option>
 			</jstl:forEach>
 		</form:select> --%>
+		
+		<div>
+			<form:label path="settle">
+		<spring:message code="brotherhood.area" />
+	</form:label>	
+	<form:select id="settle" path="settle">
+		<form:options items="${settles}" itemLabel="area" />
+	</form:select>
+	<form:errors path="settle" cssClass="error" />
+		</div>
 		
 		<fieldset>
     	<legend><spring:message code="brotherhood.fieldset.userAccount"/></legend>

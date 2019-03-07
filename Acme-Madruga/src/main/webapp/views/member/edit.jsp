@@ -13,10 +13,11 @@
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 
-<form:form action="member/edit.do" modelAttribute="memberForm" >
+<form:form action="member/edit.do" modelAttribute="member" >
 
 
-	<form:hidden path="idMember"/>
+	<form:hidden path="id"/>
+	<form:hidden path="version"/>
 	
 	<fieldset>
     <legend><spring:message code="member.fieldset.personalInformation"/></legend>

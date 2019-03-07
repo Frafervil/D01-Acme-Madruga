@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.Calendar;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.ProcessionRepository;
 import domain.Brotherhood;
@@ -22,18 +25,22 @@ public class ProcessionService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private ProcessionRepository processionRepository;
+	private ProcessionRepository	processionRepository;
 
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	private BrotherhoodService brotherhoodService;
+	private BrotherhoodService		brotherhoodService;
 
 	@Autowired
-	private RequestService requestService;
+	private RequestService			requestService;
 
 	@Autowired
-	private FloatService floatService;
+	private FloatService			floatService;
+
+	@Autowired
+	private Validator				validator;
+
 
 	// Additional functions
 	private String generateTicker() {
@@ -52,8 +59,7 @@ public class ProcessionService {
 		final char d = (char) (r.nextInt(26) + 'a');
 		final char f = (char) (r.nextInt(26) + 'a');
 		final char g = (char) (r.nextInt(26) + 'a');
-		String code = String.valueOf(a) + String.valueOf(b) + String.valueOf(c)
-				+ String.valueOf(d) + String.valueOf(f) + String.valueOf(g);
+		String code = String.valueOf(a) + String.valueOf(b) + String.valueOf(c) + String.valueOf(d) + String.valueOf(f) + String.valueOf(g);
 		code = code.toUpperCase();
 		result = year + month + date + "-" + code;
 		return result;
@@ -91,23 +97,6 @@ public class ProcessionService {
 		return result;
 	}
 
-	public Procession save(final Procession procession) {
-		Brotherhood principal;
-		Procession result;
-
-		Assert.notNull(procession);
-
-		principal = this.brotherhoodService.findByPrincipal();
-		Assert.notNull(principal);
-
-		procession.setIsDraft(false);
-
-		result = this.processionRepository.save(procession);
-		Assert.notNull(result);
-
-		return result;
-	}
-
 	public void delete(final Procession procession) {
 		Brotherhood principal;
 		Collection<Request> requests;
@@ -134,12 +123,10 @@ public class ProcessionService {
 	}
 
 	// Business Methods
-	public Collection<Procession> findAllProcessionsOfOneBrotherhood(
-			final int brotherhoodId) {
+	public Collection<Procession> findAllProcessionsOfOneBrotherhood(final int brotherhoodId) {
 		Collection<Procession> result;
 
-		result = this.processionRepository
-				.findAllProcessionsOfOneBrotherhood(brotherhoodId);
+		result = this.processionRepository.findAllProcessionsOfOneBrotherhood(brotherhoodId);
 		Assert.notNull(result);
 		return result;
 	}
@@ -165,33 +152,41 @@ public class ProcessionService {
 
 	}
 
-	public Collection<Procession> findAllFinalOfOneBrotherhood(
-			final int brotherhoodId) {
+	public Collection<Procession> findAllFinalOfOneBrotherhood(final int brotherhoodId) {
 		Collection<Procession> result;
 
-		result = this.processionRepository
-				.findAllProcessionsFinalOfOneBrotherhood(brotherhoodId);
+		result = this.processionRepository.findAllProcessionsFinalOfOneBrotherhood(brotherhoodId);
 		Assert.notNull(result);
 		return result;
 	}
 
-	public Collection<Procession> findVisibleProcessions(
-			final Brotherhood brotherhood) {
-		Collection<Procession> result = this
-				.findAllFinalOfOneBrotherhood(brotherhood.getId());
+	public Collection<Procession> findVisibleProcessions(final Brotherhood brotherhood) {
+		final Collection<Procession> result = this.findAllFinalOfOneBrotherhood(brotherhood.getId());
 		Collection<Procession> allProcessions;
-		String userNameOfBrotherhood = brotherhood.getUserAccount()
-				.getUsername();
+		final String userNameOfBrotherhood = brotherhood.getUserAccount().getUsername();
 
 		allProcessions = this.findAll();
 
-		for (Procession p : allProcessions) {
-			if (p.getIsDraft() == true
-					&& (userNameOfBrotherhood.equals(p.getBrotherhood()
-							.getUserAccount().getUsername()))) {
+		for (final Procession p : allProcessions)
+			if (p.getIsDraft() == true && (userNameOfBrotherhood.equals(p.getBrotherhood().getUserAccount().getUsername())))
 				result.add(p);
-			}
-		}
+		return result;
+	}
+
+	public Procession save(final Procession procession) {
+		Brotherhood principal;
+		Procession result;
+
+		Assert.notNull(procession);
+
+		principal = this.brotherhoodService.findByPrincipal();
+		Assert.notNull(principal);
+
+		procession.setIsDraft(false);
+
+		result = this.processionRepository.save(procession);
+		Assert.notNull(result);
+
 		return result;
 	}
 
@@ -209,6 +204,23 @@ public class ProcessionService {
 		procession.setIsDraft(true);
 		result = this.processionRepository.save(procession);
 		Assert.notNull(result);
+		return result;
+	}
+
+	public Procession reconstruct(final Procession procession, final BindingResult binding) {
+		Procession result;
+		if (procession.getId() == 0)
+			result = procession;
+		else
+			result = this.processionRepository.findOne(procession.getId());
+		result.setDescription(procession.getDescription());
+		result.setMaxColumn(procession.getMaxColumn());
+		result.setMaxRow(procession.getMaxRow());
+		result.setMoment(procession.getMoment());
+		result.setTitle(procession.getTitle());
+		//result.setTicker(procession.getTicker());
+		this.validator.validate(result, binding);
+		//this.processionRepository.flush();
 		return result;
 	}
 

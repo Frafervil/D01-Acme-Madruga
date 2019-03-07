@@ -123,10 +123,9 @@ public class BrotherhoodController extends AbstractController {
 				for (final ObjectError e : binding.getAllErrors())
 					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
 				result = this.createEditModelAndView(brotherhoodForm);
-			} else {
+			} else
 				brotherhood = this.brotherhoodService.save(brotherhood);
-				result = new ModelAndView("welcome/index");
-			}
+			result = new ModelAndView("welcome/index");
 
 		} catch (final Throwable oops) {
 			result = this.createEditModelAndView(brotherhoodForm, "brotherhood.commit.error");

@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -139,6 +140,7 @@ public class BrotherhoodForm {
 	private Settle	settle;
 
 
+	@ManyToOne(optional = false)
 	public Settle getSettle() {
 		return this.settle;
 	}

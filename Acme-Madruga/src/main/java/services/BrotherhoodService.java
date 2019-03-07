@@ -124,7 +124,7 @@ public class BrotherhoodService {
 
 		userAccount = LoginService.getPrincipal();
 		Assert.notNull(userAccount);
-		result = this.findByUserAccountId(userAccount.getId());
+		result = this.brotherhoodRepository.findByUserAccountId(userAccount.getId());
 		Assert.notNull(result);
 
 		return result;
@@ -168,15 +168,9 @@ public class BrotherhoodService {
 	public Brotherhood reconstruct(final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
 		Brotherhood result;
 
-		if (brotherhoodForm.getId() == 0) {
-			result = this.create();
-			result.getUserAccount().setUsername(brotherhoodForm.getUsername());
-			result.getUserAccount().setPassword(brotherhoodForm.getPassword());
-		} else
-			result = this.brotherhoodRepository.findOne(brotherhoodForm.getId());
-
-		//Assert.isTrue(this.useraccountRepository.findUserAccountsByUsername(brotherhoodForm.getUsername()).isEmpty(), "This username already exist");
-		//Assert.isTrue(password.equals(passwordChecker), "brotherhood.validation.passwordsNotMatch");
+		result = this.create();
+		result.getUserAccount().setUsername(brotherhoodForm.getUsername());
+		result.getUserAccount().setPassword(brotherhoodForm.getPassword());
 		result.setAddress(brotherhoodForm.getAddress());
 		result.setEmail(brotherhoodForm.getEmail());
 		result.setMiddleName(brotherhoodForm.getMiddleName());
@@ -186,8 +180,7 @@ public class BrotherhoodService {
 		result.setPictures(brotherhoodForm.getPictures());
 		result.setSurname(brotherhoodForm.getSurname());
 		result.setTitle(brotherhoodForm.getTitle());
-		//result.getUserAccount().setUsername(brotherhoodForm.getUsername());
-		//result.getUserAccount().setPassword(brotherhoodForm.getPassword());
+		result.setSettle(brotherhoodForm.getSettle());
 
 		if (!brotherhoodForm.getPassword().equals(brotherhoodForm.getPasswordChecker()))
 			binding.rejectValue("passwordChecker", "brotherhood.validation.passwordsNotMatch", "Passwords doesnt match");
