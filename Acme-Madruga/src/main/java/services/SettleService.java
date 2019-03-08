@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.SettleRepository;
-import domain.Administrator;
 import domain.Settle;
 
 @Service
@@ -19,37 +18,21 @@ public class SettleService {
 	// Managed Repository
 
 	@Autowired
-	SettleRepository		settleRepository;
+	SettleRepository	settleRepository;
+
 
 	// Services
-
-	@Autowired
-	AdministratorService	administratorService;
-
 
 	//Simple CRUD methods
 	public Settle create() {
 		final Settle result;
-		Administrator principal;
-
-		principal = this.administratorService.findByPrincipal();
-		Assert.notNull(principal);
-
 		result = new Settle();
-		Assert.notNull(result);
 
 		return result;
 	}
 
 	public void delete(final Settle settle) {
-		Integer settles;
-
-		settles = this.settleRepository.findUsedSettle(settle.getId());
-
-		if (settles == 0)
-			this.settleRepository.delete(settle);
-		else
-			Assert.isTrue(settles > 0);
+		this.settleRepository.delete(settle);
 	}
 
 	public void save(final Settle settle) {

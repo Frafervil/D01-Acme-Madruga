@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
 
 import repositories.EnrolmentRepository;
 import domain.Brotherhood;
@@ -31,9 +29,6 @@ public class EnrolmentService {
 
 	@Autowired
 	private MemberService		memberService;
-
-	@Autowired
-	private Validator			validator;
 
 
 	// Simple CRUD Methods
@@ -90,44 +85,7 @@ public class EnrolmentService {
 
 		enrolment.setDropOutMoment(moment);
 
-		this.save(enrolment);
-	}
-
-	public Enrolment saveAsMember(final Enrolment enrolment) {
-
-		Member principal;
-		Enrolment result;
-
-		Assert.notNull(enrolment);
-
-		principal = this.memberService.findByPrincipal();
-		Assert.notNull(principal);
-
-		Assert.isTrue(enrolment.getMember().getId() == principal.getId());
-
-		result = this.enrolmentRepository.save(enrolment);
-		Assert.notNull(result);
-
-		return result;
-	}
-
-	public void deleteAsMember(final Enrolment enrolment) {
-
-		Member principal;
-		Date moment;
-
-		Assert.notNull(enrolment);
-
-		principal = this.memberService.findByPrincipal();
-		Assert.notNull(principal);
-
-		Assert.isTrue(enrolment.getMember().getId() == principal.getId());
-
-		moment = new Date(System.currentTimeMillis() - 1000);
-
-		enrolment.setDropOutMoment(moment);
-
-		this.saveAsMember(enrolment);
+		this.enrolmentRepository.save(enrolment);
 	}
 
 	public Enrolment findOne(final int enrolmentId) {
@@ -206,24 +164,5 @@ public class EnrolmentService {
 		enrolment = this.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
 
 		enrolment.setDropOutMoment(new Date(System.currentTimeMillis() - 1000));
-	}
-
-	public Enrolment reconstruct(final Enrolment enrolment, final BindingResult binding) {
-		Enrolment result;
-
-		if (enrolment.getId() == 0)
-			result = enrolment;
-		else
-			result = this.enrolmentRepository.findOne(enrolment.getId());
-
-		result.setDropOutMoment(enrolment.getDropOutMoment());
-		result.setEnrolmentMoment(enrolment.getEnrolmentMoment());
-		result.setBrotherhood(enrolment.getBrotherhood());
-		result.setMember(enrolment.getMember());
-		result.setPosition(enrolment.getPosition());
-
-		this.validator.validate(result, binding);
-		this.enrolmentRepository.flush();
-		return result;
 	}
 }

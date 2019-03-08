@@ -8,6 +8,8 @@ import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 @Entity
 @Access(AccessType.PROPERTY)
 public class Settle extends DomainEntity {
@@ -16,6 +18,7 @@ public class Settle extends DomainEntity {
 	private Collection<String>	pictures;
 
 
+	@NotBlank
 	public String getArea() {
 		return this.area;
 	}

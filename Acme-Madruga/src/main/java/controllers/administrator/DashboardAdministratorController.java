@@ -3,7 +3,6 @@ package controllers.administrator;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
-import services.FinderService;
 import services.MemberService;
 import services.PositionService;
 import services.ProcessionService;
@@ -45,9 +43,6 @@ public class DashboardAdministratorController extends AbstractController {
 	@Autowired
 	private PositionService		positionService;
 
-	@Autowired
-	private FinderService		finderService;
-
 
 	// Display
 
@@ -62,13 +57,6 @@ public class DashboardAdministratorController extends AbstractController {
 		final Collection<Procession> startingSoonProcession;
 
 		final Double ratioPendingRequest, ratioapprovedRequest, ratioRejectedRequest;
-
-		final Double ratioEmptyFinders, ratioCompletedFinders;
-
-		final HashMap<String, Integer> countBrotherhoodsPerSettle;
-		final HashMap<String, Double> ratioBrotherhoodsPerSettle;
-		final Integer minBrotherhoodsPerSettle, maxBrotherhoodsPerSettle;
-		final Double avgBrotherhoodsPerSettle, stddevBrotherhoodsPerSettle;
 
 		final Collection<Member> membersRequestapproved;
 
@@ -118,18 +106,6 @@ public class DashboardAdministratorController extends AbstractController {
 			position.add(entry.getKey());
 			count.add(entry.getValue());
 		}
-		// Ratios finder
-
-		ratioEmptyFinders = (double) ((this.finderService.countEmptyFinders()) / this.finderService.findAll().size());
-
-		ratioCompletedFinders = 1.0 - ratioEmptyFinders;
-		// Seetle stats
-		countBrotherhoodsPerSettle = this.brotherhoodService.countBrotherhoodsPerSettle();
-		ratioBrotherhoodsPerSettle = this.brotherhoodService.ratioBrotherhoodsPerSettle();
-		minBrotherhoodsPerSettle = this.brotherhoodService.minBrotherhoodsPerSettle();
-		maxBrotherhoodsPerSettle = this.brotherhoodService.maxBrotherhoodsPerSettle();
-		avgBrotherhoodsPerSettle = this.brotherhoodService.avgBrotherhoodsPerSettle();
-		stddevBrotherhoodsPerSettle = this.brotherhoodService.stddevBrotherhoodsPerSettle();
 		//
 		result = new ModelAndView("administrator/dashboard");
 		result.addObject("avgMemberPerBrotherhood", avgMemberPerBrotherhood);
@@ -150,16 +126,6 @@ public class DashboardAdministratorController extends AbstractController {
 
 		result.addObject("position", position);
 		result.addObject("count", count);
-
-		result.addObject("ratioEmptyFinders", ratioEmptyFinders);
-		result.addObject("ratioCompletedFinders", ratioCompletedFinders);
-
-		result.addObject("countBrotherhoodsPerSettle", countBrotherhoodsPerSettle);
-		result.addObject("ratioBrotherhoodsPerSettle", ratioBrotherhoodsPerSettle);
-		result.addObject("minBrotherhoodsPerSettle", minBrotherhoodsPerSettle);
-		result.addObject("maxBrotherhoodsPerSettle", maxBrotherhoodsPerSettle);
-		result.addObject("avgBrotherhoodsPerSettle", avgBrotherhoodsPerSettle);
-		result.addObject("stddevBrotherhoodsPerSettle", stddevBrotherhoodsPerSettle);
 
 		return result;
 

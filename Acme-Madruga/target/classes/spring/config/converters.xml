@@ -34,8 +34,8 @@
 		<bean class="converters.EnrolmentToStringConverter" />
 		<bean class="converters.StringToEnrolmentConverter" />
 		
-		<bean class="converters.FloatBToStringConverter" />
-		<bean class="converters.StringToFloatBConverter" />
+		<bean class="converters.FloatToStringConverter" />
+		<bean class="converters.StringToFloatConverter" />
 
 		<bean class="converters.ProcessionToStringConverter" />
 		<bean class="converters.StringToProcessionConverter" />
@@ -52,12 +52,17 @@
 		<bean class="converters.PlaceToStringConverter" />
 		<bean class="converters.StringToPlaceConverter" />	
 		
+		<bean class="converters.SettleToStringConverter" />
+		<bean class="converters.StringToSettleConverter" />	
+		
 		<bean class="converters.UserAccountToStringConverter"/>
 		<bean class="converters.StringToUserAccount"/>
 		
-		<bean class="converters.LanguagePositionToStringConverter" />
-		<bean class="converters.StringToLanguagePositionConverter" />	
+		<bean class="converters.MessageBoxToStringConverter"/>
+		<bean class="converters.StringToMessageBoxConverter"/>
 		
+		<bean class="converters.MessageToStringConverter"/>
+		<bean class="converters.StringToMessageConverter"/>
 
 	</util:list>
 	

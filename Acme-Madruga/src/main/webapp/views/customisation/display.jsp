@@ -42,18 +42,6 @@
 <td> <jstl:out value="${customisation.countryCode}" /> </td>
 </tr>
 
-<tr>
-<td> <strong> <spring:message code="customisation.finderCacheTime" /> : </strong> </td>
-
-<td> <jstl:out value="${customisation.finderCacheTime}" /> </td>
-</tr>
-
-<tr>
-<td> <strong> <spring:message code="customisation.finderMaxResults" /> : </strong> </td>
-
-<td> <jstl:out value="${customisation.finderMaxResults}" /> </td>
-</tr>
-
 
 
 

@@ -1,3 +1,4 @@
+
 package services;
 
 import java.util.ArrayList;
@@ -7,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.FloatRepository;
 import domain.Brotherhood;
+import domain.Float;
 
 @Service
 @Transactional
@@ -17,12 +21,16 @@ public class FloatService {
 
 	// Managed repository -----------------------------------------------------
 	@Autowired
-	private FloatRepository floatRepository;
+	private FloatRepository		floatRepository;
 
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	private BrotherhoodService brotherhoodService;
+	private BrotherhoodService	brotherhoodService;
+
+	@Autowired
+	private Validator			validator;
+
 
 	// Additional functions
 
@@ -102,6 +110,23 @@ public class FloatService {
 
 		result = this.floatRepository.findByBrotherhoodId(brotherhoodId);
 		Assert.notNull(result);
+		return result;
+	}
+
+	public Float reconstruct(final Float floatB, final BindingResult binding) {
+		Float result;
+		if (floatB.getId() == 0)
+			result = floatB;
+
+		else
+			result = this.floatRepository.findOne(floatB.getId());
+		result.setTitle(floatB.getTitle());
+		result.setDescription(floatB.getDescription());
+		result.setPictures(floatB.getPictures());
+		result.setProcession(floatB.getProcession());
+		result.setBrotherhood(this.brotherhoodService.findByPrincipal());
+		this.validator.validate(result, binding);
+		this.floatRepository.flush();
 		return result;
 	}
 }

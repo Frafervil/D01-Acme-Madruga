@@ -1,3 +1,4 @@
+
 package controllers;
 
 import java.util.Arrays;
@@ -18,12 +19,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
 import services.CustomisationService;
-import services.EnrolmentService;
+import services.FloatService;
 import services.MemberService;
+import services.ProcessionService;
 import services.SettleService;
 import domain.Brotherhood;
-import domain.Enrolment;
 import domain.Member;
+import domain.Procession;
 import forms.BrotherhoodForm;
 
 @Controller
@@ -33,19 +35,22 @@ public class BrotherhoodController extends AbstractController {
 	// Services
 
 	@Autowired
-	private BrotherhoodService brotherhoodService;
+	private BrotherhoodService		brotherhoodService;
 
 	@Autowired
-	private SettleService settleService;
+	private ProcessionService		processionService;
 
 	@Autowired
-	private CustomisationService customisationService;
-
-	@Autowired
-	private EnrolmentService		enrolmentService;
+	private FloatService			floatService;
 
 	@Autowired
 	private MemberService			memberService;
+
+	@Autowired
+	private SettleService			settleService;
+
+	@Autowired
+	private CustomisationService	customisationService;
 
 
 	// List
@@ -67,32 +72,33 @@ public class BrotherhoodController extends AbstractController {
 	// Display
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
-	public ModelAndView show(
-			@RequestParam(required = false) final Integer brotherhoodId) {
+	public ModelAndView show(@RequestParam(required = false) final Integer brotherhoodId) {
 		final ModelAndView result;
 		Brotherhood brotherhood = new Brotherhood();
-		Enrolment enrolment = null;
-		Member principal = null;
 
 		if (brotherhoodId == null)
 			brotherhood = this.brotherhoodService.findByPrincipal();
-		else {
+		else
 			brotherhood = this.brotherhoodService.findOne(brotherhoodId);
-			if (this.memberService.findByPrincipal2() != null) {
-				principal = this.memberService.findByPrincipal();
-				enrolment = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
-			}
-		}
+
+		Collection<Member> members;
+		members = this.memberService.findAllMembersOfOneBrotherhood(brotherhood.getId());
+		Collection<Procession> processions;
+		processions = this.processionService.findAllProcessionsOfOneBrotherhood(brotherhood.getId());
+		Collection<domain.Float> floats;
+		floats = this.floatService.findByBrotherhoodId(brotherhood.getId());
 
 		result = new ModelAndView("brotherhood/display");
 		result.addObject("brotherhood", brotherhood);
-		result.addObject("enrolment", enrolment);
+		result.addObject("processions", processions);
+		result.addObject("members", members);
+		result.addObject("floats", floats);
 
 		return result;
 
 	}
 
-	// Create
+	//Create
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView create() {
 		ModelAndView result;
@@ -108,57 +114,44 @@ public class BrotherhoodController extends AbstractController {
 
 	// Save de Edit
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(
-			@ModelAttribute("brotherhood") Brotherhood brotherhood,
-			final BindingResult binding) {
+	public ModelAndView save(@ModelAttribute("brotherhood") Brotherhood brotherhood, final BindingResult binding) {
 		ModelAndView result;
 
 		try {
-			brotherhood = this.brotherhoodService.reconstructPruned(
-					brotherhood, binding);
+			brotherhood = this.brotherhoodService.reconstructPruned(brotherhood, binding);
 			if (binding.hasErrors()) {
 				result = this.editModelAndView(brotherhood);
 				for (final ObjectError e : binding.getAllErrors())
-					System.out.println(e.getObjectName() + " error ["
-							+ e.getDefaultMessage() + "] "
-							+ Arrays.toString(e.getCodes()));
-			} else {
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+			} else
 				brotherhood = this.brotherhoodService.save(brotherhood);
-				result = new ModelAndView("redirect:/welcome/index.do");
-			}
+			result = new ModelAndView("welcome/index");
 		} catch (final Throwable oops) {
-			result = this.editModelAndView(brotherhood,
-					"brotherhood.commit.error");
+			result = this.editModelAndView(brotherhood, "brotherhood.commit.error");
 
 		}
 
 		return result;
 	}
 
-	// Save de Register
+	//Save de Register
 	@RequestMapping(value = "/register", method = RequestMethod.POST, params = "register")
-	public ModelAndView register(
-			@ModelAttribute("brotherhoodForm") @Valid final BrotherhoodForm brotherhoodForm,
-			final BindingResult binding) {
+	public ModelAndView register(@ModelAttribute("brotherhoodForm") @Valid final BrotherhoodForm brotherhoodForm, final BindingResult binding) {
 		ModelAndView result;
 		Brotherhood brotherhood;
 
 		try {
-			brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm,
-					binding);
+			brotherhood = this.brotherhoodService.reconstruct(brotherhoodForm, binding);
 			if (binding.hasErrors()) {
 				for (final ObjectError e : binding.getAllErrors())
-					System.out.println(e.getObjectName() + " error ["
-							+ e.getDefaultMessage() + "] "
-							+ Arrays.toString(e.getCodes()));
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
 				result = this.createEditModelAndView(brotherhoodForm);
 			} else
 				brotherhood = this.brotherhoodService.save(brotherhood);
 			result = new ModelAndView("welcome/index");
 
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(brotherhoodForm,
-					"brotherhood.commit.error");
+			result = this.createEditModelAndView(brotherhoodForm, "brotherhood.commit.error");
 
 		}
 
@@ -179,16 +172,33 @@ public class BrotherhoodController extends AbstractController {
 
 	// Ancillary methods ------------------------------------------------------
 
-	protected ModelAndView createEditModelAndView(
-			final BrotherhoodForm brotherhoodForm) {
+	private ModelAndView editModelAndView(final Brotherhood brotherhood) {
+		ModelAndView result;
+		result = this.editModelAndView(brotherhood, null);
+		return result;
+	}
+
+	private ModelAndView editModelAndView(final Brotherhood brotherhood, final String messageCode) {
+		ModelAndView result;
+		String countryCode;
+
+		countryCode = this.customisationService.find().getCountryCode();
+
+		result = new ModelAndView("brotherhood/edit");
+		result.addObject("brotherhood", brotherhood);
+		result.addObject("countryCode", countryCode);
+		result.addObject("message", messageCode);
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(final BrotherhoodForm brotherhoodForm) {
 		ModelAndView result;
 		result = this.createEditModelAndView(brotherhoodForm, null);
 
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(
-			final BrotherhoodForm brotherhoodForm, final String message) {
+	protected ModelAndView createEditModelAndView(final BrotherhoodForm brotherhoodForm, final String message) {
 		ModelAndView result;
 		String countryCode;
 
@@ -208,26 +218,4 @@ public class BrotherhoodController extends AbstractController {
 
 		return result;
 	}
-
-	protected ModelAndView editModelAndView(final Brotherhood brotherhood) {
-		ModelAndView result;
-		result = this.editModelAndView(brotherhood, null);
-		return result;
-	}
-
-	protected ModelAndView editModelAndView(final Brotherhood brotherhood,
-			final String messageCode) {
-		ModelAndView result;
-		String countryCode;
-
-		countryCode = this.customisationService.find().getCountryCode();
-
-		result = new ModelAndView("brotherhood/edit");
-		result.addObject("brotherhood", brotherhood);
-		result.addObject("countryCode", countryCode);
-		result.addObject("message", messageCode);
-
-		return result;
-	}
-
 }

@@ -14,11 +14,6 @@
 
 <display:table name="brotherhoods" id="row" requestURI="brotherhood/list.do"
 	pagesize="5" class="displaytag">
-	
-	<!-- Display -->
-	<display:column>
-		<a href="brotherhood/display.do?brotherhoodId=${row.id}"><spring:message code="brotherhood.display"/></a>
-	</display:column>
 
 	<!-- Attributes -->
 

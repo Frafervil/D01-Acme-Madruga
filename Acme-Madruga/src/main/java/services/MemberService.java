@@ -128,16 +128,6 @@ public class MemberService {
 
 	}
 
-	public Member findByPrincipal2() {
-		Member result;
-		UserAccount userAccount;
-
-		userAccount = LoginService.getPrincipal();
-		result = this.memberRepository.findByUserAccountId(userAccount.getId());
-
-		return result;
-	}
-
 	public Member findByUserAccount(final UserAccount userAccount) {
 		Assert.notNull(userAccount);
 		Member result;
@@ -296,9 +286,22 @@ public class MemberService {
 	}
 
 	public Double stddevMemberPerBrotherhood() {
-		double result;
-		result = this.averageMemberPerBrotherhood();
-		result = Math.sqrt(result);
+		Administrator principal;
+		Collection<Brotherhood> brotherhoods;
+		Collection<Enrolment> enrolments;
+		int total = 0;
+		final Double result;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+
+		brotherhoods = this.brotherhoodService.findAll();
+		Assert.notNull(brotherhoods);
+		for (final Brotherhood b : brotherhoods) {
+			enrolments = this.enrolmentService.findAllActiveEnrolmentsByBrotherhoodId(b.getId());
+			total = total + enrolments.size();
+		}
+		result = (double) (total / (brotherhoods.size()));
 		return result;
 	}
 

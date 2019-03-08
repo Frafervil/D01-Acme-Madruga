@@ -1,4 +1,3 @@
-
 package controllers.brotherhood;
 
 import java.util.ArrayList;
@@ -13,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
+import services.EnrolmentService;
 import services.MemberService;
 import controllers.AbstractController;
 import domain.Brotherhood;
+import domain.Enrolment;
 import domain.Member;
 
 @Controller
@@ -25,11 +26,13 @@ public class MemberBrotherhoodController extends AbstractController {
 	// Servicios
 
 	@Autowired
-	private BrotherhoodService	brotherhoodService;
+	private BrotherhoodService brotherhoodService;
 
 	@Autowired
-	private MemberService		memberService;
+	private MemberService memberService;
 
+	@Autowired
+	private EnrolmentService enrolmentService;
 
 	// List
 
@@ -38,10 +41,12 @@ public class MemberBrotherhoodController extends AbstractController {
 		ModelAndView result;
 		Collection<Member> members;
 		try {
-			final Brotherhood hood = this.brotherhoodService.findOne(brotherhoodId);
+			final Brotherhood hood = this.brotherhoodService
+					.findOne(brotherhoodId);
 			Assert.notNull(hood);
 
-			members = this.memberService.findAllActiveMembersOfOneBrotherhood(brotherhoodId);
+			members = this.memberService
+					.findAllActiveMembersOfOneBrotherhood(brotherhoodId);
 			result = new ModelAndView("member/brotherhood/list");
 			result.addObject("members", members);
 			result.addObject("requestURI", "member/brotherhood/list.do");
@@ -53,6 +58,34 @@ public class MemberBrotherhoodController extends AbstractController {
 			result.addObject("members", new ArrayList<Member>());
 		}
 
+		return result;
+	}
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int memberId) {
+		// Inicializa resultado
+		ModelAndView result;
+		Member member;
+		Brotherhood principal;
+		Enrolment enrolment;
+
+		// Busca en el repositorio
+		member = this.memberService.findOne(memberId);
+		Assert.notNull(member);
+
+		principal = this.brotherhoodService.findByPrincipal();
+
+		enrolment = this.enrolmentService
+				.findActiveEnrolmentByBrotherhoodIdAndMemberId(
+						principal.getId(), memberId);
+
+		// Crea y a�ade objetos a la vista
+		result = new ModelAndView("member/display");
+		result.addObject("requestURI", "member/display.do");
+		result.addObject("enrolment", enrolment);
+		result.addObject("member", member);
+
+		// Env�a la vista
 		return result;
 	}
 

@@ -15,6 +15,4 @@ public interface SettleRepository extends JpaRepository<Settle, Integer> {
 	@Query("select s.settle from Brotherhood s where s.settle = NULL")
 	Collection<Settle> findSettlesWithNoBrotherhood();
 
-	@Query("select count(s) from Brotherhood s where s.settle.id = ?1")
-	Integer findUsedSettle(int settleId);
 }

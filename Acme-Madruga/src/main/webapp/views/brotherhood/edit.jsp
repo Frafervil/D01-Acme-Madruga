@@ -14,9 +14,8 @@
 
 
 <form:form action="brotherhood/edit.do" modelAttribute="brotherhood">
-
 	<form:hidden path="id"/>
-	<form:hidden path="version"/>
+	<form:hidden path="version" />
 	
 	<form:label path="name">
 		<spring:message code="brotherhood.name" />:
@@ -80,6 +79,12 @@
 	<form:errors cssClass="error" path="title" />
 	<br />
 	<br />
+	
+	<%-- <jstl:if test="${brotherhoodForm.settle.id ==0}">
+	<acme:select items="${settles}" itemLabel="area" code="brotherhood.area" path="settle" id="selttle"/>
+	</jstl:if>
+	<br />
+	<br /> --%>
 	
 	<form:label path="pictures">
 		<spring:message code="brotherhood.pictures" />:

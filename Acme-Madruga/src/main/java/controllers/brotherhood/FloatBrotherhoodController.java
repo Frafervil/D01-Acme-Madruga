@@ -2,14 +2,15 @@
 package controllers.brotherhood;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import services.BrotherhoodService;
 import services.FloatService;
 import controllers.AbstractController;
 import domain.Brotherhood;
+import domain.Float;
 
 @Controller
 @RequestMapping("/float/brotherhood")
@@ -94,20 +96,44 @@ public class FloatBrotherhoodController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid domain.Float floatB, final BindingResult binding) {
+	public ModelAndView save(@ModelAttribute("float") domain.Float floatB, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors()) {
-			System.out.println(binding.getAllErrors());
-			result = this.createEditModelAndView(floatB);
-		} else
-			try {
+		try {
+			floatB = this.floatService.reconstruct(floatB, binding);
+			if (binding.hasErrors()) {
+				System.out.println(binding.getAllErrors());
+				result = this.editModelAndView(floatB);
+			} else {
 				floatB = this.floatService.save(floatB);
-				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				oops.printStackTrace();
-				result = this.createEditModelAndView(floatB, "float.commit.error");
+				result = new ModelAndView("redirect:/welcome/index.do");
 			}
+
+		} catch (final Throwable oops) {
+			oops.printStackTrace();
+			result = this.editModelAndView(floatB, "float.commit.error");
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/create", method = RequestMethod.POST, params = "save")
+	public ModelAndView create(@ModelAttribute("float") domain.Float floatB, final BindingResult binding) {
+		ModelAndView result;
+
+		try {
+			floatB = this.floatService.reconstruct(floatB, binding);
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(floatB);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+			} else {
+				floatB = this.floatService.save(floatB);
+				result = new ModelAndView("redirect:/welcome/index.do");
+			}
+
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(floatB, "float.commit.error");
+		}
 		return result;
 	}
 
@@ -123,6 +149,21 @@ public class FloatBrotherhoodController extends AbstractController {
 			result = this.createEditModelAndView(floatB, "float.commit.error");
 		}
 
+		return result;
+	}
+
+	private ModelAndView editModelAndView(final Float floatB) {
+		ModelAndView result;
+
+		result = this.editModelAndView(floatB, null);
+		return result;
+	}
+
+	private ModelAndView editModelAndView(final Float floatB, final String messageCode) {
+		ModelAndView result;
+		result = new ModelAndView("float/edit");
+		result.addObject("float", floatB);
+		result.addObject("message", messageCode);
 		return result;
 	}
 
