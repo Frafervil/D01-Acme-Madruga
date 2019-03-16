@@ -35,6 +35,7 @@
 		<value>/views/customisation/tiles.xml</value>
 		<value>/views/position/tiles.xml</value>
 		<value>/views/settle/tiles.xml</value>
+		<value>/views/finder/tiles.xml</value>
 		<value>/views/messageBox/tiles.xml</value>
 		<value>/views/message/tiles.xml</value>
 
