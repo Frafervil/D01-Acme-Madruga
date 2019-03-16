@@ -2,16 +2,17 @@
 package controllers.brotherhood;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,18 +64,24 @@ public class RequestBrotherhoodController extends AbstractController {
 		return result;
 
 	}
-
+	@RequestMapping(value = "/list", method = RequestMethod.GET, params = {
+		"requestStatus"
+	})
 	public ModelAndView listByStatus(@RequestParam final int requestStatus) {
 		final ModelAndView result;
 		Map<String, List<Request>> groupedRequest;
-		final Collection<Request> requests;
+		Collection<Request> requests;
+		Brotherhood principal;
+		principal = this.brotherhoodService.findByPrincipal();
 
-		groupedRequest = this.requestService.groupByStatus();
+		requests = this.requestService.findAllByBrotherhood(principal.getId());
+
+		groupedRequest = this.requestService.groupByStatus(requests);
 
 		if (requestStatus == 0)
-			requests = this.requestService.findByPrincipal();
+			requests = this.requestService.findAllByBrotherhood(principal.getId());
 		else if (requestStatus == 1)
-			requests = new ArrayList<Request>(groupedRequest.get("ACCEPTED"));
+			requests = new ArrayList<Request>(groupedRequest.get("APPROVED"));
 		else if (requestStatus == 2)
 			requests = new ArrayList<Request>(groupedRequest.get("PENDING"));
 		else if (requestStatus == 3)
@@ -89,7 +96,6 @@ public class RequestBrotherhoodController extends AbstractController {
 		return result;
 
 	}
-
 	// Display
 
 	@RequestMapping(value = "/display", method = RequestMethod.GET)
@@ -127,21 +133,24 @@ public class RequestBrotherhoodController extends AbstractController {
 
 	}
 	@RequestMapping(value = "/reject", method = RequestMethod.POST, params = "save")
-	public ModelAndView reject(@Valid final Request request, final BindingResult binding) {
+	public ModelAndView reject(@ModelAttribute("request") Request request, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(request, false);
-			System.out.println(binding.getAllErrors());
-		} else
-			try {
+		try {
+			request = this.requestService.reconstruc(request, binding);
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(request, false);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+			} else {
 				this.requestService.reject(request);
-				this.requestService.save(request);
-
+				request = this.requestService.save(request);
 				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(request, "request.commit.error", false);
 			}
+
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(request, "request.commit.error", false);
+		}
 		return result;
 	}
 
@@ -167,20 +176,23 @@ public class RequestBrotherhoodController extends AbstractController {
 
 	}
 	@RequestMapping(value = "/approve", method = RequestMethod.POST, params = "save")
-	public ModelAndView approve(@Valid final Request request, final BindingResult binding) {
+	public ModelAndView approve(@ModelAttribute("request") Request request, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(request, true);
-			System.out.println(binding.getAllErrors());
-		} else
-
-			try {
+		try {
+			request = this.requestService.reconstruc(request, binding);
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(request, true);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+			} else {
 				this.requestService.approve(request);
 				result = new ModelAndView("redirect:list.do");
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(request, "request.commit.error", true);
 			}
+
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(request, "request.commit.error", true);
+		}
 
 		return result;
 	}
@@ -197,17 +209,9 @@ public class RequestBrotherhoodController extends AbstractController {
 
 	protected ModelAndView createEditModelAndView(final Request request, final String message, final Boolean approve) {
 		ModelAndView result;
-		boolean permission = false;
-		Brotherhood principal;
-
-		principal = this.brotherhoodService.findByPrincipal();
-
-		if (request.getProcession().getBrotherhood().getId() == principal.getId())
-			permission = true;
 
 		result = new ModelAndView("request/edit");
 		result.addObject("request", request);
-		result.addObject("permission", permission);
 		result.addObject("message", message);
 		result.addObject("approve", approve);
 		return result;

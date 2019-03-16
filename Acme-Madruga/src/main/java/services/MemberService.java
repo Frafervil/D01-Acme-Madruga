@@ -121,7 +121,7 @@ public class MemberService {
 
 		userAccount = LoginService.getPrincipal();
 		Assert.notNull(userAccount);
-		result = this.findByUserAccount(userAccount);
+		result = this.memberRepository.findByUserAccountId(userAccount.getId());
 		Assert.notNull(result);
 
 		return result;

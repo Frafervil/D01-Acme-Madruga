@@ -73,7 +73,7 @@
 
 
 
-<%-- <!-- Members -->
+<!-- Members -->
 <h3> <spring:message code="brotherhood.members" /> </h3>
 <jstl:choose>
 <jstl:when test="${not empty members}">
@@ -110,10 +110,12 @@
 			
 </display:table>
 </jstl:when>
+
 <jstl:otherwise>
 <spring:message code="brotherhood.processions.empty" /> 
 </jstl:otherwise>
 </jstl:choose>
+<acme:button url="procession/brotherhood/create.do" code="procession.create"/>
 <!-- Floats -->
 <h3> <spring:message code="brotherhood.floats" /> </h3>
 <jstl:choose>
@@ -126,11 +128,16 @@
 		<display:column property="description" title="${description}" sortable="true"/>
 			
 </display:table>
+
 </jstl:when>
+
 <jstl:otherwise>
 <spring:message code="brotherhood.floats.empty" /> 
 </jstl:otherwise>
-</jstl:choose> --%>
+</jstl:choose>
+<acme:button url="float/brotherhood/create.do" code="float.create"/>
+<br/>
+<br/>
 
 <jstl:if test="${brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
 	<security:authorize access="hasRole('BROTHERHOOD')">

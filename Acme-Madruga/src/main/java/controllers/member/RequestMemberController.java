@@ -2,16 +2,17 @@
 package controllers.member;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,9 +53,12 @@ public class RequestMemberController extends AbstractController {
 		final ModelAndView result;
 		final Collection<Request> requests;
 		Collection<Procession> processions;
+		Member principal;
+
+		principal = this.memberService.findByPrincipal();
 
 		requests = this.requestService.findByPrincipal();
-		processions = this.processionService.findAllFinal();
+		processions = this.processionService.findAllAvailableRequest(principal.getId());
 
 		result = new ModelAndView("request/list");
 		result.addObject("requests", requests);
@@ -64,16 +68,25 @@ public class RequestMemberController extends AbstractController {
 		return result;
 
 	}
-
+	@RequestMapping(value = "/list", method = RequestMethod.GET, params = {
+		"requestStatus"
+	})
 	public ModelAndView listByStatus(@RequestParam final int requestStatus) {
 		final ModelAndView result;
 		Map<String, List<Request>> groupedRequest;
-		final Collection<Request> requests;
+		Collection<Request> requests;
+		Collection<Procession> processions;
+		Member principal;
 
-		groupedRequest = this.requestService.groupByStatus();
+		principal = this.memberService.findByPrincipal();
+		processions = this.processionService.findAllAvailableRequest(principal.getId());
+
+		requests = this.requestService.findAllByMember(principal.getId());
+
+		groupedRequest = this.requestService.groupByStatus(requests);
 
 		if (requestStatus == 0)
-			requests = this.requestService.findByPrincipal();
+			requests = this.requestService.findAllByMember(principal.getId());
 		else if (requestStatus == 1)
 			requests = new ArrayList<Request>(groupedRequest.get("ACCEPTED"));
 		else if (requestStatus == 2)
@@ -85,6 +98,7 @@ public class RequestMemberController extends AbstractController {
 
 		result = new ModelAndView("request/list");
 		result.addObject("requests", requests);
+		result.addObject("processions", processions);
 		result.addObject("requestURI", "request/member/list.do");
 
 		return result;
@@ -143,16 +157,13 @@ public class RequestMemberController extends AbstractController {
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create(@RequestParam final int processionId) {
 		ModelAndView result;
-		final Request request;
-
+		Request request = new Request();
 		request = this.requestService.create(processionId);
-
 		result = this.createEditModelAndView(request);
 
 		return result;
 
 	}
-
 	// Edition
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
@@ -168,23 +179,26 @@ public class RequestMemberController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Request request, final BindingResult binding) {
+	public ModelAndView save(@ModelAttribute("request") Request request, final BindingResult binding) {
 		ModelAndView result;
 
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(request);
-			System.out.println(binding.getAllErrors());
-		} else
-			try {
-				this.placeService.save(request.getPlace());
+		try {
+			request = this.requestService.reconstruc(request, binding);
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(request);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+			} else {
+				this.placeService.save(request.getProcession().getId(), request.getPlace());
 				this.placeService.flushPlace();
-				this.requestService.save(request);
+				request = this.requestService.save(request);
 				this.requestService.flushRequest();
 				result = new ModelAndView("redirect:list.do");
-
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(request, "request.commit.error");
 			}
+
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(request, "request.commit.error");
+		}
 		return result;
 	}
 	// Ancillary methods ------------------------------------------------------

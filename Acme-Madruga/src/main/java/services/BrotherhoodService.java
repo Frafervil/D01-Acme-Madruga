@@ -3,16 +3,20 @@ package services;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import repositories.BrotherhoodRepository;
+import repositories.CustomisationRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
@@ -45,6 +49,9 @@ public class BrotherhoodService {
 
 	@Autowired
 	private Validator				validator;
+
+	@Autowired
+	private CustomisationRepository	customisationRepository;
 
 
 	// Simple CRUD Methods
@@ -182,6 +189,13 @@ public class BrotherhoodService {
 		result.setTitle(brotherhoodForm.getTitle());
 		result.setSettle(brotherhoodForm.getSettle());
 
+		if (!StringUtils.isEmpty(brotherhoodForm.getPhone())) {
+			final Pattern pattern = Pattern.compile("^\\d{4,}$", Pattern.CASE_INSENSITIVE);
+			final Matcher matcher = pattern.matcher(brotherhoodForm.getPhone());
+			if (matcher.matches())
+				brotherhoodForm.setPhone(this.customisationRepository.findAll().iterator().next().getCountryCode() + brotherhoodForm.getPhone());
+		}
+
 		if (!brotherhoodForm.getPassword().equals(brotherhoodForm.getPasswordChecker()))
 			binding.rejectValue("passwordChecker", "brotherhood.validation.passwordsNotMatch", "Passwords doesnt match");
 		if (!this.useraccountRepository.findUserAccountsByUsername(brotherhoodForm.getUsername()).isEmpty())
@@ -194,6 +208,28 @@ public class BrotherhoodService {
 
 		return result;
 
+	}
+
+	public Brotherhood reconstructPruned(final Brotherhood brotherhood, final BindingResult binding) {
+		Brotherhood result;
+
+		if (brotherhood.getId() == 0)
+			result = brotherhood;
+		else
+			result = this.brotherhoodRepository.findOne(brotherhood.getId());
+		result.setAddress(brotherhood.getAddress());
+		result.setEmail(brotherhood.getEmail());
+		result.setMessageBoxes(brotherhood.getMessageBoxes());
+		result.setMiddleName(brotherhood.getMiddleName());
+		result.setName(brotherhood.getName());
+		result.setPhone(brotherhood.getPhone());
+		result.setPhoto(brotherhood.getPhoto());
+		result.setSurname(brotherhood.getSurname());
+		result.setPictures(brotherhood.getPictures());
+		result.setTitle(brotherhood.getTitle());
+		this.validator.validate(result, binding);
+		this.brotherhoodRepository.flush();
+		return result;
 	}
 	public Brotherhood largestBrotherhood() {
 		Brotherhood result = null;
@@ -247,4 +283,5 @@ public class BrotherhoodService {
 		return result;
 
 	}
+
 }

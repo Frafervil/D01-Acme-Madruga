@@ -17,10 +17,7 @@
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
-	<form:hidden path="status" />
-	<form:hidden path="rejectionReason" />
-	<form:hidden path="procession" />
-	<form:hidden path="member" />
+	
 	
 	
 	<spring:message code="request.procession.title" />: <jstl:out value="${request.procession.title} "></jstl:out>
@@ -54,10 +51,7 @@
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
-	<form:hidden path="status" />
-	<form:hidden path="procession" />
-	<form:hidden path="member" />
-	<form:hidden path="place" />
+	
 	
 	<form:label path="rejectionReason">
 	<spring:message code="request.procession.rejection" />:
@@ -88,11 +82,7 @@
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
-	<form:hidden path="status" />
-	<form:hidden path="procession" />
-	<form:hidden path="member" />
-	<form:hidden path="place" />
-	<form:hidden path="rejectionReason" />
+	
 	
 	<form:label path="place">
 		<spring:message code="request.procession.place" />:<br />

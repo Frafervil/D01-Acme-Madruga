@@ -8,7 +8,8 @@
  * http://www.tdg-seville.info/License.html
  --%>
  
- <%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+ <%@page import="domain.Float"%>
+<%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
 <%@taglib prefix="jstl"	uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -34,11 +35,12 @@
 		<br/>
 	</jstl:if>
 	
-	<!-- Procession -->
-	<b><spring:message code="float.procession" /></b>:
-	<a href="procession/display.do?processionId=${floatB.procession.id}">
-		<jstl:out value="${floatB.procession.title}"/>
-	</a><br/>
+	<b><spring:message code="float.procession" /></b>
+	<jstl:out value="${floatB.procession.title}"/><br/>	
+	
+	
+	
+	
 	
 	<!-- Links de editar y borrar -->
 	<jstl:if test="${floatB.brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
@@ -47,5 +49,4 @@
 	</security:authorize>
 	</jstl:if>
 	
-	<a href="float/brotherhood/list.do"><spring:message code="float.list"/></a>
-	<br/>
+	

@@ -34,10 +34,9 @@
 		<acme:textbox code="procession.maxColumn" path="maxColumn"/>	
 		
 		
-		<acme:submit name="saveDraft" code="procession.saveDraft"/>
+		<acme:submit name="save" code="procession.saveFinal"/>
 		
-		<acme:submit name="saveFinal" code="procession.saveFinal"/>
 		
-		<acme:cancel url="welcome/index" code="procession.cancel"/>
+		<acme:cancel url="welcome/index.do" code="procession.cancel"/>
 		
 </form:form>

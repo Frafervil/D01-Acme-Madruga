@@ -19,6 +19,7 @@
 <%@taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="acme" tagdir="/WEB-INF/tags" %>
 
 
 <display:table name="processions" id="row" pagesize="5" requestURI="${requestURI}" 
@@ -47,9 +48,9 @@ class="displaytag" keepStatus="true">
 <!-- Create procession -->
 <security:authorize access="hasRole('BROTHERHOOD')">
 <jstl:if test = "${row.brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
-	<div>
-		<a href="procession/brotherhood/create.do"><spring:message
-				code="procession.create" /></a>
-	</div>
+	
+		
+		<acme:button url="procession/brotherhood/create.do" code="procession.create"/>
+	
 	</jstl:if>
 </security:authorize> 

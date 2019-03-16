@@ -1,3 +1,4 @@
+
 package repositories;
 
 import java.util.Collection;
@@ -10,8 +11,7 @@ import org.springframework.stereotype.Repository;
 import domain.Procession;
 
 @Repository
-public interface ProcessionRepository extends
-		JpaRepository<Procession, Integer> {
+public interface ProcessionRepository extends JpaRepository<Procession, Integer> {
 
 	@Query("select p from Procession p where p.brotherhood.id = ?1")
 	Collection<Procession> findAllProcessionsOfOneBrotherhood(int brotherhoodId);
@@ -21,7 +21,7 @@ public interface ProcessionRepository extends
 
 	@Query("select p from Procession p where p.isDraft = 0 AND p.brotherhood.id = ?1")
 	Collection<Procession> findAllProcessionsFinalOfOneBrotherhood(int brotherhoodId);
-	
+
 	@Query("select p from Procession p where p.moment > NOW() AND p.moment < ?1")
 	Collection<Procession> findSoonProcessions(Date dateMax);
 }

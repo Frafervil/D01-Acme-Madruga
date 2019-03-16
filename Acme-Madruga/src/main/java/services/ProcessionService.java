@@ -119,7 +119,7 @@ public class ProcessionService {
 				if (f.getProcession().getId() == procession.getId())
 					f.setProcession(null);
 
-		this.processionRepository.delete(procession);
+		this.processionRepository.delete(procession.getId());
 	}
 
 	// Business Methods
@@ -136,6 +136,18 @@ public class ProcessionService {
 
 		result = this.processionRepository.findAllProcessionsFinal();
 		Assert.notNull(result);
+		return result;
+	}
+
+	public Collection<Procession> findAllAvailableRequest(final int memberId) {
+		Collection<Procession> result;
+		Collection<Procession> processions;
+		processions = this.findAllFinal();
+		result = this.findAllFinal();
+
+		for (final Procession p : processions)
+			if ((this.requestService.findRepeated(memberId, p.getId())) > 0)
+				result.remove(p);
 		return result;
 	}
 
@@ -192,16 +204,12 @@ public class ProcessionService {
 
 	public Procession saveAsDraft(final Procession procession) {
 		Procession result;
-		Brotherhood principal;
+		final Brotherhood principal;
 
 		Assert.notNull(procession);
-		Assert.isTrue(procession.getIsDraft());
-
-		principal = this.brotherhoodService.findByPrincipal();
-
-		Assert.notNull(principal);
 
 		procession.setIsDraft(true);
+		Assert.isTrue(procession.getIsDraft());
 		result = this.processionRepository.save(procession);
 		Assert.notNull(result);
 		return result;
@@ -209,15 +217,19 @@ public class ProcessionService {
 
 	public Procession reconstruct(final Procession procession, final BindingResult binding) {
 		Procession result;
-		if (procession.getId() == 0)
+		if (procession.getId() == 0) {
 			result = procession;
-		else
+			result.setTicker(this.generateTicker());
+
+		} else
 			result = this.processionRepository.findOne(procession.getId());
+
 		result.setDescription(procession.getDescription());
 		result.setMaxColumn(procession.getMaxColumn());
 		result.setMaxRow(procession.getMaxRow());
 		result.setMoment(procession.getMoment());
 		result.setTitle(procession.getTitle());
+		result.setBrotherhood(this.brotherhoodService.findByPrincipal());
 		//result.setTicker(procession.getTicker());
 		this.validator.validate(result, binding);
 		//this.processionRepository.flush();

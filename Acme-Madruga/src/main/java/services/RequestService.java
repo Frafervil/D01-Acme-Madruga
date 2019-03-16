@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.RequestRepository;
 import domain.Brotherhood;
@@ -27,6 +29,9 @@ public class RequestService {
 
 	@Autowired
 	private RequestRepository	requestRepository;
+
+	@Autowired
+	private Validator			validator;
 
 	// Supporting services
 
@@ -59,14 +64,19 @@ public class RequestService {
 		Place place;
 		Procession procession;
 
-		result = new Request();
-
 		principal = this.memberService.findByPrincipal();
 		Assert.notNull(principal);
-		result.setMember(principal);
 
 		procession = this.processionService.findOne(processionId);
 		Assert.notNull(procession);
+
+		//Comprobamos si principal tiene alguna request pendiente o aceptada con esa procession
+		//En ese caso no podria crear mas
+		Assert.isTrue(!(this.findRepeated(principal.getId(), procession.getId()) > 1), "request.commit.error.repeated");
+		//
+
+		result = new Request();
+		result.setMember(principal);
 		result.setProcession(procession);
 
 		place = this.placeService.create(processionId);
@@ -77,7 +87,6 @@ public class RequestService {
 
 		return result;
 	}
-
 	public Collection<Request> findByPrincipal() {
 		Member principal;
 
@@ -125,23 +134,17 @@ public class RequestService {
 		return result;
 
 	}
-	public void save(final Request request) {
+	public Request save(final Request request) {
 		Request result;
 		result = this.requestRepository.save(request);
 		Assert.notNull(result);
+		return result;
 	}
 
 	// Other business methods
 
-	public Map<String, List<Request>> groupByStatus() {
+	public Map<String, List<Request>> groupByStatus(final Collection<Request> requests) {
 		final Map<String, List<Request>> result = new HashMap<String, List<Request>>();
-		final Member principal;
-		final Collection<Request> requests;
-
-		principal = this.memberService.findByPrincipal();
-		Assert.notNull(principal);
-
-		requests = this.findByPrincipal();
 		Assert.notNull(requests);
 		for (final Request r : requests)
 			if (result.containsKey(r.getStatus()))
@@ -152,7 +155,7 @@ public class RequestService {
 				result.put(r.getStatus(), l);
 			}
 
-		if (!result.containsKey("ACCEPTED"))
+		if (!result.containsKey("APPROVED"))
 			result.put("APPROVED", new ArrayList<Request>());
 		if (!result.containsKey("PENDING"))
 			result.put("PENDING", new ArrayList<Request>());
@@ -252,10 +255,38 @@ public class RequestService {
 
 		r.setStatus("APPROVED");
 
+		this.placeService.save(r.getProcession().getId(), r.getPlace());
 		this.requestRepository.save(r);
+	}
+
+	public Integer findRepeated(final int memberId, final int processionId) {
+		Integer result;
+		result = this.requestRepository.findRepeated(memberId, processionId);
+
+		return result;
 	}
 
 	public void flushRequest() {
 		this.requestRepository.flush();
+	}
+
+	public Request reconstruc(final Request request, final BindingResult binding) {
+		Request result;
+		if (request.getId() == 0)
+			result = request;
+		else
+			result = this.requestRepository.findOne(request.getId());
+		result.setMember(request.getMember());
+		result.setPlace(request.getPlace());
+		result.setProcession(request.getProcession());
+		result.setRejectionReason(request.getRejectionReason());
+		result.setStatus(request.getStatus());
+
+		if (!(this.placeService.findRepeated(request.getProcession().getId(), request.getPlace().getrowP(), request.getPlace().getcolumnP()) > 1))
+			binding.rejectValue("place", "request.commit.error.busy", "This position is already taken");
+
+		this.validator.validate(result, binding);
+		this.requestRepository.flush();
+		return result;
 	}
 }

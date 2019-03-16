@@ -18,11 +18,11 @@
 
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<form:form action="float/brotherhood/edit.do" modelAttribute="float">
+<form:form action="float/brotherhood/create.do" modelAttribute="float">
 		<form:hidden path="id"/>
 		<form:hidden path="version"/>
 		
-		<acme:textbox code="float.title" path="title"/>
+		<acme:textbox code="float.title" path="title" placeholder="El Cristo"/>
 		
 		<acme:textarea code="float.description" path="description"/>
 		
@@ -44,8 +44,6 @@
 		</div>
 		
 		<acme:submit name="save" code="float.save"/>
-		
-		<acme:submit name="delete" code="float.delete"/>
 		
 		<acme:cancel url="welcome/index.do" code="float.cancel"/>
 		

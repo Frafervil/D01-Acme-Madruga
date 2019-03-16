@@ -72,5 +72,4 @@
 		<a href="procession/brotherhood/edit.do?processionId=${procession.id}"><spring:message code="procession.edit"/></a><br/>
 	
 	
-		<a href="procession/brotherhood/list.do"><spring:message code="procession.list"/></a>
-		<br/>
+		

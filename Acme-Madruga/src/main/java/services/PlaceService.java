@@ -62,11 +62,22 @@ public class PlaceService {
 		result = this.placeRepository.findPlacesByProcession(processionId);
 		return result;
 	}
-	public void save(final Place place) {
+	public void save(final int processionId, final Place place) {
 		Place result;
+		//Comprobamos que la posicion no este pillada ya
+		//Assert.isTrue(!(this.findRepeated(processionId, place.getrowP(), place.getcolumnP()) > 0), "request.commit.error.busy ");
+
+		//
 		result = this.placeRepository.save(place);
 		Assert.notNull(result);
 
+	}
+
+	public Integer findRepeated(final int processionId, final int rowP, final int columnP) {
+		Integer result;
+		result = this.placeRepository.findRepeatedPlace(processionId, rowP, columnP);
+
+		return result;
 	}
 
 	public void flushPlace() {
