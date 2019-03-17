@@ -18,13 +18,10 @@
 
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<form:form action="enrolment/brotherhood/edit.do" modelAttribute="enrolment">
+<form:form action="enrolment/brotherhood/edit.do?memberId=${param['memberId']}" modelAttribute="enrolment">
 		<form:hidden path="id"/>
 		<form:hidden path="version"/>
-		<form:hidden path="enrolmentMoment"/>
-		<form:hidden path="dropOutMoment"/>
-		<form:hidden path="brotherhood"/>
-		<form:hidden path="member"/>
+		
 		
 		<jstl:if test="${cookie['language'].getValue()=='en'}">
 		

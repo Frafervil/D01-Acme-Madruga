@@ -24,7 +24,7 @@
 	<display:column property="establishmentDate" title="${establishmentDateHeader}"
 		sortable="true" />
 	<!-- Action links -->
-
+	
 	<display:column>
 	<a href="member/brotherhood/list.do?brotherhoodId=${row.id }"> <spring:message code="brotherhood.members" /></a>
 	</display:column>
@@ -33,10 +33,17 @@
 	<a href="float/brotherhood/list.do?brotherhoodId=${row.id }"> <spring:message code="brotherhood.floats" /></a>
 	</display:column>
 	
+	<security:authorize access="hasAnyRole('MEMBER', 'BROTHERHOOD', 'ADMIN')">
 	<display:column>
 	<a href="procession/brotherhood/list.do?brotherhoodId=${row.id }"> <spring:message code="brotherhood.processions" /></a>
 	</display:column>
+	</security:authorize>
 	
+	<security:authorize access="isAnonymous()">
+	<display:column>
+	<a href="procession/brotherhood/listAnonymous.do?brotherhoodId=${row.id }"> <spring:message code="brotherhood.processions" /></a>
+	</display:column>
+	</security:authorize>
 	
 
 </display:table>

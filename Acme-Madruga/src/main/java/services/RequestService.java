@@ -276,7 +276,7 @@ public class RequestService {
 			result = request;
 		else
 			result = this.requestRepository.findOne(request.getId());
-		result.setMember(request.getMember());
+		result.setMember(this.memberService.findByPrincipal());
 		result.setPlace(request.getPlace());
 		result.setProcession(request.getProcession());
 		result.setRejectionReason(request.getRejectionReason());

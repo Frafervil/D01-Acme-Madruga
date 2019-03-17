@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.ActorService;
 import services.BrotherhoodService;
 import services.ProcessionService;
 import controllers.AbstractController;
+import domain.Actor;
 import domain.Brotherhood;
 import domain.Procession;
 
@@ -31,16 +33,19 @@ public class ProcessionBrotherhoodController extends AbstractController {
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
 
+	@Autowired
+	private ActorService		actorService;
+
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(@RequestParam final int brotherhoodId) {
 		final ModelAndView result;
-		Brotherhood principal, brotherhood;
+		Brotherhood brotherhood;
 		brotherhood = this.brotherhoodService.findOne(brotherhoodId);
-		principal = this.brotherhoodService.findByPrincipal();
 		Collection<Procession> processions;
 		//Comprobar que si el principal coincide con el brotherhoodId que se le pasa al list, hacer el findVisibleProcessions
 		//En caso contrario, hacer el método findAllProcessionsOfOneBrotherhood
+		final Actor principal = this.actorService.findByPrincipal();
 		if (principal.getUserAccount().getUsername().equals(brotherhood.getUserAccount().getUsername()))
 			processions = this.processionService.findVisibleProcessions(brotherhood);
 		else
@@ -50,6 +55,18 @@ public class ProcessionBrotherhoodController extends AbstractController {
 		result.addObject("processions", processions);
 		result.addObject("requestURI", "procession/brotherhood/list.do");
 
+		return result;
+	}
+
+	@RequestMapping(value = "/listAnonymous", method = RequestMethod.GET)
+	public ModelAndView listAnonymous(@RequestParam final int brotherhoodId) {
+		ModelAndView result;
+		Collection<Procession> processions;
+		processions = this.processionService.findAllFinalOfOneBrotherhood(brotherhoodId);
+
+		result = new ModelAndView("procession/list");
+		result.addObject("processions", processions);
+		result.addObject("requestURI", "procession/brotherhood/list.do");
 		return result;
 	}
 	@RequestMapping(value = "/create", method = RequestMethod.GET)

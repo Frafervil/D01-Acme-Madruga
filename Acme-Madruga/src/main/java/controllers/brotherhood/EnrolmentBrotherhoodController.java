@@ -1,23 +1,25 @@
 
 package controllers.brotherhood;
 
+import java.util.Arrays;
 import java.util.Collection;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.BrotherhoodService;
 import services.EnrolmentService;
 import services.MemberService;
 import services.PositionService;
 import controllers.AbstractController;
+import domain.Brotherhood;
 import domain.Enrolment;
 import domain.Member;
 import domain.Position;
@@ -36,6 +38,9 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 
 	@Autowired
 	private MemberService		memberService;
+
+	@Autowired
+	private BrotherhoodService	brotherhoodService;
 
 
 	// Create
@@ -58,11 +63,13 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 	// Edit
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int enrolmentId) {
+	public ModelAndView edit(@RequestParam final int memberId) {
 		ModelAndView result;
+		Brotherhood brotherhood;
+		brotherhood = this.brotherhoodService.findByPrincipal();
 
 		try {
-			final Enrolment e = this.enrolmentService.findOne(enrolmentId);
+			final Enrolment e = this.enrolmentService.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhood.getId(), memberId);
 
 			result = this.createEditModelAndView(e, null);
 
@@ -75,27 +82,34 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid Enrolment enrolment, final BindingResult binding) {
+	public ModelAndView save(@RequestParam final int memberId, Enrolment enrolment, final BindingResult binding) {
 		ModelAndView result;
+		final Member member = this.memberService.findOne(memberId);
 
-		if (binding.hasErrors()) {
-			System.out.println(binding.getAllErrors());
-			result = this.createEditModelAndView(enrolment);
-		} else
-			try {
+		try {
+			enrolment = this.enrolmentService.reconstruc(enrolment, member, binding);
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(enrolment);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+			} else {
 				enrolment = this.enrolmentService.save(enrolment);
 				result = new ModelAndView("redirect:/welcome/index.do");
-			} catch (final Throwable oops) {
-				oops.printStackTrace();
-				result = this.createEditModelAndView(enrolment, "enrolment.commit.error");
 			}
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(enrolment, "enrolment.commit.error");
+		}
 		return result;
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final Enrolment enrolment) {
+	public ModelAndView delete(@RequestParam final int memberId, Enrolment enrolment, final BindingResult binding) {
 		ModelAndView result;
+		Member member;
+		member = this.memberService.findOne(memberId);
+
 		try {
+			enrolment = this.enrolmentService.reconstruc(enrolment, member, binding);
 			Assert.isTrue(enrolment.getId() != 0);
 			this.enrolmentService.delete(enrolment);
 			result = new ModelAndView("member/brotherhood/list");
