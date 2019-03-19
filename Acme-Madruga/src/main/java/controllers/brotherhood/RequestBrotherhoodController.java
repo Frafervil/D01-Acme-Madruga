@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -133,11 +132,11 @@ public class RequestBrotherhoodController extends AbstractController {
 
 	}
 	@RequestMapping(value = "/reject", method = RequestMethod.POST, params = "save")
-	public ModelAndView reject(@ModelAttribute("request") Request request, final BindingResult binding) {
+	public ModelAndView reject(@RequestParam final int processionId, Request request, final BindingResult binding) {
 		ModelAndView result;
-
+		final Procession procession = this.processionService.findOne(processionId);
 		try {
-			request = this.requestService.reconstruc(request, binding);
+			request = this.requestService.reconstruct(request, procession, binding);
 			if (binding.hasErrors()) {
 				result = this.createEditModelAndView(request, false);
 				for (final ObjectError e : binding.getAllErrors())
@@ -176,11 +175,11 @@ public class RequestBrotherhoodController extends AbstractController {
 
 	}
 	@RequestMapping(value = "/approve", method = RequestMethod.POST, params = "save")
-	public ModelAndView approve(@ModelAttribute("request") Request request, final BindingResult binding) {
+	public ModelAndView approve(@RequestParam final int processionId, Request request, final BindingResult binding) {
 		ModelAndView result;
-
+		final Procession procession = this.processionService.findOne(processionId);
 		try {
-			request = this.requestService.reconstruc(request, binding);
+			request = this.requestService.reconstruct(request, procession, binding);
 			if (binding.hasErrors()) {
 				result = this.createEditModelAndView(request, true);
 				for (final ObjectError e : binding.getAllErrors())

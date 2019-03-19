@@ -64,10 +64,6 @@ public class PlaceService {
 	}
 	public void save(final int processionId, final Place place) {
 		Place result;
-		//Comprobamos que la posicion no este pillada ya
-		//Assert.isTrue(!(this.findRepeated(processionId, place.getrowP(), place.getcolumnP()) > 0), "request.commit.error.busy ");
-
-		//
 		result = this.placeRepository.save(place);
 		Assert.notNull(result);
 

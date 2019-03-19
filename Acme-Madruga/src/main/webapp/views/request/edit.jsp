@@ -13,7 +13,7 @@
 
 <security:authorize access="hasRole('MEMBER')">
 
-<form:form action="request/member/edit.do" modelAttribute="request">
+<form:form action="request/member/edit.do?processionId=${param['processionId'] }" modelAttribute="request">
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
@@ -22,6 +22,9 @@
 	
 	<spring:message code="request.procession.title" />: <jstl:out value="${request.procession.title} "></jstl:out>
 	<br />
+	<jstl:out value="${request.procession.maxRow} " />
+	<jstl:out value="${request.procession.maxColumn} " />
+	
 	<br />	
 	<form:label path="place">
 		<spring:message code="request.procession.place" />:<br />
@@ -47,7 +50,7 @@
 <jstl:choose>
 <jstl:when test="${(approve==false)}">
 <security:authorize access="hasRole('BROTHERHOOD')">
-<form:form action="request/brotherhood/reject.do" modelAttribute="request">
+<form:form action="request/brotherhood/reject.do?processionId=${param['processionId'] }" modelAttribute="request">
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
@@ -78,7 +81,7 @@
 </jstl:when>
 <jstl:otherwise>
 <security:authorize access="hasRole('BROTHERHOOD')">
-<form:form action="request/brotherhood/approve.do" modelAttribute="request">
+<form:form action="request/brotherhood/approve.do?processionId=${param['processionId'] }" modelAttribute="request">
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
