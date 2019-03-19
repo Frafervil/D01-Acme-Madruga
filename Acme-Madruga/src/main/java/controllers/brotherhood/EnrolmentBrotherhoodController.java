@@ -87,7 +87,7 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 		final Member member = this.memberService.findOne(memberId);
 
 		try {
-			enrolment = this.enrolmentService.reconstruc(enrolment, member, binding);
+			enrolment = this.enrolmentService.reconstruct(enrolment, member, binding);
 			if (binding.hasErrors()) {
 				result = this.createEditModelAndView(enrolment);
 				for (final ObjectError e : binding.getAllErrors())
@@ -109,7 +109,7 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 		member = this.memberService.findOne(memberId);
 
 		try {
-			enrolment = this.enrolmentService.reconstruc(enrolment, member, binding);
+			enrolment = this.enrolmentService.reconstruct(enrolment, member, binding);
 			Assert.isTrue(enrolment.getId() != 0);
 			this.enrolmentService.delete(enrolment);
 			result = new ModelAndView("member/brotherhood/list");

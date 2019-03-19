@@ -169,7 +169,7 @@ public class EnrolmentService {
 		enrolment.setDropOutMoment(new Date(System.currentTimeMillis() - 1000));
 	}
 
-	public Enrolment reconstruc(final Enrolment enrolment, final Member member, final BindingResult binding) {
+	public Enrolment reconstruct(final Enrolment enrolment, final Member member, final BindingResult binding) {
 		Enrolment result;
 		if (enrolment.getId() == 0) {
 			result = enrolment;
