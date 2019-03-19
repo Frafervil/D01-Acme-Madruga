@@ -12,14 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.MemberService;
-import services.PlaceService;
 import services.ProcessionService;
 import services.RequestService;
 import controllers.AbstractController;
@@ -41,9 +39,6 @@ public class RequestMemberController extends AbstractController {
 
 	@Autowired
 	private ProcessionService	processionService;
-
-	@Autowired
-	private PlaceService		placeService;
 
 
 	// Listing
@@ -179,20 +174,17 @@ public class RequestMemberController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@ModelAttribute("request") Request request, final BindingResult binding) {
+	public ModelAndView save(@RequestParam final int processionId, Request request, final BindingResult binding) {
 		ModelAndView result;
-
+		final Procession procession = this.processionService.findOne(processionId);
 		try {
-			request = this.requestService.reconstruc(request, binding);
+			request = this.requestService.reconstruct(request, procession, binding);
 			if (binding.hasErrors()) {
 				result = this.createEditModelAndView(request);
 				for (final ObjectError e : binding.getAllErrors())
 					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
 			} else {
-				this.placeService.save(request.getProcession().getId(), request.getPlace());
-				this.placeService.flushPlace();
 				request = this.requestService.save(request);
-				this.requestService.flushRequest();
 				result = new ModelAndView("redirect:list.do");
 			}
 

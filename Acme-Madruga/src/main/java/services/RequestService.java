@@ -270,19 +270,19 @@ public class RequestService {
 		this.requestRepository.flush();
 	}
 
-	public Request reconstruc(final Request request, final BindingResult binding) {
+	public Request reconstruct(final Request request, final Procession procession, final BindingResult binding) {
 		Request result;
-		if (request.getId() == 0)
+		if (request.getId() == 0) {
 			result = request;
-		else
+			result.setProcession(procession);
+			result.setMember(this.memberService.findByPrincipal());
+			result.setStatus("PENDING");
+		} else
 			result = this.requestRepository.findOne(request.getId());
-		result.setMember(this.memberService.findByPrincipal());
 		result.setPlace(request.getPlace());
-		result.setProcession(request.getProcession());
 		result.setRejectionReason(request.getRejectionReason());
-		result.setStatus(request.getStatus());
 
-		if (!(this.placeService.findRepeated(request.getProcession().getId(), request.getPlace().getrowP(), request.getPlace().getcolumnP()) > 1))
+		if (this.placeService.findRepeated(request.getProcession().getId(), request.getPlace().getrowP(), request.getPlace().getcolumnP()) > 0)
 			binding.rejectValue("place", "request.commit.error.busy", "This position is already taken");
 
 		this.validator.validate(result, binding);
