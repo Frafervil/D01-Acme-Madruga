@@ -172,6 +172,13 @@ public class ProcessionService {
 		return result;
 	}
 
+	public Procession findOneByRequestId(final int requestId) {
+		Procession result;
+		result = this.processionRepository.findOneByRequestId(requestId);
+		Assert.notNull(result);
+		return result;
+	}
+
 	public Collection<Procession> findVisibleProcessions(final Brotherhood brotherhood) {
 		final Collection<Procession> result = this.findAllFinalOfOneBrotherhood(brotherhood.getId());
 		Collection<Procession> allProcessions;

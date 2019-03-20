@@ -127,7 +127,7 @@ public class EnrolmentBrotherhoodController extends AbstractController {
 
 	protected ModelAndView createEditModelAndView(final Enrolment enrolment, final String messageCode) {
 		ModelAndView result;
-		final Collection<Position> positions;
+		Collection<Position> positions;
 
 		positions = this.positionService.findAll();
 

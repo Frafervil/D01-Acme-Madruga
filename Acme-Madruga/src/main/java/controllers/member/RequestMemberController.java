@@ -162,11 +162,11 @@ public class RequestMemberController extends AbstractController {
 	// Edition
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int requestId) {
+	public ModelAndView edit(@RequestParam final int processionId) {
 		ModelAndView result;
 		Request request;
 
-		request = this.requestService.findOne(requestId);
+		request = this.requestService.findByProcession(processionId);
 		Assert.notNull(request);
 		result = this.createEditModelAndView(request);
 

@@ -51,8 +51,8 @@
 	
 	<jstl:if test="${request.status == 'PENDING'}">
 	<br/>
-		<a href="request/brotherhood/reject.do?requestId=${request.id}&?processionId=${request.procession.id}" ><spring:message code="request.reject" /></a><br/>			
-		<a href="request/brotherhood/approve.do?requestId=${request.id}&?processionId=${request.procession.id}" ><spring:message code="request.approve" /></a>								
+		<a href="request/brotherhood/reject.do?requestId=${request.id}" ><spring:message code="request.reject" /></a><br/>			
+		<a href="request/brotherhood/approve.do?requestId=${request.id}" ><spring:message code="request.approve" /></a>								
 		
 	</jstl:if>
 	</security:authorize>	

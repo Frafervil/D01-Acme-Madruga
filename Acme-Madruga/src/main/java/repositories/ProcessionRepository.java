@@ -24,4 +24,7 @@ public interface ProcessionRepository extends JpaRepository<Procession, Integer>
 
 	@Query("select p from Procession p where p.moment > NOW() AND p.moment < ?1")
 	Collection<Procession> findSoonProcessions(Date dateMax);
+
+	@Query("select r.procession from Request r where r.id = ?1")
+	Procession findOneByRequestId(int requestId);
 }

@@ -13,7 +13,7 @@
 
 <security:authorize access="hasRole('MEMBER')">
 
-<form:form action="request/member/edit.do?processionId=${param['processionId'] }" modelAttribute="request">
+<form:form action="request/member/edit.do?processionId=${request.procession.id }" modelAttribute="request">
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
@@ -50,7 +50,7 @@
 <jstl:choose>
 <jstl:when test="${(approve==false)}">
 <security:authorize access="hasRole('BROTHERHOOD')">
-<form:form action="request/brotherhood/reject.do?processionId=${param['processionId'] }" modelAttribute="request">
+<form:form action="request/brotherhood/reject.do" modelAttribute="request">
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
@@ -81,7 +81,7 @@
 </jstl:when>
 <jstl:otherwise>
 <security:authorize access="hasRole('BROTHERHOOD')">
-<form:form action="request/brotherhood/approve.do?processionId=${param['processionId'] }" modelAttribute="request">
+<form:form action="request/brotherhood/approve.do" modelAttribute="request">
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
