@@ -18,21 +18,34 @@
 
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<form:form action="enrolment/brotherhood/edit.do" modelAttribute="enrolment">
+<form:form action="enrolment/brotherhood/edit.do?memberId=${param['memberId']}" modelAttribute="enrolment">
 		<form:hidden path="id"/>
 		<form:hidden path="version"/>
-		<form:hidden path="enrolmentMoment"/>
-		<form:hidden path="dropOutMoment"/>
-		<form:hidden path="brotherhood"/>
-		<form:hidden path="member"/>
+		
 		
 		<jstl:if test="${cookie['language'].getValue()=='en'}">
-		<acme:select code="enrolment.position" path="position"
-		items="${positions}" itemLabel="englishName" id="position"/>
-		<br /></jstl:if>
+		
+		<div>
+			<form:label path="position">
+		<spring:message code="enrolment.position" />
+	</form:label>	
+	<form:select id="position" path="position">
+		<form:options items="${positions}" itemLabel="englishName" />
+	</form:select>
+	<form:errors path="position" cssClass="error" />
+		</div>
+		 </jstl:if> 
+		<br />
 		<jstl:if test="${cookie['language'].getValue()=='es'}">
-		<acme:select code="enrolment.position" path="position"
-		items="${positions}" itemLabel="spanishName" id="position"/>
+		<div>
+			<form:label path="position">
+		<spring:message code="enrolment.position" />
+	</form:label>	
+	<form:select id="position" path="position">
+		<form:options items="${positions}" itemLabel="spanishName" />
+	</form:select>
+	<form:errors path="position" cssClass="error" />
+		</div>
 		<br /></jstl:if>
 		
 		<acme:submit name="save" code="enrolment.save"/>

@@ -2,23 +2,22 @@
 package controllers.member;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.MemberService;
-import services.PlaceService;
 import services.ProcessionService;
 import services.RequestService;
 import controllers.AbstractController;
@@ -40,9 +39,6 @@ public class RequestMemberController extends AbstractController {
 
 	@Autowired
 	private ProcessionService	processionService;
-
-	@Autowired
-	private PlaceService		placeService;
 
 
 	// Listing
@@ -68,12 +64,19 @@ public class RequestMemberController extends AbstractController {
 	public ModelAndView listByStatus(@RequestParam final int requestStatus) {
 		final ModelAndView result;
 		Map<String, List<Request>> groupedRequest;
-		final Collection<Request> requests;
+		Collection<Request> requests;
+		Collection<Procession> processions;
+		Member principal;
 
-		groupedRequest = this.requestService.groupByStatus();
+		principal = this.memberService.findByPrincipal();
+		processions = this.processionService.findAllAvailableRequest(principal.getId());
+
+		requests = this.requestService.findAllByMember(principal.getId());
+
+		groupedRequest = this.requestService.groupByStatus(requests);
 
 		if (requestStatus == 0)
-			requests = this.requestService.findByPrincipal();
+			requests = this.requestService.findAllByMember(principal.getId());
 		else if (requestStatus == 1)
 			requests = new ArrayList<Request>(groupedRequest.get("ACCEPTED"));
 		else if (requestStatus == 2)
@@ -156,11 +159,11 @@ public class RequestMemberController extends AbstractController {
 	// Edition
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam final int requestId) {
+	public ModelAndView edit(@RequestParam final int processionId) {
 		ModelAndView result;
 		Request request;
 
-		request = this.requestService.findOne(requestId);
+		request = this.requestService.findByProcession(processionId);
 		Assert.notNull(request);
 		result = this.createEditModelAndView(request);
 
@@ -168,23 +171,23 @@ public class RequestMemberController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-	public ModelAndView save(@Valid final Request request, final BindingResult binding) {
+	public ModelAndView save(@RequestParam final int processionId, Request request, final BindingResult binding) {
 		ModelAndView result;
-
-		if (binding.hasErrors()) {
-			result = this.createEditModelAndView(request);
-			System.out.println(binding.getAllErrors());
-		} else
-			try {
-				this.placeService.save(request.getPlace());
-				this.placeService.flushPlace();
-				this.requestService.save(request);
-				this.requestService.flushRequest();
+		final Procession procession = this.processionService.findOne(processionId);
+		try {
+			request = this.requestService.reconstruct(request, procession, binding);
+			if (binding.hasErrors()) {
+				result = this.createEditModelAndView(request);
+				for (final ObjectError e : binding.getAllErrors())
+					System.out.println(e.getObjectName() + " error [" + e.getDefaultMessage() + "] " + Arrays.toString(e.getCodes()));
+			} else {
+				request = this.requestService.save(request);
 				result = new ModelAndView("redirect:list.do");
-
-			} catch (final Throwable oops) {
-				result = this.createEditModelAndView(request, "request.commit.error");
 			}
+
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(request, "request.commit.error");
+		}
 		return result;
 	}
 	// Ancillary methods ------------------------------------------------------

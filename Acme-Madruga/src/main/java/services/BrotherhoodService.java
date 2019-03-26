@@ -3,16 +3,21 @@ package services;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import repositories.BrotherhoodRepository;
+import repositories.CustomisationRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
@@ -46,6 +51,10 @@ public class BrotherhoodService {
 	@Autowired
 	private Validator				validator;
 
+	@Autowired
+	private SettleService			settleService;
+	@Autowired
+	private CustomisationRepository	customisationRepository;
 
 	// Simple CRUD Methods
 
@@ -146,7 +155,7 @@ public class BrotherhoodService {
 		brotherhoodForm.setCheckBox(brotherhoodForm.getCheckBox());
 		brotherhoodForm.setSettle(brotherhood.getSettle());
 		brotherhoodForm.setUsername(brotherhood.getUserAccount().getUsername());
-		//En los construct no coger la contraseña
+		//En los construct no coger la contraseï¿½a
 		return brotherhoodForm;
 
 	}
@@ -182,6 +191,13 @@ public class BrotherhoodService {
 		result.setTitle(brotherhoodForm.getTitle());
 		result.setSettle(brotherhoodForm.getSettle());
 
+		if (!StringUtils.isEmpty(brotherhoodForm.getPhone())) {
+			final Pattern pattern = Pattern.compile("^\\d{4,}$", Pattern.CASE_INSENSITIVE);
+			final Matcher matcher = pattern.matcher(brotherhoodForm.getPhone());
+			if (matcher.matches())
+				brotherhoodForm.setPhone(this.customisationRepository.findAll().iterator().next().getCountryCode() + brotherhoodForm.getPhone());
+		}
+
 		if (!brotherhoodForm.getPassword().equals(brotherhoodForm.getPasswordChecker()))
 			binding.rejectValue("passwordChecker", "brotherhood.validation.passwordsNotMatch", "Passwords doesnt match");
 		if (!this.useraccountRepository.findUserAccountsByUsername(brotherhoodForm.getUsername()).isEmpty())
@@ -212,6 +228,7 @@ public class BrotherhoodService {
 		result.setPhoto(brotherhood.getPhoto());
 		result.setSurname(brotherhood.getSurname());
 		result.setPictures(brotherhood.getPictures());
+		result.setTitle(brotherhood.getTitle());
 		this.validator.validate(result, binding);
 		this.brotherhoodRepository.flush();
 		return result;

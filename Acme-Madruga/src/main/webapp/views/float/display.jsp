@@ -35,6 +35,11 @@
 		<br/>
 	</jstl:if>
 	
+	<b><spring:message code="float.procession" /></b>
+	<jstl:out value="${floatB.procession.title}"/><br/>	
+	
+	
+	
 	
 	
 	<!-- Links de editar y borrar -->

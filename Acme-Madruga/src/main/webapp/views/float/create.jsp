@@ -18,24 +18,33 @@
 
 <%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<form:form action="float/brotherhood/edit.do" modelAttribute="float">
+<form:form action="float/brotherhood/create.do" modelAttribute="float">
 		<form:hidden path="id"/>
 		<form:hidden path="version"/>
 		
-		<acme:textbox code="float.title" path="title"/>
+		<acme:textbox code="float.title" path="title" placeholder="El Cristo"/>
 		
 		<acme:textarea code="float.description" path="description"/>
 		
 		<spring:message code = "float.pictures.placeholder" var="picturePlaceholder"/>
 		<acme:textarea code="float.pictures" path="pictures"/>
 		
-		<acme:select code="float.procession" path="procession"
-		items="${processions}" itemLabel="title" id="procession"/>
+		<%-- <acme:select code="float.procession" path="procession"
+		items="${processions}" itemLabel="title" id="procession"/> --%>
 		
-		<acme:submit name="create" code="float.save" id="create"/>
+		<div>
+		<form:label path="procession">
+		<spring:message code="float.procession" />
+	</form:label>	
+	<form:select id="procession" path="procession">
+	<form:option value="0" label="----" />		
+		<form:options items="${processions}" itemLabel="title" />
+	</form:select>
+	<form:errors path="procession" cssClass="error" />
+		</div>
 		
-		<acme:submit name="delete" code="float.delete" />
+		<acme:submit name="save" code="float.save"/>
 		
-		<acme:cancel url="float/brotherhood/list.do" code="float.cancel"/>
+		<acme:cancel url="welcome/index.do" code="float.cancel"/>
 		
 </form:form>

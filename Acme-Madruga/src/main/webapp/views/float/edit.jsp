@@ -29,11 +29,23 @@
 		<spring:message code = "float.pictures.placeholder" var="picturePlaceholder"/>
 		<acme:textarea code="float.pictures" path="pictures"/>
 		
-		<acme:select code="float.procession" path="procession"
-		items="${processions}" itemLabel="title" id="procession"/>
+		<%-- <acme:select code="float.procession" path="procession"
+		items="${processions}" itemLabel="title" id="procession"/> --%>
+		
+		<div>
+		<form:label path="procession">
+		<spring:message code="float.procession" />
+	</form:label>	
+	<form:select id="procession" path="procession">
+	<form:option value="0" label="----" />		
+		<form:options items="${processions}" itemLabel="title" />
+	</form:select>
+	<form:errors path="procession" cssClass="error" />
+		</div>
 		
 		<acme:submit name="save" code="float.save"/>
 		
+		<acme:submit name="delete" code="float.delete"/>
 		
 		<acme:cancel url="welcome/index.do" code="float.cancel"/>
 		

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
 import services.FloatService;
+import services.ProcessionService;
 import controllers.AbstractController;
 import domain.Brotherhood;
 import domain.Float;
@@ -30,6 +31,9 @@ public class FloatBrotherhoodController extends AbstractController {
 
 	@Autowired
 	private FloatService		floatService;
+
+	@Autowired
+	private ProcessionService	processionService;
 
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
@@ -85,7 +89,7 @@ public class FloatBrotherhoodController extends AbstractController {
 		try {
 			final domain.Float f = this.floatService.findOne(floatId);
 
-			result = this.createEditModelAndView(f, null);
+			result = this.editModelAndView(f);
 
 		} catch (final Exception oops) {
 			oops.printStackTrace();
@@ -138,12 +142,13 @@ public class FloatBrotherhoodController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-	public ModelAndView delete(final domain.Float floatB) {
+	public ModelAndView delete(final domain.Float floatB, final BindingResult binding) {
 		ModelAndView result;
 		try {
-			Assert.isTrue(floatB.getId() != 0);
+
 			this.floatService.delete(floatB);
-			result = new ModelAndView("redirect:../brotherhood/list.do");
+			result = new ModelAndView("redirect:/welcome/index.do");
+
 		} catch (final Exception oops) {
 			oops.printStackTrace();
 			result = this.createEditModelAndView(floatB, "float.commit.error");
@@ -161,8 +166,11 @@ public class FloatBrotherhoodController extends AbstractController {
 
 	private ModelAndView editModelAndView(final Float floatB, final String messageCode) {
 		ModelAndView result;
+		Brotherhood brotherhood;
+		brotherhood = this.brotherhoodService.findByPrincipal();
 		result = new ModelAndView("float/edit");
 		result.addObject("float", floatB);
+		result.addObject("processions", this.processionService.findAllProcessionsOfOneBrotherhood(brotherhood.getId()));
 		result.addObject("message", messageCode);
 		return result;
 	}
@@ -173,9 +181,12 @@ public class FloatBrotherhoodController extends AbstractController {
 
 	protected ModelAndView createEditModelAndView(final domain.Float floatB, final String messageCode) {
 		ModelAndView result;
+		Brotherhood brotherhood;
+		brotherhood = this.brotherhoodService.findByPrincipal();
 
-		result = new ModelAndView("float/edit");
+		result = new ModelAndView("float/create");
 		result.addObject("float", floatB);
+		result.addObject("processions", this.processionService.findAllProcessionsOfOneBrotherhood(brotherhood.getId()));
 		result.addObject("message", messageCode);
 
 		return result;

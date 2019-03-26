@@ -119,7 +119,7 @@ public class ProcessionService {
 				if (f.getProcession().getId() == procession.getId())
 					f.setProcession(null);
 
-		this.processionRepository.delete(procession);
+		this.processionRepository.delete(procession.getId());
 	}
 
 	// Business Methods
@@ -160,6 +160,13 @@ public class ProcessionService {
 		return result;
 	}
 
+	public Procession findOneByRequestId(final int requestId) {
+		Procession result;
+		result = this.processionRepository.findOneByRequestId(requestId);
+		Assert.notNull(result);
+		return result;
+	}
+
 	public Collection<Procession> findVisibleProcessions(final Brotherhood brotherhood) {
 		final Collection<Procession> result = this.findAllFinalOfOneBrotherhood(brotherhood.getId());
 		Collection<Procession> allProcessions;
@@ -192,16 +199,12 @@ public class ProcessionService {
 
 	public Procession saveAsDraft(final Procession procession) {
 		Procession result;
-		Brotherhood principal;
+		final Brotherhood principal;
 
 		Assert.notNull(procession);
-		Assert.isTrue(procession.getIsDraft());
-
-		principal = this.brotherhoodService.findByPrincipal();
-
-		Assert.notNull(principal);
 
 		procession.setIsDraft(true);
+		Assert.isTrue(procession.getIsDraft());
 		result = this.processionRepository.save(procession);
 		Assert.notNull(result);
 		return result;

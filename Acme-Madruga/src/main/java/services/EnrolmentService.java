@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.EnrolmentRepository;
 import domain.Brotherhood;
@@ -21,6 +23,9 @@ public class EnrolmentService {
 	// Managed repository -----------------------------------------------------
 	@Autowired
 	private EnrolmentRepository	enrolmentRepository;
+
+	@Autowired
+	private Validator			validator;
 
 	// Supporting services ----------------------------------------------------
 
@@ -78,8 +83,6 @@ public class EnrolmentService {
 
 		principal = this.brotherhoodService.findByPrincipal();
 		Assert.notNull(principal);
-
-		Assert.isTrue(enrolment.getBrotherhood().getId() == principal.getId());
 
 		moment = new Date(System.currentTimeMillis() - 1000);
 
@@ -164,5 +167,21 @@ public class EnrolmentService {
 		enrolment = this.findActiveEnrolmentByBrotherhoodIdAndMemberId(brotherhoodId, principal.getId());
 
 		enrolment.setDropOutMoment(new Date(System.currentTimeMillis() - 1000));
+	}
+
+	public Enrolment reconstruct(final Enrolment enrolment, final Member member, final BindingResult binding) {
+		Enrolment result;
+		if (enrolment.getId() == 0) {
+			result = enrolment;
+			result.setEnrolmentMoment(new Date(System.currentTimeMillis() - 1));
+			result.setBrotherhood(this.brotherhoodService.findByPrincipal());
+			result.setMember(member);
+		} else
+			result = this.enrolmentRepository.findOne(enrolment.getId());
+		result.setPosition(enrolment.getPosition());
+		this.validator.validate(result, binding);
+		//this.enrolmentRepository.flush();
+
+		return result;
 	}
 }

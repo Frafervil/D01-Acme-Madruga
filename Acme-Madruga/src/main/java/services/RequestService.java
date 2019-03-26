@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
+import repositories.PlaceRepository;
 import repositories.RequestRepository;
 import domain.Brotherhood;
 import domain.Member;
@@ -27,6 +30,12 @@ public class RequestService {
 
 	@Autowired
 	private RequestRepository	requestRepository;
+
+	@Autowired
+	private PlaceRepository		placeRepository;
+
+	@Autowired
+	private Validator			validator;
 
 	// Supporting services
 
@@ -67,6 +76,14 @@ public class RequestService {
 
 		procession = this.processionService.findOne(processionId);
 		Assert.notNull(procession);
+
+		//Comprobamos si principal tiene alguna request pendiente o aceptada con esa procession
+		//En ese caso no podria crear mas
+		//Assert.isTrue(!(this.findRepeated(principal.getId(), procession.getId()) > 1), "request.commit.error.repeated");
+		//
+
+		result = new Request();
+		result.setMember(principal);
 		result.setProcession(procession);
 
 		place = this.placeService.create(processionId);
@@ -125,23 +142,17 @@ public class RequestService {
 		return result;
 
 	}
-	public void save(final Request request) {
+	public Request save(final Request request) {
 		Request result;
 		result = this.requestRepository.save(request);
 		Assert.notNull(result);
+		return result;
 	}
 
 	// Other business methods
 
-	public Map<String, List<Request>> groupByStatus() {
+	public Map<String, List<Request>> groupByStatus(final Collection<Request> requests) {
 		final Map<String, List<Request>> result = new HashMap<String, List<Request>>();
-		final Member principal;
-		final Collection<Request> requests;
-
-		principal = this.memberService.findByPrincipal();
-		Assert.notNull(principal);
-
-		requests = this.findByPrincipal();
 		Assert.notNull(requests);
 		for (final Request r : requests)
 			if (result.containsKey(r.getStatus()))
@@ -152,7 +163,7 @@ public class RequestService {
 				result.put(r.getStatus(), l);
 			}
 
-		if (!result.containsKey("ACCEPTED"))
+		if (!result.containsKey("APPROVED"))
 			result.put("APPROVED", new ArrayList<Request>());
 		if (!result.containsKey("PENDING"))
 			result.put("PENDING", new ArrayList<Request>());
@@ -168,6 +179,13 @@ public class RequestService {
 		result = this.requestRepository.findAllByProcession(processionId);
 		Assert.notNull(result);
 
+		return result;
+	}
+
+	public Request findByProcession(final int processionId) {
+		Request result;
+		result = this.requestRepository.findByProcession(processionId);
+		Assert.notNull(result);
 		return result;
 	}
 
@@ -234,7 +252,7 @@ public class RequestService {
 		Assert.isTrue(!reason.isEmpty());
 		r.setStatus("REJECTED");
 
-		this.placeService.delete(r.getPlace());
+		this.placeRepository.delete(r.getPlace().getId());
 	}
 
 	// Brotherhood must be able to change the status of a request they manage from "PENDING" to "APPROVED"
@@ -257,5 +275,42 @@ public class RequestService {
 
 	public void flushRequest() {
 		this.requestRepository.flush();
+	}
+
+	public Request reconstruct(final Request request, final Procession procession, final BindingResult binding) {
+		Request result;
+		result = request;
+		result.setMember(this.memberService.findByPrincipal());
+		result.setStatus("PENDING");
+		result.setPlace(request.getPlace());
+		result.setProcession(procession);
+
+		this.validator.validate(result, binding);
+		this.requestRepository.flush();
+		return result;
+	}
+
+	public Request reconstructApprove(final Request request, final BindingResult binding) {
+		Request result;
+		result = this.requestRepository.findOne(request.getId());
+		result.getPlace().setcolumnP(request.getPlace().getcolumnP());
+		result.getPlace().setrowP(request.getPlace().getrowP());
+		//		if (this.placeService.findRepeated(result.getProcession().getId(), request.getPlace().getrowP(), request.getPlace().getcolumnP()) > 0)
+		//			binding.addError(new ObjectError("request.commit.error.busy", "request.commit.error.busy"));
+		this.validator.validate(result, binding);
+		this.requestRepository.flush();
+		return result;
+	}
+
+	public Request reconstructReject(final Request request, final BindingResult binding) {
+		final Request result;
+		result = this.requestRepository.findOne(request.getId());
+		result.setRejectionReason(request.getRejectionReason());
+		//		if (request.getRejectionReason().isEmpty())
+		//			binding.rejectValue("rejectionReason", "request.commit.error.rejectionReason", "There must be a reason");
+		//binding.addError(new ObjectError("rejectionReason", "request.commit.error.rejectionReason"));
+		this.validator.validate(result, binding);
+		this.requestRepository.flush();
+		return result;
 	}
 }

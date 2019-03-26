@@ -91,11 +91,6 @@
 </jstl:otherwise>
 </jstl:choose>
 
-<security:authorize access="hasRole('MEMBER')">
-	<jstl:if test="${enrolment != null}">
-		<a href="brotherhood/member/dropOut.do?brotherhoodId=${brotherhood.id}"><spring:message code="brotherhood.dropOut"/></a><br/>
-	</jstl:if>
-</security:authorize>
 
 <!-- Processions -->
 <h3> <spring:message code="brotherhood.processions" /> </h3>
@@ -115,7 +110,9 @@
 <spring:message code="brotherhood.processions.empty" /> 
 </jstl:otherwise>
 </jstl:choose>
+<security:authorize access="hasRole('BROTHERHOOD')">
 <acme:button url="procession/brotherhood/create.do" code="procession.create"/>
+</security:authorize>
 <!-- Floats -->
 <h3> <spring:message code="brotherhood.floats" /> </h3>
 <jstl:choose>
@@ -135,7 +132,13 @@
 <spring:message code="brotherhood.floats.empty" /> 
 </jstl:otherwise>
 </jstl:choose>
+<security:authorize access="hasRole('BROTHERHOOD')">
 <acme:button url="float/brotherhood/create.do" code="float.create"/>
+</security:authorize>
+<br/>
+<br/>
+
+
 
 <jstl:if test="${brotherhood.userAccount.username == pageContext.request.userPrincipal.name}">
 	<security:authorize access="hasRole('BROTHERHOOD')">
