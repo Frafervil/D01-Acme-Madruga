@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.BrotherhoodService;
+import services.PlaceService;
 import services.ProcessionService;
 import services.RequestService;
 import controllers.AbstractController;
@@ -40,6 +41,9 @@ public class RequestBrotherhoodController extends AbstractController {
 
 	@Autowired
 	private BrotherhoodService	brotherhoodService;
+
+	@Autowired
+	private PlaceService		placeService;
 
 
 	// Listing
@@ -138,6 +142,7 @@ public class RequestBrotherhoodController extends AbstractController {
 
 		try {
 			request = this.requestService.reconstructReject(request, binding);
+			Assert.isTrue(!(request.getRejectionReason().isEmpty()), "There must be a reason");
 			if (binding.hasErrors()) {
 				result = this.createEditModelAndView(request, false);
 				for (final ObjectError e : binding.getAllErrors())
@@ -149,7 +154,10 @@ public class RequestBrotherhoodController extends AbstractController {
 			}
 
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(request, "request.commit.error", false);
+			if (oops.getMessage().contains("There must be a reason"))
+				result = this.createEditModelAndView(request, "request.commit.error.rejectionReason", false);
+			else
+				result = this.createEditModelAndView(request, "request.commit.error", false);
 		}
 		return result;
 	}
@@ -180,6 +188,7 @@ public class RequestBrotherhoodController extends AbstractController {
 		ModelAndView result;
 		try {
 			request = this.requestService.reconstructApprove(request, binding);
+			Assert.isTrue(this.placeService.findRepeated(request.getProcession().getId(), request.getPlace().getrowP(), request.getPlace().getcolumnP()) <= 0, "This place is busy");
 			if (binding.hasErrors()) {
 				result = this.createEditModelAndView(request, true);
 				for (final ObjectError e : binding.getAllErrors())
@@ -190,9 +199,11 @@ public class RequestBrotherhoodController extends AbstractController {
 			}
 
 		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(request, "request.commit.error", true);
+			if (oops.getMessage().contains("This place is busy"))
+				result = this.createEditModelAndView(request, "request.commit.error.busy", true);
+			else
+				result = this.createEditModelAndView(request, "request.commit.error", true);
 		}
-
 		return result;
 	}
 
@@ -206,7 +217,7 @@ public class RequestBrotherhoodController extends AbstractController {
 		return result;
 	}
 
-	protected ModelAndView createEditModelAndView(final Request request, final String message, final Boolean approve) {
+	protected ModelAndView createEditModelAndView(final Request request, final String messageCode, final Boolean approve) {
 		ModelAndView result;
 		Procession procession;
 		procession = this.processionService.findOneByRequestId(request.getId());
@@ -214,7 +225,7 @@ public class RequestBrotherhoodController extends AbstractController {
 		result = new ModelAndView("request/edit");
 		result.addObject("request", request);
 		result.addObject("procession", procession);
-		result.addObject("message", message);
+		result.addObject("message", messageCode);
 		result.addObject("approve", approve);
 		return result;
 	}

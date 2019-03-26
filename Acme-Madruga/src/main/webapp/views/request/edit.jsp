@@ -1,5 +1,7 @@
 
 
+<%@page import="java.util.Collections"%>
+<%@page import="java.util.Collection"%>
 <%@page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
@@ -10,10 +12,12 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="security"	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
 <security:authorize access="hasRole('MEMBER')">
 
 <form:form action="request/member/edit.do?processionId=${request.procession.id }" modelAttribute="request">
+
 
 	<form:hidden path="id" />
 	<form:hidden path="version" />
@@ -22,10 +26,11 @@
 	
 	<spring:message code="request.procession.title" />: <jstl:out value="${request.procession.title} "></jstl:out>
 	<br />
-	<jstl:out value="${request.procession.maxRow} " />
-	<jstl:out value="${request.procession.maxColumn} " />
+	<spring:message code = "request.procession.place.maxRow"/>: <jstl:out value="${request.procession.maxRow} " />
+	<br/>
+	<spring:message code = "request.procession.place.maxColumn"/>: <jstl:out value="${request.procession.maxColumn} " />
+	<br/>
 	
-	<br />	
 	<form:label path="place">
 		<spring:message code="request.procession.place" />:<br />
 	</form:label>
@@ -56,12 +61,13 @@
 	<form:hidden path="version" />
 	
 	
-	<form:label path="rejectionReason">
+	<%-- <form:label path="rejectionReason">
 	<spring:message code="request.procession.rejection" />:
 	</form:label>
 	<br />
 	<form:textarea path="rejectionReason" />
-	<form:errors cssClass="error" path="rejectionReason" />
+	<form:errors cssClass="error" path="rejectionReason" /> --%>
+	<acme:textarea code="request.procession.rejection" path="rejectionReason"/>
 	<br />
 	<br />
 	
@@ -90,6 +96,12 @@
 	<form:label path="place">
 		<spring:message code="request.procession.place" />:<br />
 	</form:label>
+	
+	<spring:message code = "request.procession.place.maxRow"/>: <jstl:out value="${request.procession.maxRow} " />
+	<br/>
+	<spring:message code = "request.procession.place.maxColumn"/>: <jstl:out value="${request.procession.maxColumn} " />
+	<br/>
+	
 	<spring:message code="request.procession.place.row" />: <form:input path="place.rowP" placeholder="${request.place.rowP }"/>
 	<spring:message code="request.procession.place.column" />: <form:input path="place.columnP" placeholder="${request.place.columnP }"/>
 	<form:errors cssClass="error" path="place" />

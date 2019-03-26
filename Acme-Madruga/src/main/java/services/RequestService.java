@@ -299,9 +299,8 @@ public class RequestService {
 		result = this.requestRepository.findOne(request.getId());
 		result.getPlace().setcolumnP(request.getPlace().getcolumnP());
 		result.getPlace().setrowP(request.getPlace().getrowP());
-		if (this.placeService.findRepeated(result.getProcession().getId(), request.getPlace().getrowP(), request.getPlace().getcolumnP()) > 0)
-			binding.rejectValue("place", "request.commit.error.busy", "This place is busy");
-
+		//		if (this.placeService.findRepeated(result.getProcession().getId(), request.getPlace().getrowP(), request.getPlace().getcolumnP()) > 0)
+		//			binding.addError(new ObjectError("request.commit.error.busy", "request.commit.error.busy"));
 		this.validator.validate(result, binding);
 		this.requestRepository.flush();
 		return result;
@@ -311,8 +310,9 @@ public class RequestService {
 		final Request result;
 		result = this.requestRepository.findOne(request.getId());
 		result.setRejectionReason(request.getRejectionReason());
-		if (result.getRejectionReason().isEmpty())
-			binding.rejectValue("rejectionReason", "request.commit.error.rejectionReason", "There must be a reason");
+		//		if (request.getRejectionReason().isEmpty())
+		//			binding.rejectValue("rejectionReason", "request.commit.error.rejectionReason", "There must be a reason");
+		//binding.addError(new ObjectError("rejectionReason", "request.commit.error.rejectionReason"));
 		this.validator.validate(result, binding);
 		this.requestRepository.flush();
 		return result;
